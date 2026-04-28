@@ -1,0 +1,171 @@
+<div *ngIf="isLoading" class="min-h-screen flex items-center justify-center bg-[#0b0f19]">
+    <div class="text-white text-xl">Cargando tu progreso...</div>
+</div>
+
+<div *ngIf="!isLoading" class="bg-background text-on-background min-h-screen flex selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<div class="blob-bg bg-primary-container w-[500px] h-[500px] top-[-100px] left-[-100px]"></div>
+<div class="blob-bg bg-tertiary-container w-[600px] h-[600px] bottom-[-200px] right-[-200px]"></div>
+
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-white/10 bg-[#0b0f19]/60 backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+<div class="flex items-center gap-3 mb-12 px-4">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-container to-tertiary-container flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">Flemy</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">AI Education</p>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold font-body-md text-body-md transition-all cursor-pointer" >
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+            <a routerLink="/progreso" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">monitoring</span>
+                Progreso
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer" >
+<span class="material-symbols-outlined">person</span>
+                Profile
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">workspace_premium</span>
+                Certificates
+            </a>
+</div>
+<div class="mt-auto space-y-4">
+<div class="glass-card rounded-xl p-4 text-center">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">Unlock all features</p>
+<button class="w-full py-2 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white font-body-md text-body-md font-semibold shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Upgrade to Pro</button>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer" (click)="logout($event)">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-8 w-full h-20 border-b border-white/5 bg-[#0b0f19]/30 backdrop-blur-md sticky top-0 z-40">
+<div class="md:hidden">
+<h1 class="text-xl font-bold text-white font-['Space_Grotesk']">Flemy</h1>
+</div>
+<div class="hidden md:block"></div>
+<div class="flex items-center gap-4">
+<button class="text-slate-300 hover:bg-white/5 rounded-full p-2 transition-all focus:ring-2 focus:ring-sky-500">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-300 hover:bg-white/5 rounded-full p-2 transition-all focus:ring-2 focus:ring-sky-500">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-white/10 ml-2">
+<img *ngIf="userProfile?.photo; else placeholderPic" alt="Student Profile" class="w-full h-full object-cover" [src]="userProfile.photo" />
+<ng-template #placeholderPic>
+    <img alt="Default Profile" class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ userProfile?.first_name || userProfile?.username }}&background=0D8ABC&color=fff"/>
+</ng-template>
+</div>
+</div>
+</header>
+
+<div class="p-8 max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column (Main) -->
+<div class="lg:col-span-8 xl:col-span-9 space-y-8">
+<!-- Header Section -->
+<section>
+<h2 class="font-h1 text-h1 text-white mb-2">¡Hola de nuevo, {{ userProfile?.first_name || userProfile?.username }}!</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Continue your AI mastery journey.</p>
+</section>
+<!-- Stats Row -->
+<section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary-container">psychology</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Experience</span>
+</div>
+<div class="font-h2 text-h2 text-white">{{ userProfile?.xp || 0 }} XP</div>
+</div>
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-[#fbbf24]">local_fire_department</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Racha Actual</span>
+</div>
+<div class="font-h2 text-h2 text-white">{{ userProfile?.study_streak || 0 }} Días</div>
+</div>
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/20 to-[#a855f7]/20 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-3 mb-2 relative z-10">
+<span class="material-symbols-outlined text-[#fbbf24]">workspace_premium</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Membresía</span>
+</div>
+<div class="font-h2 text-h2 bg-gradient-to-r from-[#fbbf24] to-[#a855f7] bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' ? 'PREMIUM' : 'FREE' }}</div>
+</div>
+</section>
+
+<!-- Course Grid -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-h3 text-h3 text-white">Tus Cursos Activos</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div *ngFor="let enrollment of userProfile?.active_enrollments" class="glass-card rounded-xl overflow-hidden flex flex-col">
+    <div class="h-48 relative overflow-hidden">
+      <img [alt]="enrollment.course.title" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" [src]="enrollment.course.thumbnail || 'https://via.placeholder.com/400x200?text=' + enrollment.course.title" />
+      <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0ea5e9]/15 border border-[#0ea5e9]/30 text-primary-fixed backdrop-blur-md font-label-caps text-label-caps flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+        En Progreso
+      </div>
+    </div>
+    <div class="p-6 flex-1 flex flex-col">
+      <h4 class="font-h3 text-h3 text-white mb-2 line-clamp-2">{{ enrollment.course.title }}</h4>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mb-6 line-clamp-2">{{ enrollment.course.short_description }}</p>
+      <div class="mt-auto">
+        <div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-2">
+          <span>Progreso</span>
+          <span>{{ enrollment.progress_percent }}%</span>
+        </div>
+        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden mb-6">
+          <div class="h-full progress-bar-fill rounded-full" [style.width.%]="enrollment.progress_percent"></div>
+        </div>
+        <button [routerLink]="['/learning', enrollment.course.slug]" class="w-full py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-body-md text-body-md hover:bg-[rgba(255,255,255,0.1)] transition-colors flex items-center justify-center gap-2 group">
+          Continuar Aprendiendo
+          <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!userProfile?.active_enrollments?.length" class="col-span-full py-12 text-center glass-card rounded-xl">
+    <p class="text-on-surface-variant">No tienes cursos activos. ¡Explora el catálogo!</p>
+    <button routerLink="/catalog" class="mt-4 px-6 py-2 bg-primary-container text-white rounded-lg">Ver Catálogo</button>
+  </div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar -->
+<aside class="lg:col-span-4 xl:col-span-3 space-y-8">
+<div class="glass-card rounded-xl p-6">
+<div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+<span class="material-symbols-outlined text-tertiary-container animate-pulse">neurology</span>
+<h3 class="font-h3 text-h3 text-white">Sugerencia de nuestra IA</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Basado en tu progreso en Python, te recomendamos explorar este curso para ampliar tus habilidades.</p>
+<div *ngFor="let suggestion of userProfile?.ai_suggestions" class="glass-card rounded-lg overflow-hidden bg-white/5">
+  <div class="h-32 relative">
+    <img [alt]="suggestion.title" class="w-full h-full object-cover opacity-80" [src]="suggestion.thumbnail || 'https://via.placeholder.com/400x200?text=' + suggestion.title" />
+  </div>
+  <div class="p-4">
+    <h4 class="font-body-lg text-body-lg text-white font-semibold mb-1">{{ suggestion.title }}</h4>
+    <p class="font-body-sm text-body-sm text-on-surface-variant mb-4">{{ suggestion.short_description }}</p>
+    <button [routerLink]="['/catalog', suggestion.slug]" class="w-full py-2 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white font-body-sm text-body-sm font-medium shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Ver Detalles</button>
+  </div>
+</div>
+<div *ngIf="!userProfile?.ai_suggestions?.length" class="text-center py-4 bg-white/5 rounded-lg border border-dashed border-white/20">
+  <p class="text-xs text-on-surface-variant italic">No hay sugerencias por ahora</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>

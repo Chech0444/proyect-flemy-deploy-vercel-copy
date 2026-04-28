@@ -1,0 +1,62 @@
+<div class="login-wrapper">
+  <div class="grid-background"></div>
+  <div class="particles"></div>
+  
+  <nav class="top-nav">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 17L12 22L22 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12L12 17L22 12" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Flemy</span>
+    </div>
+    <div class="nav-right">
+      <span class="no-account-text">¿No tienes una cuenta?</span>
+      <a routerLink="/register" class="register-btn">Registrarse</a>
+    </div>
+  </nav>
+
+  <main class="login-container">
+    <div class="login-header">
+      <h1>Bienvenido de nuevo</h1>
+      <p>Inicia sesión para acceder a tus módulos de capacitación con IA.</p>
+    </div>
+
+    <div class="login-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Usuario</label>
+          <div class="input-wrapper">
+            <input type="text" formControlName="username" placeholder="tu_usuario" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label>Contraseña</label>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" formControlName="password" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-msg">
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+          <span *ngIf="isLoading">Cargando...</span>
+        </button>
+      </form>
+    </div>
+
+    <footer class="login-footer">
+      <a href="#">Política de Privacidad</a> | 
+      <a href="#">Términos de Servicio</a> | 
+      <a href="#">Centro de Ayuda</a>
+    </footer>
+  </main>
+</div>
