@@ -1,0 +1,264 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Dashboard Metrics */
+    .dashboard-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .metric-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+    .metric-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--accent, #10b981);
+        opacity: 0.5;
+    }
+    .metric-title {
+        color: #94a3b8;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .metric-value {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    .sparkline {
+        height: 40px;
+        width: 100%;
+        background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%);
+        margin-top: 10px;
+        border-radius: 4px;
+    }
+
+    /* App Cards Grid */
+    .app-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    .app-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+    .app-card:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+    }
+    .app-card-header {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 15px 20px;
+        border-bottom: 1px solid #30363d;
+    }
+    .app-card-header a {
+        color: #ffffff !important;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    .model-list {
+        padding: 10px 0;
+    }
+    .model-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+    }
+    .model-row:last-child { border-bottom: 0; }
+    .model-name { color: #cbd5e1; font-weight: 500; }
+    .model-actions { display: flex; gap: 10px; }
+    .model-actions a {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+    .action-add { background: rgba(59, 130, 246, 0.1); color: #3b82f6 !important; }
+    .action-change { background: rgba(255, 255, 255, 0.05); color: #94a3b8 !important; }
+
+    /* Timeline */
+    .timeline {
+        padding: 10px 0;
+    }
+    .timeline-item {
+        position: relative;
+        padding-left: 25px;
+        padding-bottom: 20px;
+        border-left: 2px solid #30363d;
+    }
+    .timeline-item:last-child { border-left: 0; padding-bottom: 0; }
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -7px;
+        top: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #30363d;
+        border: 2px solid #161b22;
+    }
+    .timeline-item.addition::before { background: #10b981; }
+    .timeline-item.change::before { background: #3b82f6; }
+    .timeline-item.deletion::before { background: #ef4444; }
+    
+    .timeline-content {
+        font-size: 13px;
+        color: #94a3b8;
+    }
+    .timeline-title { color: #ffffff; font-weight: 600; margin-bottom: 2px; }
+    .timeline-meta { font-size: 11px; opacity: 0.6; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <!-- Dashboard Top Metrics -->
+    <div class="dashboard-metrics">
+        <div class="metric-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="metric-title">Total Cursos Activos</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <div class="metric-value">{{ course_count|default:0 }}</div>
+            <div class="sparkline"></div>
+        </div>
+        <div class="metric-card" style="--accent: #3b82f6;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="metric-title">Estudiantes Registrados</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="metric-value">{{ student_count|default:0 }}</div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 100%);"></div>
+        </div>
+        <div class="metric-card" style="--accent: #f59e0b;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="metric-title">Certificados Emitidos</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-2 5 2 2 2-2-2-5z"></path><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="metric-value">{{ certificate_count|default:0 }}</div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0) 100%);"></div>
+        </div>
+        <div class="metric-card" style="--accent: #8b5cf6;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="metric-title">Inscripciones Totales</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="metric-value">{{ enrollment_count|default:0 }}</div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0) 100%);"></div>
+        </div>
+    </div>
+
+    {% if app_list %}
+    <div class="app-cards-grid">
+        {% for app in app_list %}
+        <div class="app-card">
+            <div class="app-card-header" style="display: flex; align-items: center; gap: 10px;">
+                {% if app.app_label == 'admin' or app.app_label == 'auth' or app.app_label == 'users' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.25-2.25"></path></svg>
+                {% elif app.app_label == 'courses' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                {% elif app.app_label == 'learning' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                {% elif app.app_label == 'certificates' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path></svg>
+                {% elif app.app_label == 'gamification' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg>
+                {% else %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                {% endif %}
+                <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+            </div>
+                <div class="model-list">
+                    {% for model in app.models %}
+                    <div class="model-row" style="border-bottom: 1px dashed rgba(255,255,255,0.1); padding: 15px 20px;">
+                        <div class="model-name" style="font-size: 14px; color: #cbd5e1;">{{ model.name }}</div>
+                        <div class="model-actions" style="display: flex; gap: 8px;">
+                            {% if model.add_url %}
+                            <a href="{{ model.add_url }}" class="action-add" style="display: flex; align-items: center; gap: 5px;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>Añadir Nueva</span>
+                            </a>
+                            {% endif %}
+                            {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}" class="action-change">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <span>Modificar</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>{% translate "You don't have permission to view or edit anything." %}</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>Acciones Recientes</h2>
+        <h3>Mis Acciones</h3>
+        <div class="timeline">
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>No hay acciones disponibles</p>
+            {% else %}
+            {% for entry in admin_log %}
+            <div class="timeline-item {% if entry.is_addition %}addition{% elif entry.is_change %}change{% else %}deletion{% endif %}">
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        {% if entry.is_deletion or not entry.get_admin_url %}
+                        {{ entry.object_repr }}
+                        {% else %}
+                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                        {% endif %}
+                    </div>
+                    <span class="timeline-meta">
+                        {% if entry.content_type %}
+                        {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
+                        {% else %}
+                        {% translate 'Unknown content' %}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

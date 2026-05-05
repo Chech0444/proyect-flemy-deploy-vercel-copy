@@ -1,0 +1,284 @@
+:root {
+  --primary: #3b82f6;
+  --secondary: #161b22;
+  --accent: #10b981;
+  --primary-fg: #ffffff;
+  --body-bg: #0b0e14;
+  --body-fg: #ffffff;
+  --header-color: #ffffff;
+  --header-branding-color: #ffffff;
+  --header-bg: rgba(11, 14, 20, 0.96);
+  --header-link-color: #94a3b8;
+  --breadcrumbs-fg: #94a3b8;
+  --breadcrumbs-link-fg: #3b82f6;
+  --breadcrumbs-bg: #161b22;
+  --link-fg: #3b82f6;
+  --link-hover-color: #2563eb;
+  --link-selected-fg: #10b981;
+  --hairline-color: #30363d;
+  --border-color: #30363d;
+  --error-fg: #ef4444;
+  --message-success-bg: rgba(16, 185, 129, 0.14);
+  --message-warning-bg: rgba(59, 130, 246, 0.14);
+  --message-error-bg: rgba(239, 68, 68, 0.14);
+  --darkened-bg: #11161d;
+  --selected-bg: rgba(59, 130, 246, 0.12);
+  --selected-row: rgba(255, 255, 255, 0.03);
+  --close-button-bg: #ef4444;
+  --close-button-hover-bg: #dc2626;
+  --card-bg: rgba(22, 27, 34, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-teal {
+  0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+}
+
+html,
+html[data-theme="light"],
+html[data-theme="dark"],
+body {
+  color-scheme: dark;
+  background: linear-gradient(180deg, #101520 0%, #0b0e14 100%);
+  color: #94a3b8;
+}
+
+body,
+input,
+textarea,
+select,
+button {
+  font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+
+.theme-toggle {
+  display: none !important;
+}
+
+#header {
+  background: var(--header-bg);
+  border-bottom: 1px solid #30363d;
+}
+
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+#branding {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#branding::before {
+  content: "F";
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #10b981);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+#user-tools {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+div.breadcrumbs {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+a:link,
+a:visited {
+  color: #3b82f6;
+}
+
+a:hover,
+a:focus {
+  color: #2563eb;
+}
+
+.module,
+.inline-group,
+#changelist-filter,
+#changelist .actions,
+.paginator,
+.submit-row,
+.selector,
+.results,
+.dashboard-metrics .metric-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  animation: fadeIn 0.5s ease-out forwards;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s;
+  border-radius: 12px;
+}
+
+.dashboard-metrics .metric-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--accent);
+}
+
+.dashboard #content-related {
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: rgba(255, 255, 255, 0.02);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  border-bottom: 1px solid #30363d;
+}
+
+#nav-sidebar {
+  background: #161b22;
+  border-right: 1px solid #30363d;
+}
+
+#nav-filter {
+  background: #0f141c;
+  color: #ffffff;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+}
+
+#nav-sidebar .current-model,
+#nav-sidebar .current-app .section,
+#nav-sidebar a:hover {
+  background: rgba(59, 130, 246, 0.12);
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+.dashboard .module table,
+.results table {
+  background: transparent;
+}
+
+.results th,
+.results td,
+.dashboard .module th,
+.dashboard .module td {
+  border-color: #30363d;
+}
+
+tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.results tbody tr:hover,
+.dashboard .module tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+input,
+textarea,
+select,
+.vTextField,
+.vLargeTextField {
+  background: #0f141c;
+  color: #ffffff;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+}
+
+form .aligned div.form-row {
+  border-bottom: 1px solid rgba(48, 54, 61, 0.55);
+}
+
+label,
+.help,
+.helptext,
+.quiet {
+  color: #94a3b8;
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.object-tools a,
+input.default,
+.button.default {
+  background: #3b82f6;
+  color: #ffffff;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover,
+a.button:hover,
+.object-tools a:hover {
+  background: #2563eb;
+}
+
+input.default,
+.button.default {
+  background: #10b981;
+}
+
+.deletelink,
+.button.deletelink,
+.submit-row .deletelink {
+  background: #ef4444 !important;
+}
+
+.messagelist li {
+  border-radius: 10px;
+}
+
+.messagelist li.success {
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.messagelist li.warning {
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.messagelist li.error {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.login #container {
+  background: transparent;
+}
+
+.login #content {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 14px;
+}
