@@ -1,45 +1,47 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
+import { AuthService } from '../shared/auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink],
+  imports: [NgIf, NgFor, RouterLink, TopbarComponent, SkeletonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
+  private authService = inject(AuthService);
   private http = inject(HttpClient);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private apiUrl = environment.apiUrl;
 
   userProfile: any = null;
+  isAdmin = false;
   isLoading = true;
 
   ngOnInit() {
     this.loadProfile();
+    this.isAdmin = this.authService.isAdmin();
   }
 
   loadProfile() {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!this.authService.isLoggedIn()) {
       this.isLoading = false;
       this.router.navigate(['/login']);
       return;
     }
 
-    // Usamos el endpoint de gamificación que ahora tiene todos los datos del dashboard
-    this.http.get<any>('http://localhost:8042/api/v1/gamification/dashboard/', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    // Load specialized dashboard data
+    this.http.get<any>(`${this.apiUrl}/gamification/dashboard/`).subscribe({
       next: (data) => {
-        console.log('Dashboard data loaded:', data);
-        // Mapeamos los datos para que el template siga funcionando
         this.userProfile = {
           ...data,
-          // Recuperamos el nombre del localStorage si no viene en el dashboard
           first_name: localStorage.getItem('first_name') || 'Estudiante'
         };
         this.isLoading = false;
@@ -49,18 +51,16 @@ export class DashboardComponent implements OnInit {
         console.error('Error loading dashboard:', err);
         this.isLoading = false;
         this.cdr.detectChanges();
-        this.router.navigate(['/login']);
+        if (err.status === 401) {
+          this.authService.logout();
+        }
       }
     });
   }
 
   logout(event?: Event) {
-    if (event) {
-        event.preventDefault();
-    }
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    this.router.navigate(['/login']);
+    if (event) event.preventDefault();
+    this.authService.logout();
   }
 }
 

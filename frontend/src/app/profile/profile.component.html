@@ -1,0 +1,306 @@
+<!-- Loading state -->
+<div *ngIf="isLoading" class="loading-screen">
+    <div class="loading-text">Cargando tu configuración...</div>
+</div>
+
+<!-- Main content -->
+<div *ngIf="!isLoading" class="page-wrapper">
+    <!-- Blobs de fondo -->
+    <div class="blob-bg blob-primary"></div>
+    <div class="blob-bg blob-tertiary"></div>
+
+    <!-- ───── Modal Cambio de Contraseña ───── -->
+    <div *ngIf="showPasswordModal" class="modal-overlay" (click)="closePasswordModal()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-icon">🔒</span>
+                <h3 class="modal-title">Cambiar Contraseña</h3>
+                <button class="modal-close" (click)="closePasswordModal()">✕</button>
+            </div>
+
+            <div *ngIf="passwordSuccess" class="alert-success">
+                ✅ ¡Contraseña actualizada correctamente!
+            </div>
+            <div *ngIf="passwordError" class="alert-error">
+                ⚠️ {{ passwordError }}
+            </div>
+
+            <div *ngIf="!passwordSuccess" class="modal-body">
+                <div class="form-group">
+                    <label class="field-label">Nueva Contraseña</label>
+                    <input
+                        [(ngModel)]="newPassword"
+                        type="password"
+                        class="field-input"
+                        placeholder="Mínimo 8 caracteres"
+                        [disabled]="isSavingPassword"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="field-label">Confirmar Contraseña</label>
+                    <input
+                        [(ngModel)]="confirmPassword"
+                        type="password"
+                        class="field-input"
+                        placeholder="Repite la contraseña"
+                        [disabled]="isSavingPassword"
+                    >
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" (click)="closePasswordModal()" [disabled]="isSavingPassword">Cancelar</button>
+                    <button class="btn-primary" (click)="changePassword()" [disabled]="isSavingPassword">
+                        <span *ngIf="isSavingPassword">Guardando...</span>
+                        <span *ngIf="!isSavingPassword">Cambiar Contraseña</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ───── Fin Modal ───── -->
+
+    <!-- Sidebar -->
+    <!-- Sidebar Unified (Reestructurado a Tailwind para perfil) -->
+    <nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+        <div class="flex items-center gap-3 mb-12 px-4">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+                <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-space tracking-tight">Flemy</h1>
+                <p class="font-label-caps text-label-caps text-[#cbd5e1] text-xs">AI Education</p>
+            </div>
+        </div>
+        <div class="flex-1 space-y-2">
+            <a routerLink="/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+                <span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+            <a routerLink="/progreso" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+                <span class="material-symbols-outlined">monitoring</span>
+                Progreso
+            </a>
+            <a routerLink="/catalog" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+                <span class="material-symbols-outlined">auto_stories</span>
+                Catálogo
+            </a>
+            <a routerLink="/subscription" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+                <span class="material-symbols-outlined">workspace_premium</span>
+                Suscripción
+            </a>
+        </div>
+        <div class="mt-auto space-y-4">
+            <!-- User Profile Section in Sidebar -->
+            <div class="px-4 py-4 mb-2 bg-white/5 rounded-xl border border-white/5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-sky-500/30 overflow-hidden bg-sky-500/10">
+                  <img [src]="'https://ui-avatars.com/api/?name=' + (userProfile?.first_name || userProfile?.username || 'U') + '&background=0ea5e9&color=fff'" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 overflow-hidden">
+                  <p class="text-sm font-bold text-white truncate">{{ userProfile?.first_name || userProfile?.username || 'Estudiante' }}</p>
+                  <p class="text-[10px] uppercase tracking-wider font-bold" [ngClass]="userProfile?.role === 'ROLE_PREMIUM' ? 'text-amber-400' : 'text-slate-500'">
+                    {{ userProfile?.role === 'ROLE_PREMIUM' ? 'Plan Premium' : 'Plan Free' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer" (click)="logout($event)">
+                <span class="material-symbols-outlined">logout</span>
+                Cerrar Sesión
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <!-- Top bar unificado -->
+        <app-topbar [userProfile]="userProfile" title="Configuración de Perfil"></app-topbar>
+
+        <!-- Grid -->
+        <div class="content-grid">
+
+            <!-- ── Columna izquierda ── -->
+            <div class="col-left">
+
+                <!-- Información de la Cuenta -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="material-symbols-outlined icon-sky">account_circle</span>
+                        <h3 class="card-title">Información de la Cuenta</h3>
+                    </div>
+                    <div class="account-info-body">
+                        <div class="avatar-edit-wrapper">
+                            <div class="avatar-big">
+                                <img
+                                    src="https://ui-avatars.com/api/?name={{ userProfile?.first_name || userProfile?.username }}&background=0284c7&color=fff"
+                                    alt="Avatar"
+                                    class="avatar-img"
+                                >
+                            </div>
+                            <button class="avatar-cam-btn" title="Cambiar foto">
+                                <span class="material-symbols-outlined">photo_camera</span>
+                            </button>
+                        </div>
+
+                        <div class="fields-grid">
+                            <div class="form-group">
+                                <label class="field-label">Nombre</label>
+                                <input [(ngModel)]="userProfile.first_name" type="text" class="field-input" placeholder="Ej. Alejandro">
+                            </div>
+                            <div class="form-group">
+                                <label class="field-label">Apellido</label>
+                                <input [(ngModel)]="userProfile.last_name" type="text" class="field-input" placeholder="Ej. Moreno">
+                            </div>
+                            <div class="form-group">
+                                <label class="field-label">Correo Electrónico</label>
+                                <input [value]="userProfile.email" type="email" disabled class="field-input field-disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="field-label">Usuario</label>
+                                <input [value]="userProfile.username" type="text" disabled class="field-input field-disabled">
+                            </div>
+                            <div class="form-group col-span-2">
+                                <label class="field-label">Bio Profesional</label>
+                                <textarea [(ngModel)]="userProfile.bio" rows="3" class="field-input" placeholder="Cuéntanos sobre ti..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seguridad -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="material-symbols-outlined icon-sky">shield</span>
+                        <h3 class="card-title">Seguridad</h3>
+                    </div>
+                    <div class="security-list">
+                        <div class="security-item">
+                            <div class="security-icon-wrap icon-bg-sky">
+                                <span class="material-symbols-outlined">lock</span>
+                            </div>
+                            <div class="security-info">
+                                <h4 class="security-name">Contraseña</h4>
+                                <p class="security-desc">Actualiza tu contraseña de acceso</p>
+                            </div>
+                            <button class="btn-outline" (click)="openPasswordModal()">Cambiar</button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-icon-wrap icon-bg-purple">
+                                <span class="material-symbols-outlined">phonelink_lock</span>
+                            </div>
+                            <div class="security-info">
+                                <h4 class="security-name">Autenticación de Dos Factores</h4>
+                                <p class="security-desc security-active">Próximamente</p>
+                            </div>
+                            <button class="btn-outline" disabled>Configurar</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- /col-left -->
+
+            <!-- ── Columna derecha ── -->
+            <div class="col-right">
+
+                <!-- Logros -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="material-symbols-outlined icon-yellow">emoji_events</span>
+                        <h3 class="card-title">Logros</h3>
+                    </div>
+                    <div class="achievements-list">
+                        <!-- Racha -->
+                        <div class="achievement-item">
+                            <div class="ach-icon-wrap icon-bg-yellow">
+                                <span class="material-symbols-outlined">local_fire_department</span>
+                            </div>
+                            <div class="ach-info">
+                                <span class="ach-name">Racha de Estudio</span>
+                                <span class="ach-value">{{ userProfile?.study_streak || 0 }} días</span>
+                            </div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-fill" [style.width.%]="((userProfile?.study_streak || 0) / 30) * 100"></div>
+                        </div>
+                        <p class="streak-goal">Meta: 30 días consecutivos</p>
+
+                        <!-- XP -->
+                        <div class="achievement-item" style="margin-top: 1rem;">
+                            <div class="ach-icon-wrap icon-bg-sky">
+                                <span class="material-symbols-outlined">bolt</span>
+                            </div>
+                            <div class="ach-info">
+                                <span class="ach-name">Puntos de Experiencia</span>
+                                <span class="ach-value">{{ userProfile?.xp || 0 }} XP</span>
+                            </div>
+                        </div>
+
+                        <!-- Plan -->
+                        <div class="achievement-item">
+                            <div class="ach-icon-wrap"
+                                 [class.icon-bg-yellow]="userProfile?.is_premium"
+                                 [class.icon-bg-purple]="!userProfile?.is_premium">
+                                <span class="material-symbols-outlined">{{ userProfile?.is_premium ? 'workspace_premium' : 'school' }}</span>
+                            </div>
+                            <div class="ach-info">
+                                <span class="ach-name">Plan actual</span>
+                                <span class="ach-value">{{ userProfile?.role === 'ROLE_PREMIUM' ? 'Premium' : userProfile?.role === 'ROLE_ADMIN' ? 'Admin' : 'Free' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a routerLink="/progreso" class="btn-block">Ver progreso completo</a>
+                </section>
+
+                <!-- Estadísticas -->
+                <section class="card">
+                    <h3 class="card-title" style="margin-bottom: 1.5rem;">Estadísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">{{ userProfile?.xp || 0 }}</div>
+                            <p class="stat-label">XP Ganado</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">{{ userProfile?.study_streak || 0 }}</div>
+                            <p class="stat-label">Días de Racha</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value stat-sky">—</div>
+                            <p class="stat-label">Horas Totales</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">—</div>
+                            <p class="stat-label">Certificados</p>
+                        </div>
+                    </div>
+                    <p class="stats-note">Los valores "—" estarán disponibles próximamente.</p>
+                </section>
+
+                <!-- Zona de Peligro -->
+                <section class="card card-danger">
+                    <h3 class="danger-title">Zona de Peligro</h3>
+                    <p class="danger-desc">Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate.</p>
+                    <button
+                        class="btn-danger"
+                        (click)="deleteAccount()"
+                        [disabled]="isDeletingAccount"
+                    >
+                        <span *ngIf="isDeletingAccount">Eliminando...</span>
+                        <span *ngIf="!isDeletingAccount">Eliminar Cuenta</span>
+                    </button>
+                </section>
+
+            </div><!-- /col-right -->
+        </div><!-- /content-grid -->
+
+        <!-- Floating Save Button -->
+        <div class="fab-wrapper">
+            <button (click)="saveProfile()" [disabled]="isSaving" class="fab-btn">
+                <span *ngIf="isSaving"  class="material-symbols-outlined spin">refresh</span>
+                <span *ngIf="!isSaving && !saveSuccess" class="material-symbols-outlined">save</span>
+                <span *ngIf="saveSuccess" class="material-symbols-outlined fab-success">check_circle</span>
+                {{ isSaving ? 'Guardando...' : (saveSuccess ? '¡Guardado!' : 'Guardar Cambios') }}
+            </button>
+        </div>
+    </main>
+</div>

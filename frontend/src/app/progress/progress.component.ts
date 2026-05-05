@@ -2,11 +2,13 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, KeyValuePipe } from '@angular/common';
+import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-progress',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, KeyValuePipe],
+  imports: [NgIf, NgFor, RouterLink, KeyValuePipe, TopbarComponent],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })
@@ -27,7 +29,8 @@ export class ProgressComponent implements OnInit {
   loadProfile() {
     this.userProfile = {
       first_name: localStorage.getItem('first_name') || 'Estudiante',
-      username: localStorage.getItem('username') || 'Usuario'
+      username: localStorage.getItem('username') || 'Usuario',
+      role: localStorage.getItem('role') || 'ROLE_FREE'
     };
   }
 
@@ -39,7 +42,7 @@ export class ProgressComponent implements OnInit {
       return;
     }
 
-    this.http.get<any>('http://localhost:8042/api/v1/gamification/progress/', {
+    this.http.get<any>(`${environment.apiUrl}/gamification/progress/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (data) => {
@@ -52,7 +55,7 @@ export class ProgressComponent implements OnInit {
         console.error('Error loading progress:', err);
         this.isLoading = false;
         this.cdr.detectChanges();
-        this.router.navigate(['/login']);
+        // Ya no redirigimos al login para evitar el bucle de cierre de sesión
       }
     });
   }

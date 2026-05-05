@@ -1,5 +1,43 @@
-<div *ngIf="isLoading" class="min-h-screen flex items-center justify-center bg-[#0b0f19]">
-    <div class="text-white text-xl">Cargando tu progreso...</div>
+<div *ngIf="isLoading" class="bg-[#0b0f19] min-h-screen p-8 selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+    <!-- Navbar Skeleton (hidden on mobile) -->
+    <div class="hidden md:block fixed left-0 top-0 h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4">
+        <div class="flex items-center gap-3 mb-12 px-4">
+            <app-skeleton width="32px" height="32px" radius="50%"></app-skeleton>
+            <app-skeleton width="120px" height="24px"></app-skeleton>
+        </div>
+        <div class="space-y-4">
+            <app-skeleton width="100%" height="40px" radius="8px" *ngFor="let i of [1,2,3,4]"></app-skeleton>
+        </div>
+    </div>
+
+    <!-- Main Content Skeleton -->
+    <div class="md:ml-64 max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div class="lg:col-span-8 xl:col-span-9 space-y-8">
+            <!-- Header -->
+            <section>
+                <app-skeleton width="300px" height="2.5rem" class="mb-2"></app-skeleton>
+                <app-skeleton width="200px" height="1.2rem"></app-skeleton>
+            </section>
+            
+            <!-- Stats -->
+            <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <app-skeleton height="100px" radius="12px" *ngFor="let i of [1,2,3]"></app-skeleton>
+            </section>
+
+            <!-- Grid -->
+            <section>
+                <app-skeleton width="150px" height="1.8rem" class="mb-6"></app-skeleton>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <app-skeleton height="350px" radius="12px" *ngFor="let i of [1,2]"></app-skeleton>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+            <app-skeleton height="500px" radius="12px"></app-skeleton>
+        </aside>
+    </div>
 </div>
 
 <div *ngIf="!isLoading" class="bg-background text-on-background min-h-screen flex selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
@@ -7,68 +45,65 @@
 <div class="blob-bg bg-tertiary-container w-[600px] h-[600px] bottom-[-200px] right-[-200px]"></div>
 
 <!-- SideNavBar -->
-<nav class="hidden md:flex flex-col h-screen w-64 border-r border-white/10 bg-[#0b0f19]/60 backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
-<div class="flex items-center gap-3 mb-12 px-4">
-<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-container to-tertiary-container flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
-<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-</div>
-<div>
-<h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">Flemy</h1>
-<p class="font-label-caps text-label-caps text-on-surface-variant">AI Education</p>
-</div>
-</div>
-<div class="flex-1 space-y-2">
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold font-body-md text-body-md transition-all cursor-pointer" >
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
-                Dashboard
-            </a>
-            <a routerLink="/progreso" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer">
-<span class="material-symbols-outlined">monitoring</span>
-                Progreso
-            </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer" >
-<span class="material-symbols-outlined">person</span>
-                Profile
-            </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md scale-95 active:scale-90 transition-transform cursor-pointer">
-<span class="material-symbols-outlined">workspace_premium</span>
-                Certificates
-            </a>
-</div>
-<div class="mt-auto space-y-4">
-<div class="glass-card rounded-xl p-4 text-center">
-<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">Unlock all features</p>
-<button class="w-full py-2 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white font-body-md text-body-md font-semibold shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Upgrade to Pro</button>
-</div>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer" (click)="logout($event)">
-<span class="material-symbols-outlined">logout</span>
-                Log Out
-            </a>
-</div>
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+    <div class="flex items-center gap-3 mb-12 px-4">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-space tracking-tight">Flemy</h1>
+            <p class="font-label-caps text-label-caps text-[#cbd5e1] text-xs">AI Education</p>
+        </div>
+    </div>
+    <div class="flex-1 space-y-2">
+        <a routerLink="/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+        </a>
+        <a routerLink="/progreso" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">monitoring</span>
+            Progreso
+        </a>
+        <a routerLink="/catalog" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">auto_stories</span>
+            Catálogo
+        </a>
+        <a routerLink="/subscription" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">workspace_premium</span>
+            Suscripción
+        </a>
+        <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300 font-body-md text-body-md border border-sky-500/10 bg-sky-500/5">
+            <span class="material-symbols-outlined text-sky-400">admin_panel_settings</span>
+            Panel Admin
+        </a>
+    </div>
+    <div class="mt-auto space-y-4">
+        <!-- User Profile Section in Sidebar -->
+        <div class="px-4 py-4 mb-2 bg-white/5 rounded-xl border border-white/5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border border-sky-500/30 overflow-hidden bg-sky-500/10">
+              <img [src]="'https://ui-avatars.com/api/?name=' + (userProfile?.first_name || userProfile?.username || 'U') + '&background=0ea5e9&color=fff'" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 overflow-hidden">
+              <p class="text-sm font-bold text-white truncate">{{ userProfile?.first_name || userProfile?.username || 'Estudiante' }}</p>
+              <p class="text-[10px] uppercase tracking-wider font-bold" [ngClass]="userProfile?.role === 'ROLE_PREMIUM' ? 'text-amber-400' : 'text-slate-500'">
+                {{ userProfile?.role === 'ROLE_PREMIUM' ? 'Plan Premium' : 'Plan Free' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer" (click)="logout($event)">
+            <span class="material-symbols-outlined">logout</span>
+            Cerrar Sesión
+        </a>
+    </div>
 </nav>
 <!-- Main Content -->
 <main class="flex-1 flex flex-col min-h-screen">
 <!-- TopAppBar -->
-<header class="flex items-center justify-between px-8 w-full h-20 border-b border-white/5 bg-[#0b0f19]/30 backdrop-blur-md sticky top-0 z-40">
-<div class="md:hidden">
-<h1 class="text-xl font-bold text-white font-['Space_Grotesk']">Flemy</h1>
-</div>
-<div class="hidden md:block"></div>
-<div class="flex items-center gap-4">
-<button class="text-slate-300 hover:bg-white/5 rounded-full p-2 transition-all focus:ring-2 focus:ring-sky-500">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<button class="text-slate-300 hover:bg-white/5 rounded-full p-2 transition-all focus:ring-2 focus:ring-sky-500">
-<span class="material-symbols-outlined">settings</span>
-</button>
-<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-white/10 ml-2">
-<img *ngIf="userProfile?.photo; else placeholderPic" alt="Student Profile" class="w-full h-full object-cover" [src]="userProfile.photo" />
-<ng-template #placeholderPic>
-    <img alt="Default Profile" class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ userProfile?.first_name || userProfile?.username }}&background=0D8ABC&color=fff"/>
-</ng-template>
-</div>
-</div>
-</header>
+<!-- TopAppBar Unificado -->
+<app-topbar [userProfile]="userProfile"></app-topbar>
 
 <div class="p-8 max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
 <!-- Left Column (Main) -->
@@ -136,9 +171,13 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!userProfile?.active_enrollments?.length" class="col-span-full py-12 text-center glass-card rounded-xl">
-    <p class="text-on-surface-variant">No tienes cursos activos. ¡Explora el catálogo!</p>
-    <button routerLink="/catalog" class="mt-4 px-6 py-2 bg-primary-container text-white rounded-lg">Ver Catálogo</button>
+  <div *ngIf="!userProfile?.active_enrollments?.length" class="col-span-full py-16 text-center glass-card rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-white/10">
+    <span class="material-symbols-outlined text-6xl text-sky-400 mb-4 opacity-70">school</span>
+    <h3 class="font-h2 text-h2 text-white mb-2">Comienza tu Aventura</h3>
+    <p class="text-on-surface-variant max-w-md mx-auto mb-6">Aún no estás inscrito en ningún curso. Visita nuestro catálogo para descubrir nuevas habilidades.</p>
+    <button routerLink="/catalog" class="px-8 py-3 bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 text-white rounded-lg font-bold shadow-lg transition-transform hover:-translate-y-1">
+      Explorar Catálogo
+    </button>
   </div>
 </div>
 </section>
@@ -161,8 +200,10 @@
     <button [routerLink]="['/catalog', suggestion.slug]" class="w-full py-2 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white font-body-sm text-body-sm font-medium shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Ver Detalles</button>
   </div>
 </div>
-<div *ngIf="!userProfile?.ai_suggestions?.length" class="text-center py-4 bg-white/5 rounded-lg border border-dashed border-white/20">
-  <p class="text-xs text-on-surface-variant italic">No hay sugerencias por ahora</p>
+<div *ngIf="!userProfile?.ai_suggestions?.length" class="text-center py-8 bg-white/5 rounded-lg border border-dashed border-white/20 flex flex-col items-center">
+  <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">neurology</span>
+  <p class="text-sm text-slate-400 font-medium">Nuestra IA está analizando tu perfil</p>
+  <p class="text-xs text-slate-500 mt-1">Sugeriremos nuevos cursos pronto.</p>
 </div>
 </div>
 </aside>

@@ -4,6 +4,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -38,30 +40,22 @@ export class Register {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
+    this.cdr.detectChanges();
     const formData = this.registerForm.value;
 
-    this.http.post<any>('http://localhost:8042/api/v1/auth/register/', formData)
+    this.http.post<any>(`${environment.apiUrl}/auth/register/`, formData)
       .subscribe({
         next: () => {
           this.isLoading = false;
           this.successMessage = 'Registro exitoso. Redirigiendo al login...';
+          this.cdr.detectChanges();
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);
         },
-        error: (err) => {
-          console.error('Registration error:', err);
+        error: () => {
           this.isLoading = false;
-          if (err.error && typeof err.error === 'object') {
-             try {
-                 const errors = Object.values(err.error).flat();
-                 this.errorMessage = errors.length > 0 ? errors[0] as string : 'Error en el registro';
-             } catch (e) {
-                 this.errorMessage = 'Error en el registro';
-             }
-          } else {
-             this.errorMessage = 'Error en el registro. Verifica los datos.';
-          }
+          // El error específico lo maneja el interceptor global
           this.cdr.detectChanges();
         }
       });

@@ -1,0 +1,133 @@
+<div class="min-h-screen bg-[#0b0f19] text-white font-['Inter']">
+  <app-topbar></app-topbar>
+
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h1 class="text-3xl font-black font-space tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Panel de Administración</h1>
+        <p class="text-slate-400 mt-1">Métricas globales y gestión de la plataforma Flemy.</p>
+      </div>
+      <div class="flex gap-3">
+        <button class="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold transition-all">
+          Descargar Reporte
+        </button>
+        <button class="px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          Nuevo Curso
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div *ngFor="let i of [1,2,3,4]" class="h-32 bg-white/5 border border-white/5 rounded-2xl animate-pulse"></div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div *ngIf="!isLoading && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl hover:border-sky-500/30 transition-all group">
+        <div class="w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-400 mb-4 group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined">group</span>
+        </div>
+        <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Usuarios Totales</p>
+        <p class="text-3xl font-black mt-1">{{ stats.total_users }}</p>
+      </div>
+
+      <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl hover:border-amber-500/30 transition-all group">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 mb-4 group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined">workspace_premium</span>
+        </div>
+        <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Miembros Premium</p>
+        <p class="text-3xl font-black mt-1">{{ stats.premium_users }}</p>
+      </div>
+
+      <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl hover:border-purple-500/30 transition-all group">
+        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4 group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined">auto_stories</span>
+        </div>
+        <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Inscripciones</p>
+        <p class="text-3xl font-black mt-1">{{ stats.total_enrollments }}</p>
+      </div>
+
+      <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl hover:border-emerald-500/30 transition-all group">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+        <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Ingresos Totales</p>
+        <p class="text-3xl font-black mt-1">${{ stats.total_revenue | number:'1.2-2' }}</p>
+      </div>
+    </div>
+
+    <!-- Recent Activity & Sales -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Sales Table -->
+      <div class="lg:col-span-8 bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+          <h2 class="font-bold text-lg">Ventas Recientes</h2>
+          <span class="text-xs text-sky-400 font-mono">Últimas 5 transacciones</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-xs uppercase tracking-widest text-slate-500 border-b border-white/5">
+                <th class="px-6 py-4 font-bold">Usuario</th>
+                <th class="px-6 py-4 font-bold">Monto</th>
+                <th class="px-6 py-4 font-bold">Fecha</th>
+                <th class="px-6 py-4 font-bold">Estado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              <tr *ngFor="let sale of recentSales" class="hover:bg-white/5 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center text-[10px] font-bold">
+                      {{ sale.user[0].toUpperCase() }}
+                    </div>
+                    <span class="text-sm font-medium">{{ sale.user }}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-mono text-emerald-400">${{ sale.amount | number:'1.2-2' }}</td>
+                <td class="px-6 py-4 text-sm text-slate-400">{{ sale.date }}</td>
+                <td class="px-6 py-4">
+                  <span class="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase">Completado</span>
+                </td>
+              </tr>
+              <tr *ngIf="recentSales.length === 0">
+                <td colspan="4" class="px-6 py-10 text-center text-slate-500 italic">No hay ventas registradas aún.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="bg-gradient-to-br from-sky-500/20 to-purple-500/20 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden">
+          <div class="relative z-10">
+            <h3 class="text-xl font-bold mb-2">Soporte IA Admin</h3>
+            <p class="text-slate-400 text-sm mb-6">Pregúntale a Flemy AI sobre el rendimiento de tu plataforma o cómo mejorar la retención.</p>
+            <button class="w-full py-3 bg-white text-black rounded-xl font-bold hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+              Consultar a la IA
+            </button>
+          </div>
+          <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-sky-500 blur-[80px] opacity-30"></div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-6">
+          <h3 class="font-bold mb-4">Mantenimiento</h3>
+          <div class="space-y-3">
+            <button class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 text-sm text-slate-400">
+              <span class="material-symbols-outlined text-amber-400">database</span>
+              Limpiar Caché del Sistema
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 text-sm text-slate-400">
+              <span class="material-symbols-outlined text-sky-400">mail</span>
+              Enviar Notificación Masiva
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

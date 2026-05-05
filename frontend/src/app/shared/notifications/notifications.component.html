@@ -1,0 +1,48 @@
+<div class="notifications-wrapper">
+  <!-- Campana de Notificaciones -->
+  <button class="bell-btn" (click)="toggleDropdown()">
+    <span class="material-symbols-outlined bell-icon">notifications</span>
+    <!-- Indicador de no leído -->
+    <span *ngIf="unreadCount > 0" class="badge animate-bounce">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+  </button>
+
+  <!-- Dropdown Flotante -->
+  <div class="dropdown-panel" [class.show]="isOpen">
+    <div class="dp-header">
+      <h3 class="dp-title">Notificaciones</h3>
+      <button *ngIf="unreadCount > 0" class="mark-all-btn" (click)="markAllAsRead()">Marcar leídas</button>
+    </div>
+
+    <div class="dp-content custom-scrollbar">
+      <div *ngIf="notifications.length === 0" class="empty-state">
+        <span class="material-symbols-outlined empty-icon">notifications_off</span>
+        <p>No tienes notificaciones en este momento.</p>
+      </div>
+
+      <div 
+        *ngFor="let notif of notifications" 
+        class="notif-item" 
+        [class.unread]="!notif.is_read"
+        (click)="handleNotificationClick(notif)">
+        
+        <!-- Icono según tipo -->
+        <div class="notif-icon-wrap" [ngClass]="notif.type.toLowerCase()">
+          <span class="material-symbols-outlined">{{ getIconForType(notif.type) }}</span>
+        </div>
+
+        <!-- Contenido -->
+        <div class="notif-content">
+          <h4 class="notif-title">{{ notif.title }}</h4>
+          <p class="notif-message">{{ notif.message }}</p>
+          <span class="notif-time">{{ notif.created_at | date:'short' }}</span>
+        </div>
+
+        <!-- Accion Read/Unread -->
+        <div *ngIf="!notif.is_read" class="notif-action" title="Marcar como leída">
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
