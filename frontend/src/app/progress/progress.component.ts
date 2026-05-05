@@ -1,14 +1,14 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { NgIf, NgFor, KeyValuePipe } from '@angular/common';
+import { NgIf, NgFor, KeyValuePipe, NgClass } from '@angular/common';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-progress',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, KeyValuePipe, TopbarComponent],
+  imports: [NgIf, NgFor, NgClass, RouterLink, KeyValuePipe, TopbarComponent],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })

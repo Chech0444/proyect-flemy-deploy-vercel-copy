@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -19,8 +19,12 @@ export class CourseDetailComponent implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
+  private cdr = inject(ChangeDetectorRef);
 
   courseId: string | null = null;
+  course: any = null;
+  isLoading = true;
+  
   // Estado de la UI según la imagen
   activeTab: 'description' | 'chat' | 'transcription' | 'editor' = 'description';
   
@@ -65,6 +69,7 @@ export class CourseDetailComponent implements OnInit {
         }
         
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         if (err.status === 403) {
@@ -114,10 +119,12 @@ export class CourseDetailComponent implements OnInit {
         this.aiResponse = res.answer;
         this.isAiTyping = false;
         this.aiQuery = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.notificationService.showError('El tutor IA no pudo responder en este momento.');
         this.isAiTyping = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -140,6 +147,7 @@ export class CourseDetailComponent implements OnInit {
         this.isLoading = false;
         const msg = err.error?.detail || 'No se pudo completar la inscripción.';
         this.notificationService.showError(msg);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -154,10 +162,12 @@ export class CourseDetailComponent implements OnInit {
     lesson.active = true;
     this.aiResponse = ''; // Limpiar respuesta IA al cambiar de tema
     this.notificationService.showSuccess(`Cargando: ${lesson.title}`);
+    this.cdr.detectChanges();
   }
 
   selectTab(tab: 'description' | 'chat' | 'transcription' | 'editor') {
     this.activeTab = tab;
+    this.cdr.detectChanges();
   }
 
   runCode() {
@@ -175,10 +185,12 @@ export class CourseDetailComponent implements OnInit {
         next: (res) => {
           this.outputContent = `> Resultado de la activación: 0.5841905243301777\n\n[IA FEEDBACK]: ${res.feedback}`;
           this.isExecutingCode = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.outputContent = '> Resultado de la activación: 0.5841905243301777\n\n[Error al obtener feedback de IA]';
           this.isExecutingCode = false;
+          this.cdr.detectChanges();
         }
       });
     }, 1500);

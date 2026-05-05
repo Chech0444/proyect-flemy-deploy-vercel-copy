@@ -785,3 +785,73 @@ INFO 2026-05-05 06:34:42,148 autoreload 7484 13008 C:\Users\USER\Documents\proye
 INFO 2026-05-05 06:34:44,636 autoreload 15368 20092 Watching for file changes with StatReloader
 INFO 2026-05-05 06:34:44,637 autoreload 19328 15688 Watching for file changes with StatReloader
 INFO 2026-05-05 06:34:44,637 autoreload 12112 18040 Watching for file changes with StatReloader
+INFO 2026-05-05 07:23:59,637 autoreload 12372 12668 Watching for file changes with StatReloader
+INFO 2026-05-05 07:34:05,096 log 12372 14680 "OPTIONS /api/v1/auth/login/ HTTP/1.1" 200 0
+WARNING 2026-05-05 07:34:05,110 log 12372 14680 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:34:05,112 log 12372 14680 "POST /api/v1/auth/login/ HTTP/1.1" 401 78
+WARNING 2026-05-05 07:34:10,439 log 12372 14680 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:34:10,440 log 12372 14680 "POST /api/v1/auth/login/ HTTP/1.1" 401 78
+WARNING 2026-05-05 07:34:12,065 log 12372 14680 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:34:12,066 log 12372 14680 "POST /api/v1/auth/login/ HTTP/1.1" 401 78
+WARNING 2026-05-05 07:34:12,260 log 12372 14680 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:34:12,261 log 12372 14680 "POST /api/v1/auth/login/ HTTP/1.1" 401 78
+INFO 2026-05-05 07:34:15,730 log 12372 14680 "POST /api/v1/auth/login/ HTTP/1.1" 200 506
+INFO 2026-05-05 07:34:15,735 log 12372 14680 "OPTIONS /api/v1/auth/profile/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:15,742 log 12372 14680 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:34:15,766 log 12372 14680 "OPTIONS /api/v1/gamification/dashboard/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:15,785 log 12372 14680 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 754
+INFO 2026-05-05 07:34:15,809 log 12372 14680 "OPTIONS /api/v1/auth/notifications/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:15,822 log 12372 14680 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:22,667 log 12372 14680 "OPTIONS /api/v1/gamification/progress/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:22,680 log 12372 14680 "GET /api/v1/gamification/progress/ HTTP/1.1" 200 664
+INFO 2026-05-05 07:34:22,701 log 12372 14680 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:24,106 log 12372 27628 "OPTIONS /api/v1/courses/catalog/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:24,115 log 12372 14680 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:24,119 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:34:24,127 log 12372 12424 "GET /api/v1/courses/catalog/ HTTP/1.1" 200 649
+INFO 2026-05-05 07:34:24,952 log 12372 12424 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:34:24,956 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:27,647 log 12372 14680 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:34:27,649 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:27,653 log 12372 12424 "GET /api/v1/courses/catalog/ HTTP/1.1" 200 649
+INFO 2026-05-05 07:34:42,940 log 12372 12424 "OPTIONS /api/v1/courses/catalog/curso-premium-ia/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:42,954 log 12372 12424 "GET /api/v1/courses/catalog/curso-premium-ia/ HTTP/1.1" 200 209
+INFO 2026-05-05 07:34:46,091 log 12372 14680 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:34:46,091 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:46,098 log 12372 27628 "GET /api/v1/courses/catalog/ HTTP/1.1" 200 649
+INFO 2026-05-05 07:34:47,976 log 12372 27628 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 742
+INFO 2026-05-05 07:34:47,993 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:34:52,840 log 12372 27628 "OPTIONS /api/v1/auth/logout/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:34:52,856 log 12372 27628 "POST /api/v1/auth/logout/ HTTP/1.1" 205 0
+WARNING 2026-05-05 07:35:01,536 log 12372 27628 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:35:01,536 log 12372 27628 "POST /api/v1/auth/login/ HTTP/1.1" 401 78
+WARNING 2026-05-05 07:35:12,930 log 12372 27628 Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-05 07:35:12,931 log 12372 27628 "POST /api/v1/auth/login/ HTTP/1.1" 401 83
+INFO 2026-05-05 07:35:20,201 log 12372 27628 "POST /api/v1/auth/login/ HTTP/1.1" 200 506
+INFO 2026-05-05 07:35:20,211 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:35:20,244 log 12372 27628 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 742
+INFO 2026-05-05 07:35:20,263 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:35:26,384 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:35:26,422 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:35:33,334 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:35:33,338 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:35:52,289 log 12372 12424 "GET /api/v1/gamification/progress/ HTTP/1.1" 200 664
+INFO 2026-05-05 07:35:52,303 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:36:10,384 log 12372 12424 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 691
+INFO 2026-05-05 07:36:10,400 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:36:11,528 log 12372 12424 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:36:11,532 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1283
+INFO 2026-05-05 07:36:42,531 log 12372 27628 "OPTIONS /api/v1/billing/pay/simulate/ HTTP/1.1" 200 0
+INFO 2026-05-05 07:36:42,572 log 12372 27628 "POST /api/v1/billing/pay/simulate/ HTTP/1.1" 200 116
+INFO 2026-05-05 07:36:42,585 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:36:44,607 log 12372 27628 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 754
+INFO 2026-05-05 07:36:44,625 log 12372 27628 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1546
+INFO 2026-05-05 07:36:54,370 log 12372 27628 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:36:54,373 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1546
+INFO 2026-05-05 07:36:57,008 log 12372 12424 "GET /api/v1/gamification/dashboard/ HTTP/1.1" 200 754
+INFO 2026-05-05 07:36:57,026 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1546
+INFO 2026-05-05 07:37:13,901 log 12372 14680 "GET /api/v1/auth/profile/ HTTP/1.1" 200 247
+INFO 2026-05-05 07:37:13,906 log 12372 12424 "GET /api/v1/auth/notifications/ HTTP/1.1" 200 1546
+INFO 2026-05-05 07:37:13,911 log 12372 27628 "GET /api/v1/courses/catalog/ HTTP/1.1" 200 649
+INFO 2026-05-05 07:37:25,293 log 12372 27628 "GET /api/v1/courses/catalog/curso-premium-ia/ HTTP/1.1" 200 209
+INFO 2026-05-05 07:40:00,601 autoreload 21320 24528 Watching for file changes with StatReloader

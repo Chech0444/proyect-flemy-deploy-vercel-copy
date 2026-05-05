@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NotificationService } from '../shared/notification.service';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-subscription',
@@ -20,6 +21,7 @@ export class SubscriptionComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   paymentForm: FormGroup;
   isLoading = false;
