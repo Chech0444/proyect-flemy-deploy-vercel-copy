@@ -1,0 +1,33 @@
+# ===================================================
+# Dependencias - Plataforma de Cursos Online
+# ===================================================
+
+# Framework principal
+Django==5.1.4
+djangorestframework==3.15.2
+
+# Base de datos
+psycopg2-binary==2.9.10
+
+# Procesamiento en segundo plano
+celery==5.4.0
+redis==5.2.1
+
+# Procesamiento de video/audio
+moviepy==1.0.3
+ffmpeg-python==0.2.0
+
+# Transcripción de audio con IA (faster-whisper para compatibilidad Python 3.14)
+faster-whisper==1.1.0
+
+# IA para resumen y preguntas (Google Gemini - GRATIS)
+google-generativeai==0.8.3
+
+# CORS (para conectar frontend)
+django-cors-headers==4.6.0
+
+# Variables de entorno
+python-dotenv==1.0.1
+
+# Utilidades
+Pillow==11.0.0

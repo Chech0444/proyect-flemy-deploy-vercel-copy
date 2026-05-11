@@ -1,0 +1,25 @@
+# Ignorar el entorno virtual local (Docker instalará sus propias dependencias)
+venv/
+.venv/
+env/
+
+# Ignorar archivos de caché de Python
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar archivos de Git
+.git/
+.gitignore
+
+# Ignorar archivos de media y temporales
+media/
+staticfiles/
+.env
+
+# Archivos de base de datos local
+*.sqlite3
+
+# Logs
+*.log
