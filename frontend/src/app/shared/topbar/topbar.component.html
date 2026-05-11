@@ -1,0 +1,42 @@
+<header class="topbar">
+  <!-- Izquierda: Brand / Title -->
+  <div class="topbar-left">
+    <!-- Mostrar título si existe (Ej: "Configuración de Perfil") -->
+    <h2 *ngIf="title" class="topbar-title">{{ title }}</h2>
+    
+    <!-- Mostrar brand si no hay título y estamos en móvil (Dashboard) -->
+    <div *ngIf="!title" class="md-hidden">
+      <h1 class="brand-text">Flemy</h1>
+    </div>
+  </div>
+
+  <!-- Centro: Espacio vacío para flex-between -->
+  <div class="hidden md-block"></div>
+
+  <!-- Derecha: Acciones e info de usuario -->
+  <div class="topbar-right">
+    <!-- Icono de Notificaciones -->
+    <app-notifications></app-notifications>
+
+    <!-- Icono de Ajustes (Configuracion) -->
+    <a routerLink="/configuracion" class="icon-btn" title="Ajustes">
+      <span class="material-symbols-outlined">settings</span>
+    </a>
+
+    <!-- Usuario -->
+    <div class="user-info">
+      <span class="username">{{ userProfile?.username }}</span>
+      <a routerLink="/perfil" class="avatar-link" title="Ver Perfil">
+        <img *ngIf="userProfile?.photo; else placeholderPic" 
+             class="avatar-img" 
+             [src]="userProfile.photo" 
+             alt="Avatar">
+        <ng-template #placeholderPic>
+          <img class="avatar-img" 
+               [src]="'https://ui-avatars.com/api/?name=' + (userProfile?.first_name || userProfile?.username || 'U') + '&background=0D8ABC&color=fff'" 
+               alt="Default Avatar">
+        </ng-template>
+      </a>
+    </div>
+  </div>
+</header>

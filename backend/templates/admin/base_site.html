@@ -1,0 +1,140 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | Panel Flemy{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/flemy-admin.css' %}?v=2.0">
+<style>
+  :root {
+    --accent: #14b8a6;
+    /* Teal accent */
+    --primary: #0d9488;
+    --body-bg: #0b0e14;
+  }
+
+  #header {
+    background: rgba(11, 14, 20, 0.98);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #30363d;
+  }
+
+  .flemy-brand__mark {
+    background: linear-gradient(135deg, #14b8a6, #0d9488) !important;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: white;
+    margin-right: 12px;
+  }
+
+  #branding h1 a {
+    color: #f1f5f9 !important;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .button,
+  input[type=submit],
+  input.default {
+    background: var(--accent) !important;
+    transition: filter 0.2s;
+  }
+
+  /* User Tools / Profile area */
+  #user-tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  #user-tools strong {
+    color: #ffffff;
+  }
+
+  #user-tools a {
+    color: #94a3b8 !important;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  #user-tools a:hover {
+    color: #14b8a6 !important;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #30363d;
+    border: 2px solid #14b8a6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .user-avatar svg {
+    width: 100%;
+    height: 100%;
+    fill: #94a3b8;
+  }
+
+  .button:hover,
+  input[type=submit]:hover {
+    filter: brightness(1.1);
+  }
+
+  /* Hide sidebar globally */
+  #nav-sidebar {
+    display: none !important;
+  }
+
+  #content {
+    margin-left: 0 !important;
+  }
+
+  #main {
+    margin-left: 0 !important;
+  }
+
+  .breadcrumbs {
+    display: none !important;
+  }
+</style>
+{% endblock %}
+
+{% block welcome-msg %}
+<div class="user-avatar" style="margin-right: 15px;">
+  <svg viewBox="0 0 24 24">
+    <path
+      d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+</div>
+<div style="display: flex; flex-direction: column;">
+  <span style="font-size: 9px; opacity: 0.7;">Bienvenido/a,</span>
+  <strong>{% firstof user.get_short_name user.get_username %}</strong>
+</div>
+{% endblock %}
+
+{% block branding %}
+<div class="flemy-brand" style="display: flex; align-items: center; gap: 15px;">
+  <div class="flemy-brand__copy">
+    <h1 id="site-name" style="margin: 0; line-height: 1.2;"><a href="{% url 'admin:index' %}"
+        style="font-size: 22px;">Panel Administrativo Flemy</a></h1>
+    <p style="margin: 0; color: #94a3b8; font-size: 13px; font-weight: 500;">Gestión de cursos, usuarios, progreso,
+      certificados e IA</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

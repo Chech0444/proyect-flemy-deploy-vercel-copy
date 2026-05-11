@@ -1,0 +1,239 @@
+<div class="h-screen bg-[#050810] flex flex-col font-['Inter'] text-white">
+  <app-topbar></app-topbar>
+
+  <div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+      
+      <!-- HEADER & TABS -->
+      <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
+        <div>
+          <h1 class="text-3xl font-black font-space mb-2">Panel de Administración</h1>
+          <p class="text-slate-400">Gestiona la plataforma, cursos e Inteligencia Artificial.</p>
+        </div>
+        <div class="flex bg-white/5 p-1 rounded-xl">
+          <button (click)="switchTab('stats')" [class.bg-sky-500]="activeTab === 'stats'" class="px-6 py-2 rounded-lg text-sm font-bold transition-all">Estadísticas</button>
+          <button (click)="switchTab('courses')" [class.bg-purple-500]="activeTab === 'courses'" class="px-6 py-2 rounded-lg text-sm font-bold transition-all">Gestor de Cursos</button>
+        </div>
+      </div>
+
+      <!-- TAB: ESTADÍSTICAS (Original) -->
+      <div *ngIf="activeTab === 'stats'">
+        <div *ngIf="isLoading" class="text-center py-20 text-sky-400"><span class="material-symbols-outlined animate-spin text-4xl">autorenew</span></div>
+        <div *ngIf="!isLoading && stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-[#0b0f19] border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
+            <div class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Total Usuarios</div>
+            <div class="text-4xl font-black text-white font-space">{{ stats.total_users }}</div>
+          </div>
+          <div class="bg-[#0b0f19] border border-sky-500/20 rounded-2xl p-6 shadow-xl shadow-sky-500/5">
+            <div class="text-sky-400 text-sm font-bold uppercase tracking-wider mb-2">Usuarios Premium</div>
+            <div class="text-4xl font-black text-sky-300 font-space">{{ stats.premium_users }}</div>
+          </div>
+          <div class="bg-[#0b0f19] border border-emerald-500/20 rounded-2xl p-6 shadow-xl shadow-emerald-500/5">
+            <div class="text-emerald-400 text-sm font-bold uppercase tracking-wider mb-2">Ingresos Totales</div>
+            <div class="text-4xl font-black text-emerald-300 font-space">${{ stats.total_revenue }}</div>
+          </div>
+          <div class="bg-[#0b0f19] border border-purple-500/20 rounded-2xl p-6 shadow-xl shadow-purple-500/5">
+            <div class="text-purple-400 text-sm font-bold uppercase tracking-wider mb-2">Videos Procesados IA</div>
+            <div class="text-4xl font-black text-purple-300 font-space">Automático</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: CURSOS (CRUD) -->
+      <div *ngIf="activeTab === 'courses'" class="grid grid-cols-12 gap-6 h-[70vh]">
+        
+        <!-- COL 1: Cursos -->
+        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold font-space text-sky-400">Cursos</h2>
+            <button (click)="openCourseModal()" class="w-8 h-8 rounded-lg bg-sky-500 hover:bg-sky-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
+          </div>
+          <div class="flex-1 overflow-y-auto space-y-2">
+            <div *ngFor="let c of courses" (click)="selectCourse(c)" [class.bg-sky-500]="selectedCourse?.id === c.id" [class.bg-white_5]="selectedCourse?.id !== c.id" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-transparent group">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold text-sm">{{ c.title }}</div>
+                  <div class="text-[10px] uppercase text-slate-400 mt-1">
+                    <span *ngIf="c.is_published" class="text-emerald-400">Publicado</span>
+                    <span *ngIf="!c.is_published" class="text-amber-400">Borrador</span>
+                    • {{ c.is_premium ? 'Premium' : 'Gratis' }}
+                  </div>
+                </div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button (click)="openCourseModal(c); $event.stopPropagation()" class="p-1 text-sky-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+                  <button (click)="deleteCourse(c.id); $event.stopPropagation()" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="courses.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay cursos</div>
+          </div>
+        </div>
+
+        <!-- COL 2: Secciones -->
+        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full" [class.opacity-50]="!selectedCourse" [class.pointer-events-none]="!selectedCourse">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold font-space text-purple-400">Secciones</h2>
+            <button *ngIf="selectedCourse" (click)="openSectionModal()" class="w-8 h-8 rounded-lg bg-purple-500 hover:bg-purple-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
+          </div>
+          <div class="text-xs text-slate-500 mb-4" *ngIf="selectedCourse">En: {{ selectedCourse.title }}</div>
+          
+          <div class="flex-1 overflow-y-auto space-y-2">
+            <div *ngFor="let s of sections" (click)="selectSection(s)" [class.bg-purple-500]="selectedSection?.id === s.id" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-transparent group">
+              <div class="flex justify-between items-center">
+                <div class="font-bold text-sm">#{{ s.order }} - {{ s.title }}</div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button (click)="openSectionModal(s); $event.stopPropagation()" class="p-1 text-purple-300 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+                  <button (click)="deleteSection(s.id); $event.stopPropagation()" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedCourse && sections.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay secciones</div>
+          </div>
+        </div>
+
+        <!-- COL 3: Lecciones -->
+        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full" [class.opacity-50]="!selectedSection" [class.pointer-events-none]="!selectedSection">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold font-space text-emerald-400">Lecciones</h2>
+            <button *ngIf="selectedSection" (click)="openLessonModal()" class="w-8 h-8 rounded-lg bg-emerald-500 hover:bg-emerald-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
+          </div>
+          <div class="text-xs text-slate-500 mb-4" *ngIf="selectedSection">En: {{ selectedSection.title }}</div>
+          
+          <div class="flex-1 overflow-y-auto space-y-2">
+            <div *ngFor="let l of lessons" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 group">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="font-bold text-sm">#{{ l.order }} - {{ l.title }}</div>
+                  <div class="text-[10px] text-slate-400 mt-1 uppercase">{{ l.is_premium ? 'PREMIUM' : 'GRATIS' }}</div>
+                </div>
+                <div class="flex gap-1">
+                  <button (click)="openLessonModal(l)" class="p-1 text-emerald-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+                  <button (click)="deleteLesson(l.id)" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+                </div>
+              </div>
+              <div class="text-[10px] text-slate-500 border-t border-white/5 pt-2 mt-2">
+                💡 TIP: Ve al catálogo como usuario para subir videos a las lecciones.
+              </div>
+            </div>
+            <div *ngIf="selectedSection && lessons.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay lecciones</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: COURSE -->
+  <div *ngIf="isCourseModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <h3 class="text-2xl font-bold font-space mb-6">{{ newCourse.id ? 'Editar Curso' : 'Nuevo Curso' }}</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
+          <input [(ngModel)]="newCourse.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Slug (URL amigable)</label>
+          <input [(ngModel)]="newCourse.slug" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Descripción Corta</label>
+          <input [(ngModel)]="newCourse.short_description" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Descripción Larga</label>
+          <textarea [(ngModel)]="newCourse.description" rows="3" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none resize-none"></textarea>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Nivel de Dificultad</label>
+          <select [(ngModel)]="newCourse.level" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none appearance-none">
+            <option value="Básico">Básico</option>
+            <option value="Intermedio">Intermedio</option>
+            <option value="Avanzado">Avanzado</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Imagen del Curso (Thumbnail)</label>
+          <input type="file" accept="image/*" (change)="onCourseImageSelected($event)" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-sky-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30">
+        </div>
+        <div class="flex gap-6 pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="newCourse.is_premium" class="w-5 h-5 rounded bg-black/40 border-white/10 text-sky-500 focus:ring-sky-500 focus:ring-offset-slate-900">
+            <span class="text-sm font-bold">Es Premium</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="newCourse.is_published" class="w-5 h-5 rounded bg-black/40 border-white/10 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
+            <span class="text-sm font-bold">Publicado</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-end gap-4 mt-8">
+        <button (click)="isCourseModalOpen = false" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10">Cancelar</button>
+        <button (click)="saveCourse()" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-sky-500 hover:bg-sky-400 text-white">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SECTION -->
+  <div *ngIf="isSectionModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-md">
+      <h3 class="text-2xl font-bold font-space mb-6">{{ newSection.id ? 'Editar Sección' : 'Nueva Sección' }}</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
+          <input [(ngModel)]="newSection.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-purple-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Orden (Número)</label>
+          <input type="number" [(ngModel)]="newSection.order" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-purple-500 focus:outline-none">
+        </div>
+      </div>
+      <div class="flex justify-end gap-4 mt-8">
+        <button (click)="isSectionModalOpen = false" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10">Cancelar</button>
+        <button (click)="saveSection()" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-purple-500 hover:bg-purple-400 text-white">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LESSON -->
+  <div *ngIf="isLessonModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <h3 class="text-2xl font-bold font-space mb-6">{{ newLesson.id ? 'Editar Lección' : 'Nueva Lección' }}</h3>
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
+            <input [(ngModel)]="newLesson.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 font-bold uppercase">Orden</label>
+            <input type="number" [(ngModel)]="newLesson.order" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Contenido de Texto</label>
+          <textarea [(ngModel)]="newLesson.content" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none resize-none"></textarea>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold uppercase">Archivo de Video (Lanza IA)</label>
+          <input type="file" accept="video/*" (change)="onLessonVideoSelected($event)" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30">
+          <p class="text-[10px] text-slate-500 mt-2">Al subir un video, pasará automáticamente a ser procesado por Whisper y Gemini en segundo plano.</p>
+        </div>
+        <div class="flex gap-6 pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="newLesson.is_premium" class="w-5 h-5 rounded bg-black/40 border-white/10 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
+            <span class="text-sm font-bold">Lección Exclusiva Premium</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-end gap-4 mt-8">
+        <button (click)="isLessonModalOpen = false" [disabled]="isUploadingVideo" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 disabled:opacity-50">Cancelar</button>
+        <button (click)="saveLesson()" [disabled]="isUploadingVideo" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-white disabled:opacity-50 flex items-center gap-2">
+          <span *ngIf="isUploadingVideo" class="material-symbols-outlined animate-spin text-[16px]">sync</span>
+          {{ isUploadingVideo ? 'Subiendo video...' : 'Guardar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

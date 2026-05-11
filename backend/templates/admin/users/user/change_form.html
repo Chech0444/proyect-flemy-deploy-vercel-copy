@@ -1,0 +1,327 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_modify static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Centered Dashboard Form Layout */
+    #content {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 40px !important;
+        min-height: calc(100vh - 150px);
+    }
+    
+    .centered-form-panel {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 24px;
+        padding: 40px;
+        width: 100%;
+        max-width: 900px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .form-header {
+        margin-bottom: 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .form-title-group h2 {
+        color: #ffffff !important;
+        font-size: 28px !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+
+    .form-subtitle {
+        color: #94a3b8;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    /* Grid Sections */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .form-section-title {
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    /* Custom Field Styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-group input, 
+    .form-group select {
+        width: 100%;
+        background: #0d1117 !important;
+        border: 1px solid #30363d !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+        color: #ffffff !important;
+        font-size: 14px !important;
+    }
+
+    .form-group input:focus {
+        border-color: #14b8a6 !important;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+    }
+
+    /* Avatar Upload */
+    .avatar-upload-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .avatar-preview {
+        width: 80px;
+        height: 80px;
+        background: #30363d;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-upload {
+        background: transparent;
+        border: 1px solid #14b8a6;
+        color: #14b8a6;
+        padding: 6px 15px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Toggle Switch */
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 5px;
+    }
+
+    .toggle-container input[type="checkbox"] {
+        appearance: none;
+        width: 44px;
+        height: 22px;
+        background: #30363d !important;
+        border-radius: 20px !important;
+        position: relative;
+        cursor: pointer;
+        transition: background 0.3s;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    .toggle-container input[type="checkbox"]:checked {
+        background: #14b8a6 !important;
+    }
+
+    .toggle-container input[type="checkbox"]::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: #ffffff;
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        transition: transform 0.3s;
+    }
+
+    .toggle-container input[type="checkbox"]:checked::before {
+        transform: translateX(22px);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Submit Section */
+    .form-actions-footer {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid #30363d;
+    }
+
+    .btn-cancel {
+        background: transparent !important;
+        border: 1px solid #30363d !important;
+        color: #94a3b8 !important;
+        padding: 12px 30px !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+    }
+
+    .btn-create {
+        background: #14b8a6 !important;
+        border: none !important;
+        color: #ffffff !important;
+        padding: 12px 40px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4);
+    }
+
+    /* Hide default Django bits */
+    .breadcrumbs, .module h2, .submit-row, .fieldBox br {
+        display: none !important;
+    }
+    
+    /* Input with icons */
+    .input-with-icon {
+        position: relative;
+    }
+    .input-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #484f58;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="centered-form-panel">
+    <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>
+        {% csrf_token %}
+        
+        <div class="form-header">
+            <div class="form-title-group">
+                <h2>{% if add %}{% translate 'Crear Nuevo Usuario' %}{% else %}{% translate 'Modificar Usuario' %}: {{ original.username }}{% endif %}</h2>
+                <div class="form-subtitle">Complete los detalles del usuario a continuación.</div>
+            </div>
+            {% if not add %}
+            <div class="header-badges">
+                <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase;">ELIMINAR USUARIO</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-grid">
+            <!-- Account Details -->
+            <div class="form-column">
+                <span class="form-section-title">Detalles de la Cuenta</span>
+                
+                <div class="form-group">
+                    <label>Nombre de Usuario</label>
+                    {{ adminform.form.username }}
+                </div>
+                
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    {{ adminform.form.email }}
+                </div>
+                
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div class="input-with-icon">
+                        {{ adminform.form.password }}
+                        <span class="input-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="avatar-upload-area">
+                    <div class="avatar-preview">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    {{ adminform.form.photo }}
+                </div>
+            </div>
+
+            <!-- Role & Status -->
+            <div class="form-column">
+                <span class="form-section-title">Rol y Estado</span>
+                
+                <div class="form-group">
+                    <label>Rol</label>
+                    {{ adminform.form.role }}
+                </div>
+                
+                <div class="form-group">
+                    <label>Estado Activo</label>
+                    <div class="toggle-container">
+                        {{ adminform.form.is_active }}
+                        <span style="color: #94a3b8; font-size: 13px;">Sí / No</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 60px; text-align: center;">
+                    <div class="avatar-preview" style="width: 100px; height: 100px; margin: 0 auto 15px;">
+                         <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <span style="color: #14b8a6; font-size: 13px; font-weight: 600; cursor: pointer;">Subir Avatar</span>
+                </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="form-column">
+                <span class="form-section-title">Métricas</span>
+                
+                <div class="form-group">
+                    <label>Experiencia (XP)</label>
+                    <div class="input-with-icon">
+                        {{ adminform.form.xp }}
+                        <span class="input-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Racha de Estudio (Streak)</label>
+                    <div class="input-with-icon">
+                        {{ adminform.form.study_streak }}
+                        <span class="input-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 3.5 6.5 1.5 2 2 3.5 1 5.5s-2.5 3-4.5 3-4-1.5-4.5-3z"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions-footer">
+            <a href=".." class="btn-cancel">Cancelar</a>
+            <input type="submit" value="{% if add %}Crear Usuario{% else %}Guardar Cambios{% endif %}" class="btn-create" name="_save">
+        </div>
+    </form>
+</div>
+{% endblock %}

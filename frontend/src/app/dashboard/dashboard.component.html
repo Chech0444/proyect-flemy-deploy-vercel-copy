@@ -1,0 +1,212 @@
+<div *ngIf="isLoading" class="bg-[#0b0f19] min-h-screen p-8 selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+    <!-- Navbar Skeleton (hidden on mobile) -->
+    <div class="hidden md:block fixed left-0 top-0 h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4">
+        <div class="flex items-center gap-3 mb-12 px-4">
+            <app-skeleton width="32px" height="32px" radius="50%"></app-skeleton>
+            <app-skeleton width="120px" height="24px"></app-skeleton>
+        </div>
+        <div class="space-y-4">
+            <app-skeleton width="100%" height="40px" radius="8px" *ngFor="let i of [1,2,3,4]"></app-skeleton>
+        </div>
+    </div>
+
+    <!-- Main Content Skeleton -->
+    <div class="md:ml-64 max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div class="lg:col-span-8 xl:col-span-9 space-y-8">
+            <!-- Header -->
+            <section>
+                <app-skeleton width="300px" height="2.5rem" class="mb-2"></app-skeleton>
+                <app-skeleton width="200px" height="1.2rem"></app-skeleton>
+            </section>
+            
+            <!-- Stats -->
+            <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <app-skeleton height="100px" radius="12px" *ngFor="let i of [1,2,3]"></app-skeleton>
+            </section>
+
+            <!-- Grid -->
+            <section>
+                <app-skeleton width="150px" height="1.8rem" class="mb-6"></app-skeleton>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <app-skeleton height="350px" radius="12px" *ngFor="let i of [1,2]"></app-skeleton>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+            <app-skeleton height="500px" radius="12px"></app-skeleton>
+        </aside>
+    </div>
+</div>
+
+<div *ngIf="!isLoading" class="bg-background text-on-background min-h-screen flex selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<div class="blob-bg bg-primary-container w-[500px] h-[500px] top-[-100px] left-[-100px]"></div>
+<div class="blob-bg bg-tertiary-container w-[600px] h-[600px] bottom-[-200px] right-[-200px]"></div>
+
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+    <div class="flex items-center gap-3 mb-12 px-4">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-space tracking-tight">Flemy</h1>
+            <p class="font-label-caps text-label-caps text-[#cbd5e1] text-xs">AI Education</p>
+        </div>
+    </div>
+    <div class="flex-1 space-y-2">
+        <a routerLink="/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+        </a>
+        <a routerLink="/progreso" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">monitoring</span>
+            Progreso
+        </a>
+        <a routerLink="/catalog" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">auto_stories</span>
+            Catálogo
+        </a>
+        <a routerLink="/subscription" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
+            <span class="material-symbols-outlined">workspace_premium</span>
+            Suscripción
+        </a>
+        <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300 font-body-md text-body-md border border-sky-500/10 bg-sky-500/5">
+            <span class="material-symbols-outlined text-sky-400">admin_panel_settings</span>
+            Panel Admin
+        </a>
+    </div>
+    <div class="mt-auto space-y-4">
+        <!-- User Profile Section in Sidebar -->
+        <div class="px-4 py-4 mb-2 bg-white/5 rounded-xl border border-white/5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border border-sky-500/30 overflow-hidden bg-sky-500/10">
+              <img [src]="'https://ui-avatars.com/api/?name=' + (userProfile?.first_name || userProfile?.username || 'U') + '&background=0ea5e9&color=fff'" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 overflow-hidden">
+              <p class="text-sm font-bold text-white truncate">{{ userProfile?.first_name || userProfile?.username || 'Estudiante' }}</p>
+              <p class="text-[10px] uppercase tracking-wider font-bold" [ngClass]="userProfile?.role === 'ROLE_PREMIUM' ? 'text-amber-400' : 'text-slate-500'">
+                {{ userProfile?.role === 'ROLE_PREMIUM' ? 'Plan Premium' : 'Plan Free' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer" (click)="logout($event)">
+            <span class="material-symbols-outlined">logout</span>
+            Cerrar Sesión
+        </a>
+    </div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<!-- TopAppBar Unificado -->
+<app-topbar [userProfile]="userProfile"></app-topbar>
+
+<div class="p-8 max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column (Main) -->
+<div class="lg:col-span-8 xl:col-span-9 space-y-8">
+<!-- Header Section -->
+<section>
+<h2 class="font-h1 text-h1 text-white mb-2">¡Hola de nuevo, {{ userProfile?.first_name || userProfile?.username }}!</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Continue your AI mastery journey.</p>
+</section>
+<!-- Stats Row -->
+<section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary-container">psychology</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Experience</span>
+</div>
+<div class="font-h2 text-h2 text-white">{{ userProfile?.xp || 0 }} XP</div>
+</div>
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-[#fbbf24]">local_fire_department</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Racha Actual</span>
+</div>
+<div class="font-h2 text-h2 text-white">{{ userProfile?.study_streak || 0 }} Días</div>
+</div>
+<div class="glass-card rounded-xl p-6 flex flex-col justify-center items-start relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/20 to-[#a855f7]/20 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-3 mb-2 relative z-10">
+<span class="material-symbols-outlined text-[#fbbf24]">workspace_premium</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Membresía</span>
+</div>
+<div class="font-h2 text-h2 bg-gradient-to-r from-[#fbbf24] to-[#a855f7] bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' ? 'PREMIUM' : 'FREE' }}</div>
+</div>
+</section>
+
+<!-- Course Grid -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-h3 text-h3 text-white">Tus Cursos Activos</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div *ngFor="let enrollment of userProfile?.active_enrollments" class="glass-card rounded-xl overflow-hidden flex flex-col">
+    <div class="h-48 relative overflow-hidden">
+      <img [alt]="enrollment.course.title" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" [src]="enrollment.course.thumbnail || 'https://via.placeholder.com/400x200?text=' + enrollment.course.title" />
+      <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0ea5e9]/15 border border-[#0ea5e9]/30 text-primary-fixed backdrop-blur-md font-label-caps text-label-caps flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+        En Progreso
+      </div>
+    </div>
+    <div class="p-6 flex-1 flex flex-col">
+      <h4 class="font-h3 text-h3 text-white mb-2 line-clamp-2">{{ enrollment.course.title }}</h4>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mb-6 line-clamp-2">{{ enrollment.course.short_description }}</p>
+      <div class="mt-auto">
+        <div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-2">
+          <span>Progreso</span>
+          <span>{{ enrollment.progress_percent }}%</span>
+        </div>
+        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden mb-6">
+          <div class="h-full progress-bar-fill rounded-full" [style.width.%]="enrollment.progress_percent"></div>
+        </div>
+        <button [routerLink]="['/learning', enrollment.course.slug]" class="w-full py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-body-md text-body-md hover:bg-[rgba(255,255,255,0.1)] transition-colors flex items-center justify-center gap-2 group">
+          Continuar Aprendiendo
+          <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!userProfile?.active_enrollments?.length" class="col-span-full py-16 text-center glass-card rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-white/10">
+    <span class="material-symbols-outlined text-6xl text-sky-400 mb-4 opacity-70">school</span>
+    <h3 class="font-h2 text-h2 text-white mb-2">Comienza tu Aventura</h3>
+    <p class="text-on-surface-variant max-w-md mx-auto mb-6">Aún no estás inscrito en ningún curso. Visita nuestro catálogo para descubrir nuevas habilidades.</p>
+    <button routerLink="/catalog" class="px-8 py-3 bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 text-white rounded-lg font-bold shadow-lg transition-transform hover:-translate-y-1">
+      Explorar Catálogo
+    </button>
+  </div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar -->
+<aside class="lg:col-span-4 xl:col-span-3 space-y-8">
+<div class="glass-card rounded-xl p-6">
+<div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+<span class="material-symbols-outlined text-tertiary-container animate-pulse">neurology</span>
+<h3 class="font-h3 text-h3 text-white">Sugerencia de nuestra IA</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Basado en tu progreso en Python, te recomendamos explorar este curso para ampliar tus habilidades.</p>
+<div *ngFor="let suggestion of userProfile?.ai_suggestions" class="glass-card rounded-lg overflow-hidden bg-white/5">
+  <div class="h-32 relative">
+    <img [alt]="suggestion.title" class="w-full h-full object-cover opacity-80" [src]="suggestion.thumbnail || 'https://via.placeholder.com/400x200?text=' + suggestion.title" />
+  </div>
+  <div class="p-4">
+    <h4 class="font-body-lg text-body-lg text-white font-semibold mb-1">{{ suggestion.title }}</h4>
+    <p class="font-body-sm text-body-sm text-on-surface-variant mb-4">{{ suggestion.short_description }}</p>
+    <button [routerLink]="['/catalog', suggestion.slug]" class="w-full py-2 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white font-body-sm text-body-sm font-medium shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Ver Detalles</button>
+  </div>
+</div>
+<div *ngIf="!userProfile?.ai_suggestions?.length" class="text-center py-8 bg-white/5 rounded-lg border border-dashed border-white/20 flex flex-col items-center">
+  <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">neurology</span>
+  <p class="text-sm text-slate-400 font-medium">Nuestra IA está analizando tu perfil</p>
+  <p class="text-xs text-slate-500 mt-1">Sugeriremos nuevos cursos pronto.</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
