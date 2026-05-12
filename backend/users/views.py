@@ -153,9 +153,13 @@ class NotificationReadAllView(APIView):
         return Response({"status": "success"})
 
 
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
+from users.models import Notification, PasswordResetCode
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
+import random
+import string
 
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -165,51 +169,84 @@ class PasswordResetRequestView(APIView):
         if not email:
             return Response({"error": "El email es requerido"}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Normalizar email
+        email = email.strip().lower()
+        
         try:
-            # Obtener el primer usuario en caso de múltiples emails (aunque es unique)
-            user = User.objects.filter(email=email).first()
+            # Usar iexact por seguridad adicional aunque ya está en lower
+            user = User.objects.filter(email__iexact=email).first()
             if user:
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                token = default_token_generator.make_token(user)
-                reset_link = f"http://localhost:4200/reset-password/{uid}/{token}"
+                # Generate a 6 digit code
+                code = ''.join(random.choices(string.digits, k=6))
                 
-                # Simulador de envío de correo en la terminal de Django
-                print("\n" + "="*50)
-                print("SIMULACRO DE ENVÍO DE EMAIL DE RECUPERACIÓN")
-                print(f"Para: {user.email}")
-                print("Haz clic en el siguiente enlace para restablecer tu contraseña:")
-                print(reset_link)
-                print("="*50 + "\n")
+                # Delete any existing valid codes for this user to avoid confusion
+                PasswordResetCode.objects.filter(user=user).delete()
+                
+                # Create a new code
+                PasswordResetCode.objects.create(user=user, code=code)
+                
+                # Configuracion del correo optimizada con HTML
+                subject = "Codigo de Recuperacion - Flemy"
+                context = {
+                    "user": user,
+                    "code": code,
+                }
+                html_message = render_to_string("emails/password_reset.html", context)
+                plain_message = strip_tags(html_message)
+                from_email = settings.DEFAULT_FROM_EMAIL
+                recipient_list = [user.email]
+                
+                try:
+                    send_mail(
+                        subject, 
+                        plain_message, 
+                        from_email, 
+                        recipient_list, 
+                        html_message=html_message
+                    )
+                    print(f"Correo enviado a: {user.email}")
+                except Exception as mail_error:
+                    print(f"Error al enviar correo real a {user.email}: {mail_error}")
+                    # Fallback simulado para desarrollo
+                    print(f"\nCÓDIGO DE EMERGENCIA PARA {user.email}: {code}\n")
+            else:
+                print(f"Password reset solicitado para email no encontrado: {email}")
         except Exception as e:
-            print("Error en Password Reset Request:", e)
-            pass
+            print(f"Error crítico en Password Reset Request para {email}: {e}")
             
-        return Response({"message": "Si tu correo está registrado, recibirás un enlace de recuperación."})
+        return Response({"message": "Si tu correo está registrado, recibirás un código de recuperación."})
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        uidb64 = request.data.get("uidb64")
-        token = request.data.get("token")
+        email = request.data.get("email")
+        code = request.data.get("code")
         new_password = request.data.get("new_password")
         
-        if not uidb64 or not token or not new_password:
+        if not email or not code or not new_password:
             return Response({"error": "Faltan parámetros de seguridad o contraseña"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Normalizar datos
+        email = email.strip().lower()
+        code = code.strip()
             
-        try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
+            return Response({"error": "El código es inválido o ha expirado"}, status=status.HTTP_400_BAD_REQUEST)
             
-        if user is not None and default_token_generator.check_token(user, token):
+        # Find the valid code
+        reset_code = PasswordResetCode.objects.filter(user=user, code=code).order_by('-created_at').first()
+        
+        if reset_code and reset_code.is_valid:
             user.set_password(new_password)
             user.save()
+            # Clean up used codes
+            PasswordResetCode.objects.filter(user=user).delete()
             return Response({"message": "La contraseña ha sido actualizada exitosamente"})
         else:
             return Response(
-                {"error": "El enlace de recuperación es inválido, manipulado o ha expirado"}, 
+                {"error": "El código de recuperación es inválido, manipulado o ha expirado"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
 

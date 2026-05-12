@@ -29,9 +29,9 @@
 /* ─── Page wrapper ──────────────────────────────────────────────────── */
 .page-wrapper {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* ─── Blobs ─────────────────────────────────────────────────────────── */
@@ -112,7 +112,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
   position: relative;
   z-index: 1;
 }

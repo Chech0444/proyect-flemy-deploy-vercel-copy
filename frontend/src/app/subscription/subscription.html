@@ -1,11 +1,11 @@
-<div class="relative bg-background text-on-background min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<div class="relative bg-background text-on-background h-screen flex selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
   
   <!-- Blobs de Fondo -->
   <div class="blob-bg bg-primary-container w-[500px] h-[500px] top-[-100px] left-[-100px] absolute mix-blend-screen opacity-20 filter blur-[100px] pointer-events-none rounded-full"></div>
   <div class="blob-bg bg-tertiary-container w-[600px] h-[600px] bottom-[-200px] right-[-200px] absolute mix-blend-screen opacity-20 filter blur-[100px] pointer-events-none rounded-full"></div>
 
   <!-- Sidebar -->
-  <nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+  <nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 shrink-0 z-50">
       <div class="flex items-center gap-3 mb-12 px-4">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
               <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
@@ -42,7 +42,7 @@
   </nav>
 
   <!-- Contenido Principal -->
-  <main class="flex-1 flex flex-col min-h-screen z-10 relative">
+  <main class="flex-1 flex flex-col h-screen overflow-y-auto z-10 relative">
     <app-topbar [userProfile]="userProfile" title="Planes y Suscripción"></app-topbar>
     
     <div class="p-8 max-w-[1000px] mx-auto w-full">

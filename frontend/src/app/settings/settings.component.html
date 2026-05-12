@@ -1,10 +1,10 @@
-<div class="page-wrapper" style="display:flex;">
+<div class="page-wrapper h-screen overflow-hidden" style="display:flex;">
   <!-- Blobs de fondo -->
   <div class="blob-bg blob-primary"></div>
   <div class="blob-bg blob-secondary"></div>
 
   <!-- Sidebar Compartida -->
-  <nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+  <nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 shrink-0 z-50">
       <div class="flex items-center gap-3 mb-12 px-4">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
               <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
@@ -56,7 +56,7 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="flex-1 overflow-x-hidden min-h-screen relative z-10">
+  <main class="flex-1 overflow-y-auto h-screen relative z-10">
     <app-topbar [userProfile]="userProfile"></app-topbar>
 
     <div class="settings-container">

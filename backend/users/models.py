@@ -68,3 +68,20 @@ class Subscription(models.Model):
     
     def __str__(self):
         return f"{self.user.email} - {self.plan_type} ({'Activa' if self.is_active else 'Inactiva'})"
+
+from django.utils import timezone
+from datetime import timedelta
+
+class PasswordResetCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reset_codes")
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    @property
+    def is_valid(self) -> bool:
+        # 10 minutes time limit
+        return timezone.now() <= self.created_at + timedelta(minutes=10)
+        
+    def __str__(self):
+        return f"Code for {self.user.email} (Valid: {self.is_valid})"
+
