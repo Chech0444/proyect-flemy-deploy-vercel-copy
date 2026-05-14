@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from users.models import User
+from users.models import User, PasswordResetCode
 
 
 @admin.register(User)
@@ -14,3 +14,8 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ("Flemy", {"fields": ("email", "role")}),
     )
+
+@admin.register(PasswordResetCode)
+class PasswordResetCodeAdmin(admin.ModelAdmin):
+    list_display = ("user", "code", "created_at", "is_valid")
+    readonly_fields = ("created_at",)
