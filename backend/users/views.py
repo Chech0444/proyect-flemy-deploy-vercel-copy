@@ -81,6 +81,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return response
 
 
+# Alias para compatibilidad con users/urls.py
+LoginView = CustomTokenObtainPairView
+
+
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
