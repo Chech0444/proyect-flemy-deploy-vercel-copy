@@ -21,14 +21,22 @@ Asegúrate de tener instalados los siguientes programas en tu sistema:
 
 ## ⚙️ 2. Configuración Inicial del Backend (Base de Datos y Python)
 
-### A. Variables de Entorno (Tokens de IA)
+### A. Variables de Entorno
+> ⚠️ **IMPORTANTE**: El archivo `.env` contiene tus claves secretas y **NO se sube a Git**. El repositorio incluye un archivo `.env.example` con todas las variables necesarias y valores de referencia. **Debes copiarlo y configurarlo antes de correr el proyecto.**
+
 1. Entra a la carpeta del backend: `cd backend`
 2. Copia el archivo de ejemplo para crear tu entorno local:
    - **Linux/Mac**: `cp .env.example .env`
    - **Windows**: `copy .env.example .env`
-3. Abre el archivo `.env` que acabas de crear y busca la línea `GEMINI_API_KEY=`.
-4. Pega ahí tu clave de API (puedes obtener una gratis en [Google AI Studio](https://aistudio.google.com/apikey)).
-   - *Nota: Opcionalmente puedes configurar aquí las credenciales de correo para la recuperación de contraseña (`EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, etc.).*
+3. Abre el archivo `.env` que acabas de crear y configura las siguientes claves:
+
+   **🤖 IA (Gemini):**
+   - `GEMINI_API_KEY=` → Pega tu clave de API (gratis en [Google AI Studio](https://aistudio.google.com/apikey))
+
+   **📧 Email (Recuperación de contraseña):**
+   - `EMAIL_HOST_USER=` → Tu correo de Gmail (ej: `miflemy@gmail.com`)
+   - `EMAIL_HOST_PASSWORD=` → Una **Contraseña de Aplicación** de Google (NO tu contraseña normal de Gmail). Genérala en [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) (requiere verificación en 2 pasos activada)
+   - `DEFAULT_FROM_EMAIL=` → Mismo correo en formato `Flemy <tu-correo@gmail.com>`
 
 ### B. Levantar Infraestructura (Base de Datos PostgreSQL y Redis)
 Abre una terminal en la raíz del proyecto y ejecuta:
