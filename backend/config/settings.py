@@ -234,7 +234,7 @@ CELERY_TIMEZONE = TIME_ZONE
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-CSRF_TRUSTED_ORIGINS = ["http://localhost:4200", "http://127.0.0.1:4200"]
+CSRF_TRUSTED_ORIGINS = env("DJANGO_CORS_ALLOWED_ORIGINS")
 
 # ===================================================
 # Whisper (Transcripción de audio con IA)
