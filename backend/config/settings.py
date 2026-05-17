@@ -238,6 +238,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
 CSRF_TRUSTED_ORIGINS = env("DJANGO_CORS_ALLOWED_ORIGINS")
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ===================================================
 # Whisper (Transcripción de audio con IA)

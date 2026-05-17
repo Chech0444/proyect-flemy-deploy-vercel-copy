@@ -7,6 +7,9 @@ import config.admin
 
 from django.views.generic import RedirectView
 
+from django.views.static import serve
+from django.urls import re_path
+
 urlpatterns = [
     path('', RedirectView.as_view(url='admin/', permanent=True)),
     path('admin/', admin.site.urls),
@@ -19,4 +22,5 @@ urlpatterns = [
     path("api/v1/certificates/", include("certificates.urls")),
     path("api/v1/billing/", include("billing.urls")),
     path("api/v1/", include("ai_tools.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]
