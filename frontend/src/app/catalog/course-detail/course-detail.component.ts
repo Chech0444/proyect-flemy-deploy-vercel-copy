@@ -64,15 +64,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Detectar si el usuario es admin
-    const userData = localStorage.getItem('user_data');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        this.isAdmin = user.role === 'ROLE_ADMIN';
-      } catch(e) {
-        this.isAdmin = false;
-      }
-    }
+    const role = localStorage.getItem('role');
+    const isStaff = localStorage.getItem('is_staff') === 'true';
+    this.isAdmin = role === 'ROLE_ADMIN' || isStaff;
 
     this.route.paramMap.subscribe(params => {
       this.courseId = params.get('slug');
