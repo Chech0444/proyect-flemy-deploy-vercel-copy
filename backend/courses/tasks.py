@@ -99,7 +99,7 @@ def process_video_task(self, video_id: int):
         status.progress_percent = 60
         status.save()
 
-        edu_content = ai_service.generate_educational_content(transcription_data['text'])
+        edu_content = ai_service.generate_educational_content(transcription_data['text'], num_questions=8)
 
         # Guardar Resumen
         summary, _ = Summary.objects.update_or_create(
@@ -169,3 +169,68 @@ def process_video_task(self, video_id: int):
     finally:
         if audio_path:
             video_processing_service.cleanup_audio(audio_path)
+
+@shared_task(bind=True, name='courses.regenerate_summary')
+def regenerate_summary_task(self, video_id: int):
+    from courses.models import Video, Summary, ProcessingStatus
+    from courses.services.ai_services import ai_service
+    from django.utils import timezone
+    try:
+        video = Video.objects.get(id=video_id)
+        status = video.processing_status
+        status.status = ProcessingStatus.Status.PROCESSING
+        status.current_step = ProcessingStatus.Step.GENERATING_SUMMARY
+        status.save()
+
+        transcription_text = video.transcription.full_text
+        summary_data = ai_service.generate_summary_only(transcription_text)
+
+        Summary.objects.filter(video=video).delete()
+        Summary.objects.create(
+            video=video,
+            content=summary_data['content'],
+            key_points=summary_data['key_points']
+        )
+
+        status.status = ProcessingStatus.Status.COMPLETED
+        status.current_step = ProcessingStatus.Step.DONE
+        status.completed_at = timezone.now()
+        status.save()
+    except Exception as e:
+        status.status = ProcessingStatus.Status.ERROR
+        status.error_message = str(e)
+        status.save()
+
+@shared_task(bind=True, name='courses.regenerate_quiz')
+def regenerate_quiz_task(self, video_id: int):
+    from courses.models import Video, QuizQuestion, ProcessingStatus
+    from courses.services.ai_services import ai_service
+    from django.utils import timezone
+    try:
+        video = Video.objects.get(id=video_id)
+        status = video.processing_status
+        status.status = ProcessingStatus.Status.PROCESSING
+        status.current_step = ProcessingStatus.Step.GENERATING_QUIZ
+        status.save()
+
+        transcription_text = video.transcription.full_text
+        quiz_data = ai_service.generate_quiz_only(transcription_text, num_questions=8)
+
+        QuizQuestion.objects.filter(video=video).delete()
+        for q_data in quiz_data:
+            QuizQuestion.objects.create(
+                video=video,
+                question=q_data['question'],
+                options=q_data['options'],
+                correct_option=q_data['correct_option'],
+                explanation=q_data.get('explanation', '')
+            )
+
+        status.status = ProcessingStatus.Status.COMPLETED
+        status.current_step = ProcessingStatus.Step.DONE
+        status.completed_at = timezone.now()
+        status.save()
+    except Exception as e:
+        status.status = ProcessingStatus.Status.ERROR
+        status.error_message = str(e)
+        status.save()

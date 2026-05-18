@@ -97,6 +97,7 @@ class AIService:
         try:
             prompt = f"""Eres un catedrático universitario y pedagogo experto.
 Analiza la siguiente transcripción de un video educativo y genera un JSON estructurado que contenga DOS partes: un resumen detallado y un quiz de evaluación.
+IMPORTANTE: El usuario final acaba de ver un VIDEO. Por lo tanto, tu respuesta debe parecer que estás analizando un video directamente. NUNCA menciones palabras como "texto", "transcripción", "documento" o "lectura".
 
 TRANSCRIPCIÓN:
 ---
@@ -106,7 +107,7 @@ TRANSCRIPCIÓN:
 Responde ÚNICAMENTE con un objeto JSON válido (sin bloques de código markdown, sin texto adicional) con esta estructura exacta:
 {{
     "summary": {{
-        "content": "Un resumen exhaustivo y fluido. Explica el contexto inicial, el desarrollo profundo de las ideas y la conclusión. Redacta entre 4 y 7 párrafos nutridos, lenguaje profesional.",
+        "content": "Un resumen exhaustivo y fluido. Inicia siempre haciendo referencia al video (ej. 'En este video se explica...', 'Según el video mostrado...'). Redacta entre 4 y 7 párrafos nutridos, lenguaje profesional.",
         "key_points": [
             "Concepto Clave 1: Explicación profunda.",
             "Concepto Clave 2: Explicación detallada."
@@ -114,7 +115,7 @@ Responde ÚNICAMENTE con un objeto JSON válido (sin bloques de código markdown
     }},
     "quiz": [
         {{
-            "question": "Pregunta compleja que evalúe pensamiento crítico.",
+            "question": "Pregunta compleja que evalúe pensamiento crítico. Debe estar formulada refiriéndose al video (ej. 'Según el video, ¿qué...?', 'En el video se menciona que...').",
             "options": [
                 "Opción A estructurada e inteligente (distractor)",
                 "Opción B argumentada (distractor)",
@@ -122,7 +123,7 @@ Responde ÚNICAMENTE con un objeto JSON válido (sin bloques de código markdown
                 "Opción D (distractor tramposo)"
             ],
             "correct_option": 2,
-            "explanation": "Explicación didáctica de por qué esta es la correcta."
+            "explanation": "Explicación didáctica basada en lo mostrado en el video."
         }}
     ]
 }}
@@ -132,6 +133,7 @@ Reglas del Quiz:
 - Cada pregunta debe tener exactamente 4 opciones.
 - "correct_option" debe ser un entero (0, 1, 2, o 3).
 - Altera aleatoriamente la ubicación de las respuestas correctas.
+- RECUERDA: Tanto el resumen como las preguntas y explicaciones deben hablar explícitamente del "video".
 Todo el contenido generado debe estar en el mismo idioma predominante de la transcripción original."""
 
             response = self._model.generate_content(prompt)
@@ -171,6 +173,82 @@ Todo el contenido generado debe estar en el mismo idioma predominante de la tran
                 'summary': self._fallback_summary(transcription_text),
                 'quiz': self._fallback_quiz(transcription_text, num_questions)
             }
+
+    def generate_summary_only(self, transcription_text: str) -> dict:
+        self._initialize()
+        if not self._is_configured:
+            return self._fallback_summary(transcription_text)
+
+        try:
+            prompt = f"""Eres un catedrático universitario y pedagogo experto.
+Analiza la siguiente transcripción de un video educativo y genera SOLO un JSON con el resumen.
+IMPORTANTE: El usuario final acaba de ver un VIDEO. NUNCA menciones palabras como "texto", "transcripción" o "documento".
+
+TRANSCRIPCIÓN:
+---
+{transcription_text[:12000]}
+---
+
+Responde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta:
+{{
+    "content": "Un resumen exhaustivo y fluido. Inicia siempre haciendo referencia al video (ej. 'En este video se explica...'). Redacta entre 4 y 7 párrafos nutridos.",
+    "key_points": [
+        "Concepto Clave 1",
+        "Concepto Clave 2"
+    ]
+}}"""
+            response = self._model.generate_content(prompt)
+            result = self._parse_json_response(response.text)
+            
+            return {
+                'content': result.get('content', 'Resumen no generado adecuadamente.'),
+                'key_points': result.get('key_points', [])
+            }
+        except Exception as e:
+            logger.error(f'Error al generar solo resumen: {e}')
+            return self._fallback_summary(transcription_text)
+
+    def generate_quiz_only(self, transcription_text: str, num_questions: int = 8) -> list:
+        self._initialize()
+        if not self._is_configured:
+            return self._fallback_quiz(transcription_text, num_questions)
+
+        try:
+            prompt = f"""Eres un catedrático universitario y pedagogo experto.
+Analiza la siguiente transcripción de un video educativo y genera SOLO un JSON con preguntas de quiz.
+IMPORTANTE: El usuario final acaba de ver un VIDEO. Las preguntas deben referirse al video. NUNCA menciones "texto" o "transcripción".
+
+TRANSCRIPCIÓN:
+---
+{transcription_text[:12000]}
+---
+
+Responde ÚNICAMENTE con una lista JSON válida con {num_questions} preguntas, cada una con esta estructura exacta:
+[
+    {{
+        "question": "Pregunta referida al video.",
+        "options": ["Opcion A", "Opcion B", "Opcion C", "Opcion D"],
+        "correct_option": 2,
+        "explanation": "Explicación basada en el video."
+    }}
+]"""
+            response = self._model.generate_content(prompt)
+            result = self._parse_json_response(response.text)
+            
+            quiz_questions = []
+            if isinstance(result, list):
+                for q in result:
+                    if all(k in q for k in ['question', 'options', 'correct_option']):
+                        quiz_questions.append({
+                            'question': q['question'],
+                            'options': q['options'][:4],
+                            'correct_option': min(q['correct_option'], 3),
+                            'explanation': q.get('explanation', '')
+                        })
+            return quiz_questions
+        except Exception as e:
+            logger.error(f'Error al generar solo quiz: {e}')
+            return self._fallback_quiz(transcription_text, num_questions)
 
     # ===================================================
     # Métodos de fallback (cuando no hay API key)

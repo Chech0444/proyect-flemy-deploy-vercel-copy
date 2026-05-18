@@ -94,10 +94,12 @@ def generate_exercise_payload(lesson: Lesson):
         return [{"error": "GEMINI_API_KEY no configurada"}]
 
     context = _get_lesson_context(lesson)
-    prompt = f"""Basado en el siguiente contenido educativo, genera exactamente 3 ejercicios de práctica.
+    prompt = f"""Basado en el siguiente contenido de un VIDEO educativo, genera exactamente 3 ejercicios de práctica.
+IMPORTANTE: Redacta los ejercicios asumiendo que el estudiante acaba de ver un video. Usa frases como 'En el video vimos...', o 'Según lo explicado en el video...'. NUNCA menciones palabras como 'texto', 'transcripción' o 'lectura'.
+
 Responde SOLO con un JSON válido: una lista de objetos, cada uno con "question" y "hint".
 
-Contenido:
+Contenido del Video:
 {context[:3000]}"""
 
     try:
@@ -146,9 +148,10 @@ def generate_chatbot_answer(lesson: Lesson, question: str) -> str:
     context = _get_lesson_context(lesson)
 
     prompt = f"""Eres "Flemy AI", un tutor educativo amigable y experto.
-Tienes acceso al contenido de la lección que el estudiante está viendo.
+Tienes acceso al contenido del VIDEO de la lección que el estudiante acaba de ver.
+IMPORTANTE: El estudiante vio un VIDEO, no leyó un texto. Cuando respondas, haz referencia al video (ej. "Como viste en el video...", "En el video se explica que..."). NUNCA menciones palabras como "texto", "transcripción" o "documento".
 
-CONTEXTO DE LA LECCIÓN:
+CONTEXTO DEL VIDEO:
 {context}
 
 PREGUNTA DEL ESTUDIANTE:
@@ -156,8 +159,8 @@ PREGUNTA DEL ESTUDIANTE:
 
 INSTRUCCIONES:
 - Responde de forma clara, concisa y amigable.
-- Basa tu respuesta en el contexto de la lección proporcionado.
-- Si la pregunta no tiene relación con el tema, redirígelo amablemente al contenido.
+- Basa tu respuesta en el contexto del video proporcionado.
+- Si la pregunta no tiene relación con el tema del video, redirígelo amablemente al contenido del mismo.
 - Usa ejemplos simples cuando sea útil.
 - Responde en español.
 - Máximo 150 palabras."""

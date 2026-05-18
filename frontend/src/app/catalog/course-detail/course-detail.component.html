@@ -335,10 +335,15 @@
                   <span class="material-symbols-outlined text-9xl">auto_awesome</span>
                 </div>
                 <div class="relative z-10">
-                  <h3 class="text-2xl font-bold font-space text-purple-300 mb-6 flex items-center gap-3">
-                    <span class="material-symbols-outlined">menu_book</span>
-                    Resumen Ejecutivo
-                  </h3>
+                  <div class="flex items-start justify-between mb-6">
+                    <h3 class="text-2xl font-bold font-space text-purple-300 flex items-center gap-3">
+                      <span class="material-symbols-outlined">menu_book</span>
+                      Resumen Ejecutivo
+                    </h3>
+                    <button *ngIf="isAdmin" (click)="regenerateSummary()" class="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 border border-purple-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[14px]">autorenew</span> Regenerar
+                    </button>
+                  </div>
                   <p class="text-slate-300 leading-relaxed text-lg whitespace-pre-wrap">{{ summaryData.content }}</p>
                 </div>
               </div>
@@ -382,6 +387,14 @@
                   <div class="text-3xl font-black font-space text-white">{{ quizScore }}/{{ quizTotalAnswered }}</div>
                   <div class="text-xs text-emerald-500 font-bold uppercase tracking-widest">Puntuación</div>
                 </div>
+              </div>
+
+              <!-- BOTÓN DE ADMIN PARA REGENERAR IA -->
+              <div *ngIf="isAdmin" class="mb-6 flex justify-end">
+                <button (click)="regenerateQuiz()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-lg text-xs font-bold shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all">
+                  <span class="material-symbols-outlined text-[16px]">autorenew</span>
+                  Regenerar Solo el Quiz (Admin)
+                </button>
               </div>
 
               <div class="space-y-8">
@@ -449,11 +462,15 @@
                 </div>
               </div>
 
-              <div *ngIf="quizTotalAnswered === quizData.length" class="mt-8 text-center animate-in fade-in zoom-in duration-500">
-                <button (click)="resetQuiz()" class="px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all">
-                  <span class="material-symbols-outlined align-middle mr-2 text-[20px]">refresh</span>
+              <div *ngIf="quizTotalAnswered === quizData.length" class="mt-8 text-center animate-in fade-in zoom-in duration-500 flex flex-col items-center gap-4">
+                <button *ngIf="quizScore <= 4" (click)="resetQuiz()" class="px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[20px]">refresh</span>
                   Reintentar Quiz
                 </button>
+                <div *ngIf="quizScore > 4" class="px-8 py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-bold inline-flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[20px]">verified</span>
+                  ¡Quiz Aprobado! Ya no puedes volver a intentarlo.
+                </div>
               </div>
 
             </div>

@@ -308,3 +308,67 @@ class LessonVideoDetailView(APIView):
             'status': 'success',
             'data': serializer.data
         })
+
+class VideoRegenerateSummaryView(APIView):
+    """
+    POST /api/v1/courses/admin/videos/<id>/regenerate-summary/
+    Solo admins. Regenera solo el resumen.
+    """
+    permission_classes = [IsAdminRole]
+
+    def post(self, request, video_id):
+        video = get_object_or_404(Video, id=video_id)
+        if not hasattr(video, 'transcription') or not video.transcription.full_text:
+            return Response({
+                'status': 'error',
+                'message': 'No hay transcripción disponible para generar contenido.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        from courses.tasks import regenerate_summary_task
+        from django.db import transaction
+        
+        processing_status = video.processing_status
+        processing_status.status = ProcessingStatus.Status.PENDING
+        processing_status.save()
+
+        def dispatch_task():
+            regenerate_summary_task.delay(video.id)
+            
+        transaction.on_commit(dispatch_task)
+
+        return Response({
+            'status': 'success',
+            'message': 'Regeneración del resumen iniciada en segundo plano.'
+        })
+
+class VideoRegenerateQuizView(APIView):
+    """
+    POST /api/v1/courses/admin/videos/<id>/regenerate-quiz/
+    Solo admins. Regenera solo el quiz.
+    """
+    permission_classes = [IsAdminRole]
+
+    def post(self, request, video_id):
+        video = get_object_or_404(Video, id=video_id)
+        if not hasattr(video, 'transcription') or not video.transcription.full_text:
+            return Response({
+                'status': 'error',
+                'message': 'No hay transcripción disponible para generar contenido.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        from courses.tasks import regenerate_quiz_task
+        from django.db import transaction
+        
+        processing_status = video.processing_status
+        processing_status.status = ProcessingStatus.Status.PENDING
+        processing_status.save()
+
+        def dispatch_task():
+            regenerate_quiz_task.delay(video.id)
+            
+        transaction.on_commit(dispatch_task)
+
+        return Response({
+            'status': 'success',
+            'message': 'Regeneración del quiz iniciada en segundo plano.'
+        })

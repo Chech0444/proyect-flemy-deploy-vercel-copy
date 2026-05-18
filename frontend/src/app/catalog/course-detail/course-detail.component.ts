@@ -129,16 +129,12 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     const token = localStorage.getItem('access_token');
     if (!token) return;
 
-    // Limpiar datos anteriores
+    // Limpiar datos anteriores (se sobrescribirán o cargarán después)
     this.activeLessonVideoData = null;
     this.processingStatus = null;
     this.transcriptionData = null;
     this.summaryData = null;
     this.quizData = [];
-    this.quizAnswers = {};
-    this.quizSubmitted = {};
-    this.quizScore = 0;
-    this.quizTotalAnswered = 0;
     this.stopPolling();
 
     this.http.get<any>(`${environment.apiUrl}/courses/lessons/${lessonId}/video/`, {
@@ -151,6 +147,24 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
           this.transcriptionData = res.data.transcription;
           this.summaryData = res.data.summary;
           this.quizData = res.data.quiz_questions || [];
+          
+          // Cargar estado guardado en localStorage
+          const stateKey = `quiz_state_${res.data.id}`;
+          const savedStateStr = localStorage.getItem(stateKey);
+          if (savedStateStr) {
+             try {
+                const savedState = JSON.parse(savedStateStr);
+                this.quizAnswers = savedState.quizAnswers || {};
+                this.quizSubmitted = savedState.quizSubmitted || {};
+                this.quizScore = savedState.quizScore || 0;
+                this.quizTotalAnswered = savedState.quizTotalAnswered || 0;
+             } catch(e) {}
+          } else {
+             this.quizAnswers = {};
+             this.quizSubmitted = {};
+             this.quizScore = 0;
+             this.quizTotalAnswered = 0;
+          }
           
           // Si está procesando, iniciar polling
           if (this.processingStatus && 
@@ -247,6 +261,45 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  regenerateSummary() {
+    const token = localStorage.getItem('access_token');
+    if (!token || !this.activeLessonVideoData) return;
+    
+    if (!confirm('¿Estás seguro de que quieres regenerar solo el resumen con la IA? Esto sobreescribirá el resumen actual.')) return;
+
+    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-summary/`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        this.notificationService.showSuccess('Regenerando resumen con IA. Puede tardar unos segundos...');
+        this.startPolling(this.activeLessonVideoData.id);
+      },
+      error: (err) => {
+        this.notificationService.showError('Error al intentar regenerar el resumen con IA.');
+      }
+    });
+  }
+
+  regenerateQuiz() {
+    const token = localStorage.getItem('access_token');
+    if (!token || !this.activeLessonVideoData) return;
+    
+    if (!confirm('¿Estás seguro de que quieres regenerar solo las preguntas del quiz con la IA? Esto sobreescribirá las preguntas actuales y borrará el progreso del quiz.')) return;
+
+    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-quiz/`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        this.notificationService.showSuccess('Regenerando quiz con IA. Puede tardar unos segundos...');
+        localStorage.removeItem(`quiz_state_${this.activeLessonVideoData.id}`);
+        this.startPolling(this.activeLessonVideoData.id);
+      },
+      error: (err) => {
+        this.notificationService.showError('Error al intentar regenerar el quiz con IA.');
+      }
+    });
+  }
+
   // ===================================================
   // Métodos de Quiz Interactivo
   // ===================================================
@@ -266,6 +319,18 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     if (question && this.quizAnswers[questionId] === question.correct_option) {
       this.quizScore++;
     }
+    
+    // Guardar estado
+    if (this.activeLessonVideoData) {
+       const stateKey = `quiz_state_${this.activeLessonVideoData.id}`;
+       localStorage.setItem(stateKey, JSON.stringify({
+          quizAnswers: this.quizAnswers,
+          quizSubmitted: this.quizSubmitted,
+          quizScore: this.quizScore,
+          quizTotalAnswered: this.quizTotalAnswered
+       }));
+    }
+
     this.cdr.detectChanges();
   }
 
@@ -279,6 +344,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.quizSubmitted = {};
     this.quizScore = 0;
     this.quizTotalAnswered = 0;
+    if (this.activeLessonVideoData) {
+        localStorage.removeItem(`quiz_state_${this.activeLessonVideoData.id}`);
+    }
     this.cdr.detectChanges();
   }
 

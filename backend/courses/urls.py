@@ -16,6 +16,8 @@ from courses.views import (
     VideoSummaryView,
     VideoQuizView,
     LessonVideoDetailView,
+    VideoRegenerateSummaryView,
+    VideoRegenerateQuizView,
 )
 
 urlpatterns = [
@@ -44,5 +46,7 @@ urlpatterns = [
     path("courses/videos/<int:video_id>/transcription/", VideoTranscriptionView.as_view(), name="video-transcription"),
     path("courses/videos/<int:video_id>/summary/", VideoSummaryView.as_view(), name="video-summary"),
     path("courses/videos/<int:video_id>/quiz/", VideoQuizView.as_view(), name="video-quiz"),
+    path("courses/admin/videos/<int:video_id>/regenerate-summary/", VideoRegenerateSummaryView.as_view(), name="video-regenerate-summary"),
+    path("courses/admin/videos/<int:video_id>/regenerate-quiz/", VideoRegenerateQuizView.as_view(), name="video-regenerate-quiz"),
     path("courses/lessons/<int:lesson_id>/video/", LessonVideoDetailView.as_view(), name="lesson-video-detail"),
 ]
