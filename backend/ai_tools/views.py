@@ -83,12 +83,37 @@ class CodeFeedbackView(APIView):
 class ChatbotView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request):
+        lesson_id = request.query_params.get("lesson_id")
+        if not lesson_id:
+            return Response({"error": "Falta lesson_id"}, status=400)
+        
+        lesson = get_object_or_404(Lesson, pk=lesson_id)
+        _validate_lesson_access(request.user, lesson)
+        
+        logs = ChatbotLog.objects.filter(user=request.user, lesson=lesson).order_by("created_at")
+        history = []
+        for log in logs:
+            history.append({"role": "user", "text": log.question})
+            history.append({"role": "ai", "text": log.answer})
+            
+        return Response(history)
+
     def post(self, request):
         serializer = ChatbotSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         lesson = get_object_or_404(Lesson, pk=serializer.validated_data["lesson_id"])
         _validate_lesson_access(request.user, lesson)
-        answer = generate_chatbot_answer(lesson, serializer.validated_data["question"])
+        
+        # Recuperar ultimos 5 mensajes para contexto (10 logs = 5 questions + 5 answers max)
+        logs = ChatbotLog.objects.filter(user=request.user, lesson=lesson).order_by("-created_at")[:5]
+        history = []
+        for log in reversed(logs):
+            history.append({"role": "user", "text": log.question})
+            history.append({"role": "ai", "text": log.answer})
+            
+        answer = generate_chatbot_answer(lesson, serializer.validated_data["question"], history)
+        
         ChatbotLog.objects.create(
             user=request.user,
             lesson=lesson,

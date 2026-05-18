@@ -135,17 +135,25 @@ Tu respuesta debe ser breve (máximo 3 frases) y seguir este formato:
         return f"[ERROR DEL SISTEMA]: {str(e)}"
 
 
-def generate_chatbot_answer(lesson: Lesson, question: str) -> str:
+def generate_chatbot_answer(lesson: Lesson, question: str, history: list = None) -> str:
     """
     Asistente interactivo contextual.
     Usa la transcripción del video + contenido de la lección como contexto
     para responder preguntas del estudiante.
+    Incluye historial reciente si se proporciona.
     """
     model = _get_model()
     if not model:
         return "Error: El servicio de IA no está disponible en este momento."
 
     context = _get_lesson_context(lesson)
+    
+    history_text = ""
+    if history:
+        history_text = "\nHISTORIAL RECIENTE DE LA CONVERSACIÓN:\n"
+        for msg in history:
+            role = "Tutor (Tú)" if msg["role"] == "ai" else "Estudiante"
+            history_text += f"{role}: {msg['text']}\n"
 
     prompt = f"""Eres "Flemy AI", un tutor educativo amigable y experto.
 Tienes acceso al contenido del VIDEO de la lección que el estudiante acaba de ver.
@@ -153,8 +161,9 @@ IMPORTANTE: El estudiante vio un VIDEO, no leyó un texto. Cuando respondas, haz
 
 CONTEXTO DEL VIDEO:
 {context}
+{history_text}
 
-PREGUNTA DEL ESTUDIANTE:
+PREGUNTA ACTUAL DEL ESTUDIANTE:
 {question}
 
 INSTRUCCIONES:
