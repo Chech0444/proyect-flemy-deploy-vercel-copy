@@ -104,6 +104,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         if (this.course.sections.length > 0 && this.course.sections[0].lessons?.length > 0) {
           this.course.sections[0].lessons[0].active = true;
           this.loadLessonVideoData(this.course.sections[0].lessons[0].id);
+          this.loadChatHistory(this.course.sections[0].lessons[0].id);
         }
         
         this.isLoading = false;
