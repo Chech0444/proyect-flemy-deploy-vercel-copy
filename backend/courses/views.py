@@ -329,6 +329,7 @@ class VideoRegenerateSummaryView(APIView):
         
         processing_status = video.processing_status
         processing_status.status = ProcessingStatus.Status.PENDING
+        processing_status.current_step = ProcessingStatus.Step.WAITING
         processing_status.save()
 
         def dispatch_task():
@@ -361,6 +362,7 @@ class VideoRegenerateQuizView(APIView):
         
         processing_status = video.processing_status
         processing_status.status = ProcessingStatus.Status.PENDING
+        processing_status.current_step = ProcessingStatus.Step.WAITING
         processing_status.save()
 
         def dispatch_task():
