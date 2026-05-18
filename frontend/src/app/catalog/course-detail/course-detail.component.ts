@@ -481,10 +481,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   selectTab(tab: 'description' | 'chat' | 'transcription' | 'editor' | 'summary' | 'quiz') {
     this.activeTab = tab;
-    // Si queremos scroll to bottom cuando abre chat
-    if (tab === 'chat') {
-      setTimeout(() => this.scrollToBottom(), 100);
-    }
   }
 
   loadChatHistory(lessonId: number) {
@@ -497,7 +493,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       next: (history) => {
         if (history && history.length > 0) {
            this.chatMessages = history;
-           setTimeout(() => this.scrollToBottom(), 100);
         }
         this.cdr.detectChanges();
       },
@@ -505,8 +500,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         console.error('No se pudo cargar el historial del chat');
       }
     });
-  }
-    this.cdr.detectChanges();
   }
 
   runCode() {
