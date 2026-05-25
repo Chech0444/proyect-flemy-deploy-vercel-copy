@@ -15,13 +15,18 @@ import { NotificationService } from '../../shared/notification.service';
   styleUrls: ['./course-detail.component.css']
 })
 export class CourseDetailComponent implements OnInit {
+
+  // ==================== PROPIEDADES CORREGIDAS ====================
+  course: any = null;
+  isLoading = true;
+  courseId: string | null = null;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
 
-  courseId: string | null = null;
-  // Estado de la UI según la imagen
+  // Estado de la UI
   activeTab: 'description' | 'chat' | 'transcription' | 'editor' = 'description';
   
   // Editor de Código
@@ -49,17 +54,14 @@ export class CourseDetailComponent implements OnInit {
       return;
     }
 
-    // Obtener detalles desde la base de datos real
     this.http.get<any>(`${environment.apiUrl}/courses/catalog/${this.courseId}/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (data: any) => {
         this.course = data;
         
-        // Verificación de seguridad para evitar errores si no hay contenido
         if (!this.course.sections) this.course.sections = [];
         
-        // Seleccionar la primera lección como activa por defecto si existe
         if (this.course.sections.length > 0 && this.course.sections[0].lessons?.length > 0) {
           this.course.sections[0].lessons[0].active = true;
         }
@@ -67,11 +69,12 @@ export class CourseDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
+        this.isLoading = false;
         if (err.status === 403) {
-          this.notificationService.showError('Este curso es exclusivo para miembros Premium. ¡Únete ahora para desbloquearlo!');
+          this.notificationService.showError('Este curso es exclusivo para miembros Premium.');
           this.router.navigate(['/subscription']);
         } else {
-          this.notificationService.showError('Este curso aún no está disponible o no existe.');
+          this.notificationService.showError('Este curso no está disponible.');
           this.router.navigate(['/catalog']);
         }
       }
@@ -81,7 +84,6 @@ export class CourseDetailComponent implements OnInit {
   askAi() {
     if (!this.aiQuery.trim()) return;
     
-    // Buscar la lección activa para dar contexto a la IA
     let activeLessonId = null;
     for (const section of this.course.sections) {
       const active = section.lessons.find((l: any) => l.active);
@@ -91,7 +93,6 @@ export class CourseDetailComponent implements OnInit {
       }
     }
 
-    // Si no hay ninguna marcada como activa, usamos la primera disponible
     if (!activeLessonId && this.course.sections[0]?.lessons[0]) {
       activeLessonId = this.course.sections[0].lessons[0].id;
     }
@@ -116,7 +117,7 @@ export class CourseDetailComponent implements OnInit {
         this.aiQuery = '';
       },
       error: () => {
-        this.notificationService.showError('El tutor IA no pudo responder en este momento.');
+        this.notificationService.showError('El tutor IA no pudo responder.');
         this.isAiTyping = false;
       }
     });
@@ -133,8 +134,8 @@ export class CourseDetailComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {
-        this.notificationService.showSuccess('¡Inscripción exitosa! Bienvenido al curso.');
-        this.loadCourseData(); // Recargar para mostrar el reproductor
+        this.notificationService.showSuccess('¡Inscripción exitosa!');
+        this.loadCourseData();
       },
       error: (err) => {
         this.isLoading = false;
@@ -145,14 +146,11 @@ export class CourseDetailComponent implements OnInit {
   }
 
   selectLesson(lesson: any) {
-    // Desactivar todas las lecciones en todas las secciones
     this.course.sections.forEach((section: any) => {
       section.lessons.forEach((l: any) => l.active = false);
     });
-    
-    // Activar la seleccionada
     lesson.active = true;
-    this.aiResponse = ''; // Limpiar respuesta IA al cambiar de tema
+    this.aiResponse = '';
     this.notificationService.showSuccess(`Cargando: ${lesson.title}`);
   }
 
@@ -164,7 +162,6 @@ export class CourseDetailComponent implements OnInit {
     this.isExecutingCode = true;
     this.outputContent = 'Ejecutando...';
     
-    // Simulación de ejecución con feedback de IA
     setTimeout(() => {
       this.http.post<any>(`${environment.apiUrl}/ai/code-feedback/`, {
         language: 'python',

@@ -1,14 +1,18 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';           // ← Agregado
 import { HttpClient } from '@angular/common/http';
-import { NgIf, NgFor, KeyValuePipe } from '@angular/common';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-progress',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, KeyValuePipe, TopbarComponent],
+  imports: [
+    CommonModule,          // ← Necesario para ngClass
+    RouterLink, 
+    TopbarComponent
+  ],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })
@@ -55,7 +59,6 @@ export class ProgressComponent implements OnInit {
         console.error('Error loading progress:', err);
         this.isLoading = false;
         this.cdr.detectChanges();
-        // Ya no redirigimos al login para evitar el bucle de cierre de sesión
       }
     });
   }

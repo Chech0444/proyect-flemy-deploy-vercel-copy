@@ -1,8 +1,9 @@
 import os
-from google import genai
+from google import genai   
 from openai import OpenAI
 from courses.models import Lesson
-from django.conf import settings
+
+
 
 # Configuración Inicial con la nueva librería google-genai
 # La API KEY se toma de la variable de entorno GOOGLE_API_KEY

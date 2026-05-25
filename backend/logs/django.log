@@ -785,3 +785,17 @@ INFO 2026-05-05 06:34:42,148 autoreload 7484 13008 C:\Users\USER\Documents\proye
 INFO 2026-05-05 06:34:44,636 autoreload 15368 20092 Watching for file changes with StatReloader
 INFO 2026-05-05 06:34:44,637 autoreload 19328 15688 Watching for file changes with StatReloader
 INFO 2026-05-05 06:34:44,637 autoreload 12112 18040 Watching for file changes with StatReloader
+INFO 2026-05-12 08:13:52,727 autoreload 11004 14464 Watching for file changes with StatReloader
+INFO 2026-05-19 06:35:27,387 autoreload 13996 824 Watching for file changes with StatReloader
+INFO 2026-05-19 06:48:19,054 autoreload 13996 824 C:\Users\HP PROBOOK 440 G8\Desktop\proyect-Flemy\backend\config\settings.py changed, reloading.
+INFO 2026-05-19 06:48:21,258 autoreload 16052 6676 Watching for file changes with StatReloader
+INFO 2026-05-19 06:49:43,097 autoreload 3980 11044 Watching for file changes with StatReloader
+INFO 2026-05-19 06:52:14,951 autoreload 3980 11044 C:\Users\HP PROBOOK 440 G8\Desktop\proyect-Flemy\backend\config\settings.py changed, reloading.
+INFO 2026-05-19 06:52:18,486 autoreload 13984 5420 Watching for file changes with StatReloader
+INFO 2026-05-19 06:55:50,777 autoreload 9412 12832 Watching for file changes with StatReloader
+INFO 2026-05-19 07:12:56,276 autoreload 13984 2020 Watching for file changes with StatReloader
+INFO 2026-05-19 07:15:35,381 autoreload 13984 2020 C:\Users\HP PROBOOK 440 G8\Desktop\proyect-Flemy\backend\ai_tools\services.py changed, reloading.
+INFO 2026-05-19 07:15:37,494 autoreload 16244 12712 Watching for file changes with StatReloader
+INFO 2026-05-19 09:07:07,058 log 9468 8640 "GET / HTTP/1.1" 301 0
+INFO 2026-05-19 09:07:07,225 log 9468 8640 "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-05-19 09:07:07,234 log 9468 8640 "GET /admin/login/?next=/admin/ HTTP/1.1" 302 0

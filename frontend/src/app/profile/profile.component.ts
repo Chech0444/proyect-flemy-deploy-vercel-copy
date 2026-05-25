@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { AuthService } from '../shared/auth.service';
@@ -8,7 +8,7 @@ import { AuthService } from '../shared/auth.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [NgIf, RouterLink, FormsModule, TopbarComponent],
+  imports: [CommonModule, RouterLink, FormsModule, TopbarComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -36,7 +36,6 @@ export class ProfileComponent implements OnInit {
   isSaving = false;
   saveSuccess = false;
 
-  // Modal cambio de contraseña
   showPasswordModal = false;
   newPassword = '';
   confirmPassword = '';
@@ -44,7 +43,6 @@ export class ProfileComponent implements OnInit {
   passwordSuccess = false;
   passwordError = '';
 
-  // Eliminar cuenta
   isDeletingAccount = false;
 
   ngOnInit() {
@@ -75,8 +73,8 @@ export class ProfileComponent implements OnInit {
     this.isSaving = true;
     const updateData = {
       first_name: this.userProfile.first_name,
-      last_name:  this.userProfile.last_name,
-      bio:        this.userProfile.bio,
+      last_name: this.userProfile.last_name,
+      bio: this.userProfile.bio,
       preferences: this.userProfile.preferences
     };
 
@@ -127,30 +125,24 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isSavingPassword = false;
         this.passwordSuccess = true;
+        setTimeout(() => this.closePasswordModal(), 2000);
       },
       error: (err) => {
         this.isSavingPassword = false;
-        this.passwordError = err.error?.error || 'Error de conexión. Intente nuevamente.';
+        this.passwordError = err.error?.error || 'Error de conexión.';
       }
     });
   }
 
   deleteAccount() {
-    const confirmed = confirm(
-      '⚠️ ¿Estás completamente seguro?\n\nEsta acción eliminará tu cuenta permanentemente y no se puede deshacer.'
-    );
+    const confirmed = confirm('⚠️ ¿Estás completamente seguro? Esta acción es irreversible.');
     if (!confirmed) return;
 
     this.isDeletingAccount = true;
     this.authService.deleteAccount().subscribe({
-      next: () => {
-        // AuthService.logout handles clearing and navigation
-      },
+      next: () => {},
       error: (err) => {
         console.error('Error eliminando cuenta:', err);
-        if (err.status === 405) {
-          alert('Función no disponible en este momento. Contacta al soporte.');
-        }
         this.isDeletingAccount = false;
         this.cdr.detectChanges();
       }

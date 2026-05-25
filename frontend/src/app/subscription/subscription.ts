@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NotificationService } from '../shared/notification.service';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-subscription',
@@ -15,11 +16,13 @@ import { TopbarComponent } from '../shared/topbar/topbar.component';
   styleUrls: ['./subscription.css']
 })
 export class SubscriptionComponent implements OnInit {
+  
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
   private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   paymentForm: FormGroup;
   isLoading = false;
@@ -104,7 +107,6 @@ export class SubscriptionComponent implements OnInit {
         this.isLoading = false;
         this.notificationService.showSuccess('¡Suscripción Activada! Ahora eres miembro PREMIUM.');
         
-        // Recargar el perfil desde el servidor para actualizar el rol en toda la app
         this.authService.loadUserProfile().subscribe();
         
         setTimeout(() => {
@@ -114,7 +116,7 @@ export class SubscriptionComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         console.error('ERROR EN PAGO:', err);
-        const msg = err.error?.detail || 'No pudimos procesar tu pago. Revisa los datos.';
+        const msg = err.error?.detail || 'No pudimos procesar tu pago.';
         this.notificationService.showError(msg);
         this.cdr.detectChanges();
       }

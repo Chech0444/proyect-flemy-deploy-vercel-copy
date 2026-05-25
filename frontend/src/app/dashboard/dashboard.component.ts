@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { NgIf, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';           // ← Agregado
 import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
@@ -10,7 +10,12 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, TopbarComponent, SkeletonComponent],
+  imports: [
+    CommonModule,           // ← Agregado (necesario para ngClass, ngIf, ngFor, etc.)
+    RouterLink, 
+    TopbarComponent, 
+    SkeletonComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -27,17 +32,16 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadProfile();
-    this.isAdmin = this.authService.isAdmin();
+    this.isAdmin = this.authService.isAdmin?.() || false; // protección por si no existe el método
   }
 
   loadProfile() {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isLoggedIn?.()) {
       this.isLoading = false;
       this.router.navigate(['/login']);
       return;
     }
 
-    // Load specialized dashboard data
     this.http.get<any>(`${this.apiUrl}/gamification/dashboard/`).subscribe({
       next: (data) => {
         this.userProfile = {

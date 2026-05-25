@@ -2,7 +2,7 @@ import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../core/services/auth.service';   // ← Ruta corregida
 
 @Component({
   selector: 'app-login',
@@ -36,12 +36,9 @@ export class LoginComponent {
     this.cdr.detectChanges();
     
     this.authService.login(this.loginForm.value).subscribe({
-      next: () => {
-        this.checkProfile();
-      },
+      next: () => this.checkProfile(),
       error: () => {
         this.isLoading = false;
-        // El error específico lo maneja el errorInterceptor mediante Toasts
         this.cdr.detectChanges();
       }
     });
@@ -49,11 +46,11 @@ export class LoginComponent {
 
   checkProfile() {
     this.authService.loadUserProfile().subscribe({
-      next: (profile) => {
+      next: (profile: any) => {
         this.isLoading = false;
         this.cdr.detectChanges();
         
-        if (profile.role === 'ROLE_ADMIN') {
+        if (profile?.role === 'ROLE_ADMIN') {
           window.location.href = 'http://127.0.0.1:8000/admin/';
         } else {
           this.router.navigate(['/dashboard']);
@@ -64,5 +61,13 @@ export class LoginComponent {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  loginWithGoogle() {
+    this.authService.loginWithGoogle();
+  }
+
+  loginWithGitHub() {
+    this.authService.loginWithGitHub();
   }
 }
