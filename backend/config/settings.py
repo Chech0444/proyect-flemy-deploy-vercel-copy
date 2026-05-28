@@ -11,6 +11,7 @@ env = environ.Env(
     DJANGO_DEBUG=(bool, False),
     DJANGO_ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     DJANGO_CORS_ALLOWED_ORIGINS=(list, ["http://localhost:4200", "http://127.0.0.1:4200"]),
+    FRONTEND_AUTH_CALLBACK_URL=(str, "http://localhost:4200/auth/callback"),
 )
 
 # Read .env file if it exists
@@ -146,6 +147,9 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_QUERY_EMAIL = True
+FRONTEND_AUTH_CALLBACK_URL = env("FRONTEND_AUTH_CALLBACK_URL")
+LOGIN_REDIRECT_URL = FRONTEND_AUTH_CALLBACK_URL
+ACCOUNT_ADAPTER = "users.adapters.JWTAccountAdapter"
 
 REST_AUTH = {
     'USE_JWT': True,

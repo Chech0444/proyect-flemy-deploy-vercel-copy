@@ -1,53 +1,51 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SocialAuthService, GoogleLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
-import { BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/auth';
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly backendUrl = new URL(environment.apiUrl).origin;
+  private readonly callbackUrl = `${window.location.origin}/auth/callback`;
   private isAuthSubject = new BehaviorSubject<boolean>(this.hasToken());
-  isAuthenticated$ = this.isAuthSubject.asObservable();
 
-  private http = inject(HttpClient);
-  private socialAuth = inject(SocialAuthService);
-  private router = inject(Router);
+  readonly isAuthenticated$ = this.isAuthSubject.asObservable();
 
-  // Login tradicional
-  login(credentials: any) {
-    return this.http.post(`${this.apiUrl}/login/`, credentials);
+  login(credentials: { username: string | null; password: string | null }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login/`, credentials).pipe(
+      tap((response) => this.storeTokens(response.access, response.refresh))
+    );
   }
 
-  loadUserProfile() {
-    return this.http.get(`${this.apiUrl}/user/`);
+  loadUserProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile/`);
   }
 
-  // ==================== SOCIAL LOGIN ====================
-  loginWithGoogle() {
-    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-      this.http.post(`${this.apiUrl}/social/google/`, {
-        access_token: user.idToken
-      }).pipe(
-        tap((response: any) => {
-          localStorage.setItem('access_token', response.access);
-          if (response.refresh) localStorage.setItem('refresh_token', response.refresh);
-          this.isAuthSubject.next(true);
-          this.router.navigate(['/dashboard']);
-        })
-      ).subscribe();
-    }).catch(err => console.error('Google Login Error:', err));
+  loginWithGoogle(): void {
+    this.redirectToProvider('google');
   }
 
-  loginWithGitHub() {
-    window.location.href = 'http://127.0.0.1:8000/accounts/github/login/';
+  loginWithGitHub(): void {
+    this.redirectToProvider('github');
+  }
+
+  async handleAuthCallback(token: string, refresh?: string): Promise<boolean> {
+    if (!token || token === 'undefined' || token === 'null') {
+      throw new Error('No se recibio un token de acceso valido.');
+    }
+
+    this.storeTokens(token, refresh);
+    return this.router.navigate(['/dashboard']);
   }
 
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    this.socialAuth.signOut();
     this.isAuthSubject.next(false);
     this.router.navigate(['/login']);
   }
@@ -58,5 +56,24 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('access_token');
+  }
+
+  private redirectToProvider(provider: 'google' | 'github'): void {
+    const next = encodeURIComponent(this.callbackUrl);
+    window.location.href = `${this.backendUrl}/accounts/${provider}/login/?process=login&next=${next}`;
+  }
+
+  private storeTokens(access?: string, refresh?: string): void {
+    if (!access) {
+      return;
+    }
+
+    localStorage.setItem('access_token', access);
+
+    if (refresh) {
+      localStorage.setItem('refresh_token', refresh);
+    }
+
+    this.isAuthSubject.next(true);
   }
 }

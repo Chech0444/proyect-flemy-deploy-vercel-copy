@@ -1,0 +1,15 @@
+<main class="callback-page">
+  <section class="callback-panel" aria-live="polite">
+    <ng-container *ngIf="isLoading; else errorState">
+      <div class="spinner" aria-hidden="true"></div>
+      <h1>Conectando tu cuenta</h1>
+      <p>Estamos validando tus credenciales.</p>
+    </ng-container>
+
+    <ng-template #errorState>
+      <h1>No pudimos iniciar sesion</h1>
+      <p>{{ errorMessage }}</p>
+      <a routerLink="/login">Volver al login</a>
+    </ng-template>
+  </section>
+</main>

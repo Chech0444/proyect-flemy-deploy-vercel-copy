@@ -71,10 +71,19 @@
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  color: #fff;
+  text-decoration: none;
 }
 
-.logo svg {
-  filter: drop-shadow(0 0 8px rgba(100, 150, 255, 0.8));
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  box-shadow: 0 0 18px rgba(100, 150, 255, 0.55);
+  font-size: 17px;
 }
 
 .nav-right {
@@ -142,6 +151,84 @@
   border-radius: 16px;
   padding: 40px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(100, 150, 255, 0.1);
+}
+
+.social-actions {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.social-btn {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(15, 20, 35, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.1s;
+}
+
+.social-btn:hover:not(:disabled) {
+  background: rgba(30, 41, 59, 0.78);
+  border-color: rgba(148, 163, 184, 0.55);
+}
+
+.social-btn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.social-btn:disabled,
+.submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.provider-icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+.google-icon {
+  background: #fff;
+  color: #1f2937;
+}
+
+.github-icon {
+  background: #111827;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .form-group {
@@ -220,6 +307,12 @@
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.field-error {
+  color: #f87171;
+  font-size: 12px;
+  margin: 8px 0 0;
 }
 
 .submit-btn {

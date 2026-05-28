@@ -13,12 +13,14 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { CallbackComponent } from './auth/callback/callback.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: Register },
+  { path: 'auth/callback', component: CallbackComponent },
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
