@@ -17,5 +17,5 @@ python-dotenv==1.0.1
 requests==2.32.3
 faster-whisper==1.1.0
 whitenoise==6.8.2
-django-allauth==65.1.0
-dj-rest-auth==7.0.0
+django-allauth
+dj-rest-auth
