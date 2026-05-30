@@ -1,0 +1,64 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.callback-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #0b0f19;
+  color: #f8fafc;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.callback-panel {
+  width: min(100%, 420px);
+  padding: 32px;
+  text-align: center;
+  background: rgba(20, 25, 40, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.callback-panel h1 {
+  margin: 18px 0 10px;
+  font-size: 24px;
+}
+
+.callback-panel p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.callback-panel a {
+  display: inline-flex;
+  margin-top: 22px;
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.callback-panel a:hover {
+  color: #bfdbfe;
+  text-decoration: underline;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #38bdf8;
+  border-radius: 999px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

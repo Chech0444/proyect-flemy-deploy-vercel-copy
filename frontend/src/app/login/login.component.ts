@@ -1,8 +1,8 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { AuthService } from '../shared/auth.service';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +12,21 @@ import { AuthService } from '../shared/auth.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  loginForm = this.fb.group({
+  readonly loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
 
   isLoading = false;
+  socialLoading: 'google' | 'github' | null = null;
   errorMessage = '';
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -35,25 +36,25 @@ export class LoginComponent {
     this.errorMessage = '';
     this.cdr.detectChanges();
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.checkProfile();
       },
-      error: () => {
+      error: (error) => {
         this.isLoading = false;
-        // El error específico lo maneja el errorInterceptor mediante Toasts
+        this.errorMessage = this.getErrorMessage(error);
         this.cdr.detectChanges();
       }
     });
   }
 
-  checkProfile() {
+  checkProfile(): void {
     this.authService.loadUserProfile().subscribe({
-      next: (profile) => {
+      next: (profile: any) => {
         this.isLoading = false;
         this.cdr.detectChanges();
 
-        if (profile.role === 'ROLE_ADMIN') {
+        if (profile?.role === 'ROLE_ADMIN') {
           // Permite que el admin entre al dashboard de Angular en lugar de mandarlo a Django
           this.router.navigate(['/dashboard']);
         } else {
@@ -62,8 +63,40 @@ export class LoginComponent {
       },
       error: () => {
         this.isLoading = false;
+        this.errorMessage = 'Tu sesion inicio, pero no pudimos cargar tu perfil.';
         this.cdr.detectChanges();
       }
     });
+  }
+
+  loginWithGoogle(): void {
+    this.startSocialLogin('google');
+  }
+
+  loginWithGitHub(): void {
+    this.startSocialLogin('github');
+  }
+
+  private startSocialLogin(provider: 'google' | 'github'): void {
+    this.errorMessage = '';
+    this.socialLoading = provider;
+
+    try {
+      if (provider === 'google') {
+        this.authService.loginWithGoogle();
+      } else {
+        this.authService.loginWithGitHub();
+      }
+    } catch {
+      this.socialLoading = null;
+      this.errorMessage = `No pudimos redirigirte a ${provider === 'google' ? 'Google' : 'GitHub'}.`;
+      this.cdr.detectChanges();
+    }
+  }
+
+  private getErrorMessage(error: any): string {
+    return error?.error?.detail
+      || error?.error?.message
+      || 'No pudimos iniciar sesion. Revisa tus credenciales e intenta de nuevo.';
   }
 }

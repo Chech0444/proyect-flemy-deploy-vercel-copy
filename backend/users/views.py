@@ -281,3 +281,23 @@ class DeleteAccountView(APIView):
         user = request.user
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# ====================== SOCIAL LOGIN (Google + GitHub) ======================
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
+
+
+class GoogleLogin(SocialLoginView):
+    """Login con Google"""
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = "http://localhost:4200"   # Cambia esto en producción
+    client_class = OAuth2Client
+
+
+class GitHubLogin(SocialLoginView):
+    """Login con GitHub"""
+    adapter_class = GitHubOAuth2Adapter
+    callback_url = "http://localhost:4200"
+    client_class = OAuth2Client

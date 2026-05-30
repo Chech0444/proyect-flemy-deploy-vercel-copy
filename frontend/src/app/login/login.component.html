@@ -1,62 +1,92 @@
-<div class="login-wrapper">
+<main class="login-wrapper">
   <div class="grid-background"></div>
   <div class="particles"></div>
-  
-  <nav class="top-nav">
-    <div class="logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 17L12 22L22 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 12L12 17L22 12" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+
+  <nav class="top-nav" aria-label="Principal">
+    <a class="logo" routerLink="/login" aria-label="Flemy">
+      <span class="logo-mark">F</span>
       <span>Flemy</span>
-    </div>
+    </a>
+
     <div class="nav-right">
-      <span class="no-account-text">¿No tienes una cuenta?</span>
-      <a routerLink="/register" class="register-btn">Registrarse</a>
+      <span class="no-account-text">No tienes cuenta?</span>
+      <a class="register-btn" routerLink="/register">Registrate</a>
     </div>
   </nav>
 
-  <main class="login-container">
-    <div class="login-header">
-      <h1>Bienvenido de nuevo</h1>
-      <p>Inicia sesión para acceder a tus módulos de capacitación con IA.</p>
-    </div>
+  <section class="login-container">
+    <header class="login-header">
+      <h1>Inicia sesion</h1>
+      <p>Continua aprendiendo desde tu dashboard.</p>
+    </header>
 
-    <div class="login-card">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label>Usuario</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="username" placeholder="tu_usuario" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="label-row">
-            <label>Contraseña</label>
-            <a routerLink="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a>
-          </div>
-          <div class="input-wrapper">
-            <input type="password" formControlName="password" placeholder="••••••••" required>
-          </div>
-        </div>
-
-        <div *ngIf="errorMessage" class="error-msg">
-          {{ errorMessage }}
-        </div>
-
-        <button type="submit" class="submit-btn" [disabled]="isLoading">
-          <span *ngIf="!isLoading">Iniciar Sesión</span>
-          <span *ngIf="isLoading">Cargando...</span>
+    <form class="login-card" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="social-actions">
+        <button
+          type="button"
+          class="social-btn"
+          (click)="loginWithGoogle()"
+          [disabled]="isLoading || socialLoading !== null"
+        >
+          <span class="provider-icon google-icon">G</span>
+          <span>{{ socialLoading === 'google' ? 'Conectando...' : 'Continuar con Google' }}</span>
         </button>
-      </form>
-    </div>
 
-    <footer class="login-footer">
-      <a href="#">Política de Privacidad</a> | 
-      <a href="#">Términos de Servicio</a> | 
-      <a href="#">Centro de Ayuda</a>
-    </footer>
-  </main>
-</div>
+        <button
+          type="button"
+          class="social-btn"
+          (click)="loginWithGitHub()"
+          [disabled]="isLoading || socialLoading !== null"
+        >
+          <span class="provider-icon github-icon">GH</span>
+          <span>{{ socialLoading === 'github' ? 'Conectando...' : 'Continuar con GitHub' }}</span>
+        </button>
+      </div>
+
+      <div class="divider"><span>o usa tus credenciales</span></div>
+
+      <div class="form-group">
+        <label for="username">Usuario o correo</label>
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">@</span>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            autocomplete="username"
+            placeholder="tu@email.com"
+          />
+        </div>
+        <p class="field-error" *ngIf="loginForm.controls.username.touched && loginForm.controls.username.invalid">
+          Ingresa tu usuario o correo.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <div class="label-row">
+          <label for="password">Contrasena</label>
+          <a class="forgot-password" routerLink="/forgot-password">Olvide mi contrasena</a>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">*</span>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="Tu contrasena"
+          />
+        </div>
+        <p class="field-error" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+          Ingresa tu contrasena.
+        </p>
+      </div>
+
+      <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button class="submit-btn" type="submit" [disabled]="isLoading || socialLoading !== null">
+        {{ isLoading ? 'Ingresando...' : 'Entrar' }}
+      </button>
+    </form>
+  </section>
+</main>
