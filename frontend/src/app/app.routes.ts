@@ -10,6 +10,7 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { CourseDetailComponent } from './catalog/course-detail/course-detail.component';
 import { SubscriptionComponent } from './subscription/subscription';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { CallbackComponent } from './auth/callback/callback.component';
@@ -32,7 +33,6 @@ export const routes: Routes = [
   { path: 'subscription', component: SubscriptionComponent },
   { path: 'configuracion', component: SettingsComponent },
 
-  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:uidb64/:token', component: ResetPasswordComponent },
 
   // Ruta comodín (captura cualquier ruta desconocida)
