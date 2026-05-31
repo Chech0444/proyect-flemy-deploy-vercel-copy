@@ -113,8 +113,9 @@ export class SubscriptionComponent implements OnInit {
       next: (config) => {
         const publicKey = config.public_key;
         
-        // PSE solo soporta COP, así que convertimos el precio (ej. 19.99 USD a aprox 79.900 COP)
-        const priceCop = plan === 'MONTHLY' ? 79900 : 799000;
+        // TEMPORAL: Ajustado a 2.000 COP (2 lukas) para que hagas la prueba con plata real
+        // Cuando termines las pruebas, vuelve a poner: plan === 'MONTHLY' ? 79900 : 799000;
+        const priceCop = plan === 'MONTHLY' ? 2000 : 799000;
         const amountInCents = priceCop * 100;
         
         // Generar una referencia única
