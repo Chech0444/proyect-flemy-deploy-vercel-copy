@@ -24,14 +24,9 @@
       <div class="form-group">
         <label for="username">Usuario o correo</label>
         <div class="input-wrapper">
-          <span class="input-icon" aria-hidden="true">@</span>
-          <input
-            id="username"
-            type="text"
-            formControlName="username"
-            autocomplete="username"
-            placeholder="tu@email.com"
-          />
+          <span class="input-icon" aria-hidden="true"></span>
+          <input id="username" type="text" formControlName="username" autocomplete="username"
+            placeholder="tu@email.com" />
         </div>
         <p class="field-error" *ngIf="loginForm.controls.username.touched && loginForm.controls.username.invalid">
           Ingresa tu usuario o correo.
@@ -44,14 +39,9 @@
           <a class="forgot-password" routerLink="/forgot-password">Olvide mi contrasena</a>
         </div>
         <div class="input-wrapper">
-          <span class="input-icon" aria-hidden="true">*</span>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            autocomplete="current-password"
-            placeholder="Tu contrasena"
-          />
+          <span class="input-icon" aria-hidden="true"></span>
+          <input id="password" type="password" formControlName="password" autocomplete="current-password"
+            placeholder="Tu contrasena" />
         </div>
         <p class="field-error" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
           Ingresa tu contrasena.
@@ -67,22 +57,14 @@
       <div class="divider"><span>o continua con</span></div>
 
       <div class="social-actions">
-        <button
-          type="button"
-          class="social-btn"
-          (click)="loginWithGoogle()"
-          [disabled]="isLoading || socialLoading !== null"
-        >
+        <button type="button" class="social-btn" (click)="loginWithGoogle()"
+          [disabled]="isLoading || socialLoading !== null">
           <span class="provider-icon google-icon">G</span>
           <span>{{ socialLoading === 'google' ? 'Conectando...' : 'Continuar con Google' }}</span>
         </button>
 
-        <button
-          type="button"
-          class="social-btn"
-          (click)="loginWithGitHub()"
-          [disabled]="isLoading || socialLoading !== null"
-        >
+        <button type="button" class="social-btn" (click)="loginWithGitHub()"
+          [disabled]="isLoading || socialLoading !== null">
           <span class="provider-icon github-icon">GH</span>
           <span>{{ socialLoading === 'github' ? 'Conectando...' : 'Continuar con GitHub' }}</span>
         </button>
