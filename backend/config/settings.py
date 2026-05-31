@@ -285,6 +285,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
 FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000
 
 # ===================================================
+# Wompi Payment Gateway Configuration (PSE / Cards)
+# ===================================================
+WOMPI_PUBLIC_KEY = env("WOMPI_PUBLIC_KEY", default="pub_test_Q5yDA9zoK1gBD15n15el26S1CUOPV25m")
+WOMPI_PRIVATE_KEY = env("WOMPI_PRIVATE_KEY", default="")
+WOMPI_API_URL = env("WOMPI_API_URL", default="https://sandbox.wompi.co/v1")
+
+# ===================================================
 # Email Configuration (Feature: Password Reset via Email)
 # ===================================================
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
