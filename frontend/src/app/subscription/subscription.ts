@@ -85,6 +85,21 @@ export class SubscriptionComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  loadWompiScript(): Promise<void> {
+    return new Promise((resolve) => {
+      if ((window as any).WidgetCheckout) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.wompi.co/widget/v1/with-iframe.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      script.onload = () => resolve();
+      document.body.appendChild(script);
+    });
+  }
+
   payWithWompi(plan: 'MONTHLY' | 'YEARLY') {
     this.isWompiLoading = true;
     this.cdr.detectChanges();
@@ -106,14 +121,31 @@ export class SubscriptionComponent implements OnInit {
         const userId = this.userProfile?.id || 'guest';
         const reference = `flemy_${userId}_${Date.now()}`;
         
-        // URL a la que Wompi debe retornar al usuario tras el pago
+        // URL a la que Wompi debe retornar al usuario tras el pago (necesario para PSE)
         const redirectUrl = window.location.origin + '/subscription';
         
-        // Construir URL de redirección segura a Wompi Webcheckout
-        const wompiCheckoutUrl = `https://checkout.wompi.co/p/?public-key=${publicKey}&currency=COP&amount-in-cents=${amountInCents}&reference=${reference}&redirect-url=${redirectUrl}`;
-        
-        console.log('Redirigiendo a Wompi Checkout:', wompiCheckoutUrl);
-        window.location.href = wompiCheckoutUrl;
+        // Cargar el Widget de Wompi dinámicamente y abrirlo
+        this.loadWompiScript().then(() => {
+          this.isWompiLoading = false;
+          this.cdr.detectChanges();
+
+          const checkout = new (window as any).WidgetCheckout({
+            currency: 'COP',
+            amountInCents: amountInCents,
+            reference: reference,
+            publicKey: publicKey,
+            redirectUrl: redirectUrl
+          });
+
+          console.log('Abriendo Wompi Widget...');
+          checkout.open((result: any) => {
+            const transaction = result.transaction;
+            console.log('Transacción completada en modal:', transaction);
+            if (transaction && transaction.id) {
+              this.verifyWompiTransaction(transaction.id);
+            }
+          });
+        });
       },
       error: (err) => {
         this.isWompiLoading = false;
