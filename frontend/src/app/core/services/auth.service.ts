@@ -59,8 +59,7 @@ export class AuthService {
   }
 
   private redirectToProvider(provider: 'google' | 'github'): void {
-    const next = encodeURIComponent(this.callbackUrl);
-    window.location.href = `${this.backendUrl}/accounts/${provider}/login/?process=login&next=${next}`;
+    window.location.href = `${this.backendUrl}/accounts/${provider}/login/?process=login`;
   }
 
   private storeTokens(access?: string, refresh?: string): void {
