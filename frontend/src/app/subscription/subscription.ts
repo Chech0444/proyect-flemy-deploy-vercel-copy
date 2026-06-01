@@ -33,9 +33,24 @@ export class SubscriptionComponent implements OnInit {
   showPaymentForm = false;
   userProfile: any = null;
   isAdmin = false;
+  products: any[] = [];
+  showProductSection = false;
+  isBuyingProduct = false;
+  isProductWompiLoading = false;
+  isVerifyingProductPurchase = false;
+  selectedProduct: any = null;
+  showProductSimulatedForm = false;
+  showProductPaymentForm = false;
+  productPurchaseForm: FormGroup;
 
   constructor() {
     this.paymentForm = this.fb.group({
+      card_number: ['', [Validators.required, Validators.pattern(/^\d{16,19}|\d{4}(\s\d{4}){3}$/)]],
+      card_holder: ['', [Validators.required]],
+      expiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+      cvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]]
+    });
+    this.productPurchaseForm = this.fb.group({
       card_number: ['', [Validators.required, Validators.pattern(/^\d{16,19}|\d{4}(\s\d{4}){3}$/)]],
       card_holder: ['', [Validators.required]],
       expiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
@@ -46,13 +61,27 @@ export class SubscriptionComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
     this.loadProfile();
+    this.loadProducts();
 
-    // Consultar parámetros para verificar si viene de regreso de Wompi
     this.route.queryParams.subscribe(params => {
       const transactionId = params['id'];
-      if (transactionId) {
+      const purchaseTid = params['purchase_id'];
+      if (purchaseTid) {
+        const productId = params['product_id'];
+        this.verifyWompiProductPurchase(purchaseTid, productId);
+      } else if (transactionId) {
         this.verifyWompiTransaction(transactionId);
       }
+    });
+  }
+
+  loadProducts() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+    this.http.get<any[]>(`${environment.apiUrl}/billing/products/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data) => { this.products = data; this.cdr.detectChanges(); }
     });
   }
 
@@ -86,16 +115,17 @@ export class SubscriptionComponent implements OnInit {
   }
 
   loadWompiScript(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if ((window as any).WidgetCheckout) {
         resolve();
         return;
       }
       const script = document.createElement('script');
-      script.src = 'https://checkout.wompi.co/widget/v1/with-iframe.js';
+      script.src = 'https://checkout.wompi.co/widget.js';
       script.type = 'text/javascript';
       script.async = true;
       script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Failed to load Wompi script'));
       document.body.appendChild(script);
     });
   }
@@ -146,6 +176,11 @@ export class SubscriptionComponent implements OnInit {
               this.verifyWompiTransaction(transaction.id);
             }
           });
+        }).catch((err) => {
+          this.isWompiLoading = false;
+          console.error('ERROR CARGANDO SCRIPT WOMPI:', err);
+          this.notificationService.showError('No se pudo cargar la pasarela de pagos. Desactiva tu bloqueador de anuncios.');
+          this.cdr.detectChanges();
         });
       },
       error: (err) => {
@@ -229,6 +264,167 @@ export class SubscriptionComponent implements OnInit {
     });
   }
 
+  toggleProductSection() {
+    this.showProductSection = !this.showProductSection;
+    this.cdr.detectChanges();
+  }
+
+  buyProduct(product: any) {
+    this.selectedProduct = product;
+    this.showProductPaymentForm = true;
+    this.showProductSimulatedForm = false;
+    this.cdr.detectChanges();
+  }
+
+  goBackProduct() {
+    if (this.showProductSimulatedForm) {
+      this.showProductSimulatedForm = false;
+    } else if (this.showProductPaymentForm) {
+      this.showProductPaymentForm = false;
+      this.selectedProduct = null;
+    } else {
+      this.showProductSection = false;
+    }
+    this.cdr.detectChanges();
+  }
+
+  buyProductWithWompi(product: any) {
+    this.isProductWompiLoading = true;
+    this.cdr.detectChanges();
+
+    const token = localStorage.getItem('access_token');
+    this.http.get<any>(`${environment.apiUrl}/billing/wompi/config/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (config) => {
+        const amountInCents = product.price_cop * 100;
+        const userId = this.userProfile?.id || 'guest';
+        const reference = `flemy_product_${product.id}_${userId}_${Date.now()}`;
+        const redirectUrl = window.location.origin + '/subscription?purchase_id=REF&product_id=' + product.id;
+
+        this.loadWompiScript().then(() => {
+          this.isProductWompiLoading = false;
+          this.cdr.detectChanges();
+
+          const checkout = new (window as any).WidgetCheckout({
+            currency: 'COP',
+            amountInCents: amountInCents,
+            reference: reference,
+            publicKey: config.public_key,
+            redirectUrl: redirectUrl.replace('REF', reference)
+          });
+
+          console.log('Abriendo Wompi Widget para compra de producto...');
+          checkout.open((result: any) => {
+            const transaction = result.transaction;
+            console.log('Transacción de producto completada:', transaction);
+            if (transaction && transaction.id) {
+              this.verifyWompiProductPurchase(transaction.id, product.id);
+            }
+          });
+        }).catch((err) => {
+          this.isProductWompiLoading = false;
+          console.error('ERROR CARGANDO SCRIPT WOMPI:', err);
+          this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err) => {
+        this.isProductWompiLoading = false;
+        console.error('ERROR:', err);
+        this.notificationService.showError('No se pudo iniciar el pago con Wompi.');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  verifyWompiProductPurchase(transactionId: string, productId: string) {
+    this.isVerifyingProductPurchase = true;
+    this.cdr.detectChanges();
+
+    const token = localStorage.getItem('access_token');
+    this.http.post<any>(`${environment.apiUrl}/billing/wompi/purchase-verify/`, {
+      transaction_id: transactionId,
+      product_id: productId
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        this.isVerifyingProductPurchase = false;
+        if (res.status === 'APPROVED') {
+          this.notificationService.showSuccess(res.message);
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { purchase_id: null, product_id: null },
+            queryParamsHandling: 'merge'
+          });
+          this.selectedProduct = null;
+          this.showProductPaymentForm = false;
+        } else if (res.status === 'PENDING') {
+          this.notificationService.showInfo('Pago pendiente de confirmación bancaria.');
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { purchase_id: null, product_id: null },
+            queryParamsHandling: 'merge'
+          });
+        } else {
+          this.notificationService.showError(res.detail || 'Pago no aprobado.');
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { purchase_id: null, product_id: null },
+            queryParamsHandling: 'merge'
+          });
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isVerifyingProductPurchase = false;
+        console.error('ERROR:', err);
+        this.notificationService.showError(err.error?.detail || 'No se pudo verificar el pago.');
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { purchase_id: null, product_id: null },
+          queryParamsHandling: 'merge'
+        });
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  onSubmitProductPurchase() {
+    if (this.productPurchaseForm.invalid) {
+      this.notificationService.showError('Completa los datos de la tarjeta.');
+      return;
+    }
+    this.isBuyingProduct = true;
+    this.cdr.detectChanges();
+
+    const payload = {
+      ...this.productPurchaseForm.value,
+      product_id: this.selectedProduct.id
+    };
+
+    const token = localStorage.getItem('access_token');
+    this.http.post<any>(`${environment.apiUrl}/billing/purchase/simulate/`, payload, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        this.isBuyingProduct = false;
+        this.notificationService.showSuccess(res.message);
+        this.selectedProduct = null;
+        this.showProductPaymentForm = false;
+        this.showProductSimulatedForm = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isBuyingProduct = false;
+        console.error('ERROR:', err);
+        this.notificationService.showError(err.error?.detail || 'Error al procesar la compra.');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   formatCardNumber(event: any) {
     let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     let matches = value.match(/\d{4,16}/g);
@@ -240,7 +436,9 @@ export class SubscriptionComponent implements OnInit {
     }
 
     if (parts.length) {
-      this.paymentForm.patchValue({ card_number: parts.join(' ') }, { emitEvent: false });
+      const formatted = parts.join(' ');
+      this.paymentForm.patchValue({ card_number: formatted }, { emitEvent: false });
+      this.productPurchaseForm.patchValue({ card_number: formatted }, { emitEvent: false });
     }
   }
 
@@ -250,6 +448,7 @@ export class SubscriptionComponent implements OnInit {
       value = value.substring(0, 2) + '/' + value.substring(2, 4);
     }
     this.paymentForm.patchValue({ expiry: value }, { emitEvent: false });
+    this.productPurchaseForm.patchValue({ expiry: value }, { emitEvent: false });
   }
 
   onSubmit() {
