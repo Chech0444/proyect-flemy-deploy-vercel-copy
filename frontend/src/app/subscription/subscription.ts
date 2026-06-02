@@ -135,7 +135,7 @@ export class SubscriptionComponent implements OnInit {
     this.cdr.detectChanges();
 
     const token = localStorage.getItem('access_token');
-    
+
     this.http.get<any>(`${environment.apiUrl}/billing/wompi/config/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
@@ -146,35 +146,44 @@ export class SubscriptionComponent implements OnInit {
         const reference = `flemy_${userId}_${Date.now()}`;
         const redirectUrl = window.location.origin + '/subscription';
 
-        this.loadWompiScript().then(() => {
-          this.isWompiLoading = false;
-          this.cdr.detectChanges();
+        this.http.post<any>(`${environment.apiUrl}/billing/wompi/signature/`, {
+          reference, amount_in_cents: amountInCents, currency: 'COP'
+        }, { headers: { Authorization: `Bearer ${token}` } }).subscribe({
+          next: (sig) => {
+            this.loadWompiScript().then(() => {
+              this.isWompiLoading = false;
+              this.cdr.detectChanges();
 
-          const checkout = new (window as any).WidgetCheckout({
-            currency: 'COP',
-            amountInCents: amountInCents,
-            reference: reference,
-            publicKey: config.public_key,
-            redirectUrl: redirectUrl,
-            integrityKey: config.integrity_key
-          });
+              const checkout = new (window as any).WidgetCheckout({
+                currency: 'COP',
+                amountInCents,
+                reference,
+                publicKey: config.public_key,
+                redirectUrl,
+                'signature:integrity': sig.signature
+              });
 
-          checkout.open((result: any) => {
-            const transaction = result.transaction;
-            if (transaction && transaction.id) {
-              this.verifyWompiTransaction(transaction.id);
-            }
-          });
-        }).catch((err) => {
-          this.isWompiLoading = false;
-          console.error('ERROR:', err);
-          this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
-          this.cdr.detectChanges();
+              checkout.open((result: any) => {
+                const transaction = result.transaction;
+                if (transaction && transaction.id) {
+                  this.verifyWompiTransaction(transaction.id);
+                }
+              });
+            }).catch((err) => {
+              this.isWompiLoading = false;
+              this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
+              this.cdr.detectChanges();
+            });
+          },
+          error: (err) => {
+            this.isWompiLoading = false;
+            this.notificationService.showError(err.error?.detail || 'Error de firma Wompi.');
+            this.cdr.detectChanges();
+          }
         });
       },
       error: (err) => {
         this.isWompiLoading = false;
-        console.error('ERROR AL OBTENER CONFIG WOMPI:', err);
         this.notificationService.showError('No se pudo iniciar el proceso de pago con Wompi.');
         this.cdr.detectChanges();
       }
@@ -291,35 +300,44 @@ export class SubscriptionComponent implements OnInit {
         const reference = `flemy_product_${product.id}_${userId}_${Date.now()}`;
         const redirectUrl = window.location.origin + '/subscription?purchase_id=REF&product_id=' + product.id;
 
-        this.loadWompiScript().then(() => {
-          this.isProductWompiLoading = false;
-          this.cdr.detectChanges();
+        this.http.post<any>(`${environment.apiUrl}/billing/wompi/signature/`, {
+          reference, amount_in_cents: amountInCents, currency: 'COP'
+        }, { headers: { Authorization: `Bearer ${token}` } }).subscribe({
+          next: (sig) => {
+            this.loadWompiScript().then(() => {
+              this.isProductWompiLoading = false;
+              this.cdr.detectChanges();
 
-          const checkout = new (window as any).WidgetCheckout({
-            currency: 'COP',
-            amountInCents: amountInCents,
-            reference: reference,
-            publicKey: config.public_key,
-            redirectUrl: redirectUrl.replace('REF', reference),
-            integrityKey: config.integrity_key
-          });
+              const checkout = new (window as any).WidgetCheckout({
+                currency: 'COP',
+                amountInCents,
+                reference,
+                publicKey: config.public_key,
+                redirectUrl: redirectUrl.replace('REF', reference),
+                'signature:integrity': sig.signature
+              });
 
-          checkout.open((result: any) => {
-            const transaction = result.transaction;
-            if (transaction && transaction.id) {
-              this.verifyWompiProductPurchase(transaction.id, product.id);
-            }
-          });
-        }).catch((err) => {
-          this.isProductWompiLoading = false;
-          console.error('ERROR:', err);
-          this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
-          this.cdr.detectChanges();
+              checkout.open((result: any) => {
+                const transaction = result.transaction;
+                if (transaction && transaction.id) {
+                  this.verifyWompiProductPurchase(transaction.id, product.id);
+                }
+              });
+            }).catch((err) => {
+              this.isProductWompiLoading = false;
+              this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
+              this.cdr.detectChanges();
+            });
+          },
+          error: (err) => {
+            this.isProductWompiLoading = false;
+            this.notificationService.showError(err.error?.detail || 'Error de firma Wompi.');
+            this.cdr.detectChanges();
+          }
         });
       },
       error: (err) => {
         this.isProductWompiLoading = false;
-        console.error('ERROR:', err);
         this.notificationService.showError('No se pudo iniciar el pago con Wompi.');
         this.cdr.detectChanges();
       }

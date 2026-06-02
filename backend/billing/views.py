@@ -160,7 +160,6 @@ class WompiConfigView(APIView):
     def get(self, request):
         return Response({
             "public_key": settings.WOMPI_PUBLIC_KEY,
-            "integrity_key": settings.WOMPI_INTEGRITY_KEY or settings.WOMPI_PRIVATE_KEY,
             "api_url": settings.WOMPI_API_URL,
         }, status=status.HTTP_200_OK)
 
