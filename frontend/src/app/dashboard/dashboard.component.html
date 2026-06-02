@@ -78,8 +78,8 @@
             </div>
             <div class="flex-1 overflow-hidden">
               <p class="text-sm font-bold text-white truncate">{{ userProfile?.first_name || userProfile?.username || 'Estudiante' }}</p>
-              <p class="text-[10px] uppercase tracking-wider font-bold" [ngClass]="userProfile?.role === 'ROLE_PREMIUM' ? 'text-amber-400' : 'text-slate-500'">
-                {{ userProfile?.role === 'ROLE_PREMIUM' ? 'Plan Premium' : 'Plan Free' }}
+              <p class="text-[10px] uppercase tracking-wider font-bold" [ngClass]="userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'text-amber-400' : 'text-slate-500'">
+                {{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'Plan Premium' : 'Plan Free' }}
               </p>
             </div>
           </div>
@@ -154,8 +154,8 @@
       <span class="material-symbols-outlined text-amber-400 text-xl">workspace_premium</span>
       <span class="font-label-caps text-label-caps text-on-surface-variant uppercase text-[11px]">Membresía</span>
     </div>
-    <div class="font-h3 text-h3 bg-gradient-to-r from-[#fbbf24] to-[#a855f7] bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' ? 'PREMIUM' : 'FREE' }}</div>
-    <p class="text-[10px] text-slate-500 mt-1 relative z-10">{{ userProfile?.role === 'ROLE_PREMIUM' ? 'Acceso ilimitado' : 'Actualiza a Premium' }}</p>
+    <div class="font-h3 text-h3 bg-gradient-to-r from-[#fbbf24] to-[#a855f7] bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'PREMIUM' : 'FREE' }}</div>
+    <p class="text-[10px] text-slate-500 mt-1 relative z-10">{{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'Acceso ilimitado' : 'Actualiza a Premium' }}</p>
   </div>
 </section>
 

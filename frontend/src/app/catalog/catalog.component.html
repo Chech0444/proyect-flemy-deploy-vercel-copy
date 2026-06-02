@@ -62,8 +62,8 @@
             <p class="text-sm font-bold text-white truncate">{{ userProfile?.first_name || userProfile?.username ||
               'Estudiante' }}</p>
             <p class="text-[10px] uppercase tracking-wider font-bold"
-              [ngClass]="userProfile?.role === 'ROLE_PREMIUM' ? 'text-amber-400' : 'text-slate-500'">
-              {{ userProfile?.role === 'ROLE_PREMIUM' ? 'Plan Premium' : 'Plan Free' }}
+              [ngClass]="userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'text-amber-400' : 'text-slate-500'">
+              {{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'Plan Premium' : 'Plan Free' }}
             </p>
           </div>
         </div>
