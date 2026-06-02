@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { NgIf, NgFor, NgClass, DatePipe, KeyValuePipe } from '@angular/common';
+import { NgIf, NgFor, NgClass, KeyValuePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, DatePipe, KeyValuePipe, RouterLink, TopbarComponent, SkeletonComponent],
+  imports: [NgIf, NgFor, NgClass, KeyValuePipe, RouterLink, TopbarComponent, SkeletonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -91,6 +91,10 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+  }
+
+  heatmapTitle(key: any, value: any): string {
+    return `${key} - ${value ? 'Actividad' : 'Sin actividad'}`;
   }
 
   logout(event?: Event) {

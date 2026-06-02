@@ -232,11 +232,11 @@
   <h3 class="font-h3 text-h3 text-white mb-4">Actividad (30 días)</h3>
   <div class="glass-card rounded-xl p-4">
     <div class="flex gap-[3px] flex-wrap">
-      <div *ngFor="let item of userProfile.heatmap_data | keyvalue" 
+      <div *ngFor="let item of (userProfile.heatmap_data | keyvalue)" 
            class="w-3.5 h-3.5 rounded-sm transition-colors"
            [class.bg-sky-400]="item.value === 1"
            [class.bg-white/5]="item.value === 0"
-           [title]="item.key + ': ' + (item.value === 1 ? 'Actividad' : 'Sin actividad')">
+           [title]="heatmapTitle(item.key, item.value)">
       </div>
     </div>
     <div class="flex justify-between text-[10px] text-slate-500 mt-2">
