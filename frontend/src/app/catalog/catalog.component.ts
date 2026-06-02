@@ -159,7 +159,11 @@ export class CatalogComponent implements OnInit {
 
   logout(event?: Event) {
     if (event) event.preventDefault();
-    localStorage.clear();
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('first_name');
+    localStorage.removeItem('role');
     window.location.href = '/login';
   }
 }
