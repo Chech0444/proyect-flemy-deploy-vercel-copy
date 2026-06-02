@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { NotificationService } from '../shared/notification.service';
 
 @Component({
   selector: 'app-settings',
@@ -16,17 +17,15 @@ import { environment } from '../../environments/environment';
 export class SettingsComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
-  
+  private notificationService = inject(NotificationService);
+
   userProfile: any = null;
 
-  // Estructura por defecto
   settings = {
     difficulty: 'intermedio',
     languages: ['Python', 'JavaScript', 'TypeScript'],
     interface: {
-      language: 'es',
-      fontSize: 50,
-      highContrast: false
+      language: 'es'
     },
     notifications: {
       browser: false,
@@ -42,6 +41,7 @@ export class SettingsComponent implements OnInit {
   isLoading = true;
   isSaving = false;
   saveSuccess = false;
+  newLanguage = '';
 
   constructor(private router: Router) {}
 
@@ -55,17 +55,31 @@ export class SettingsComponent implements OnInit {
     this.loadSettings();
   }
 
+  deepMerge(target: any, source: any): any {
+    const result = { ...target };
+    for (const key of Object.keys(source)) {
+      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        result[key] = this.deepMerge(target[key] || {}, source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+    return result;
+  }
+
   loadSettings() {
     const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!token) {
+      this.isLoading = false;
+      return;
+    }
 
     this.http.get<any>(`${environment.apiUrl}/auth/profile/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (data) => {
         if (data.preferences && Object.keys(data.preferences).length > 0) {
-          // Merge deep of settings object with existing default keys to avoid undefined properties
-          this.settings = { ...this.settings, ...data.preferences };
+          this.settings = this.deepMerge(this.settings, data.preferences);
         }
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -88,10 +102,15 @@ export class SettingsComponent implements OnInit {
   }
 
   addLanguage() {
-    if (!this.settings.languages.includes('Java')) {
-      this.settings.languages.push('Java');
-      this.cdr.detectChanges();
+    const lang = this.newLanguage.trim();
+    if (!lang) return;
+    if (this.settings.languages.includes(lang)) {
+      this.notificationService.showError('Ese lenguaje ya esta agregado.');
+      return;
     }
+    this.settings.languages.push(lang);
+    this.newLanguage = '';
+    this.cdr.detectChanges();
   }
 
   saveSettings() {
@@ -100,7 +119,7 @@ export class SettingsComponent implements OnInit {
 
     this.isSaving = true;
     this.cdr.detectChanges();
-    this.http.patch<any>(`${environment.apiUrl}/auth/profile/`, 
+    this.http.patch<any>(`${environment.apiUrl}/auth/profile/`,
       { preferences: this.settings },
       { headers: { Authorization: `Bearer ${token}` } }
     ).subscribe({
@@ -113,10 +132,10 @@ export class SettingsComponent implements OnInit {
           this.cdr.detectChanges();
         }, 3000);
       },
-      error: () => {
+      error: (err) => {
         this.isSaving = false;
         this.cdr.detectChanges();
-        alert('Error al guardar configuración');
+        this.notificationService.showError(err.error?.detail || 'Error al guardar configuracion');
       }
     });
   }
@@ -129,7 +148,9 @@ export class SettingsComponent implements OnInit {
     if (event) event.preventDefault();
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('first_name');
+    localStorage.removeItem('role');
     this.router.navigate(['/login']);
   }
 }
-

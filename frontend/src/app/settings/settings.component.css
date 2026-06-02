@@ -203,15 +203,47 @@
 }
 .close-icon:hover { color: #f87171; }
 
-.btn-add-lang {
-  background: transparent;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.2s;
+.lang-input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
-.btn-add-lang:hover {
-  background: rgba(255, 255, 255, 0.05);
+
+.lang-input {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.lang-input:focus {
+  border-color: #0ea5e9;
+}
+
+.lang-input::placeholder {
+  color: #475569;
+}
+
+.lang-add-btn {
+  background: #0ea5e9;
   color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.lang-add-btn:hover {
+  background: #0284c7;
 }
 
 /* Interfaz */
@@ -406,4 +438,13 @@ input:checked + .slider.round:before {
 .btn-save:hover {
   background: #0284c7;
   transform: translateY(-2px);
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

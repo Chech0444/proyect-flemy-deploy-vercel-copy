@@ -1,9 +1,10 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgIf, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { AuthService } from '../shared/auth.service';
+import { NotificationService } from '../shared/notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,7 @@ import { AuthService } from '../shared/auth.service';
 })
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
-  private router = inject(Router);
+  private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
 
   userProfile: any = {
@@ -36,7 +37,6 @@ export class ProfileComponent implements OnInit {
   isSaving = false;
   saveSuccess = false;
 
-  // Modal cambio de contraseña
   showPasswordModal = false;
   newPassword = '';
   confirmPassword = '';
@@ -44,7 +44,6 @@ export class ProfileComponent implements OnInit {
   passwordSuccess = false;
   passwordError = '';
 
-  // Eliminar cuenta
   isDeletingAccount = false;
   isAdmin = false;
 
@@ -54,6 +53,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadProfile() {
+    this.isLoading = true;
     this.authService.loadUserProfile().subscribe({
       next: (data) => {
         this.userProfile = {
@@ -86,12 +86,16 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isSaving = false;
         this.saveSuccess = true;
+        if (this.userProfile.first_name) {
+          localStorage.setItem('first_name', this.userProfile.first_name);
+        }
         setTimeout(() => { this.saveSuccess = false; this.cdr.detectChanges(); }, 3000);
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error guardando perfil:', err);
         this.isSaving = false;
+        this.notificationService.showError(err.error?.detail || 'Error al guardar el perfil.');
         this.cdr.detectChanges();
       }
     });
@@ -114,11 +118,11 @@ export class ProfileComponent implements OnInit {
 
   changePassword() {
     if (this.newPassword !== this.confirmPassword) {
-      this.passwordError = 'Las contraseñas no coinciden.';
+      this.passwordError = 'Las contrasenas no coinciden.';
       return;
     }
     if (this.newPassword.length < 8) {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres.';
+      this.passwordError = 'La contrasena debe tener al menos 8 caracteres.';
       return;
     }
 
@@ -132,26 +136,25 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.isSavingPassword = false;
-        this.passwordError = err.error?.error || 'Error de conexión. Intente nuevamente.';
+        this.passwordError = err.error?.error || 'Error de conexion. Intente nuevamente.';
       }
     });
   }
 
   deleteAccount() {
     const confirmed = confirm(
-      '⚠️ ¿Estás completamente seguro?\n\nEsta acción eliminará tu cuenta permanentemente y no se puede deshacer.'
+      'Esta accion eliminara tu cuenta permanentemente y no se puede deshacer.'
     );
     if (!confirmed) return;
 
     this.isDeletingAccount = true;
     this.authService.deleteAccount().subscribe({
       next: () => {
-        // AuthService.logout handles clearing and navigation
       },
       error: (err) => {
         console.error('Error eliminando cuenta:', err);
         if (err.status === 405) {
-          alert('Función no disponible en este momento. Contacta al soporte.');
+          this.notificationService.showError('Funcion no disponible. Contacta al soporte.');
         }
         this.isDeletingAccount = false;
         this.cdr.detectChanges();
