@@ -8,6 +8,7 @@ from billing.models import Transaction, Product, ProductPurchase
 from billing.serializers import ProductSerializer
 
 import requests
+import hashlib
 from django.conf import settings
 
 
@@ -161,6 +162,30 @@ class WompiConfigView(APIView):
             "public_key": settings.WOMPI_PUBLIC_KEY,
             "api_url": settings.WOMPI_API_URL,
         }, status=status.HTTP_200_OK)
+
+
+class WompiSignatureView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        reference = request.data.get("reference")
+        amount_in_cents = request.data.get("amount_in_cents")
+        currency = request.data.get("currency", "COP")
+
+        if not reference or not amount_in_cents:
+            return Response({"detail": "Faltan referencia o monto."}, status=status.HTTP_400_BAD_REQUEST)
+
+        integrity_key = settings.WOMPI_PRIVATE_KEY
+        if not integrity_key:
+            return Response(
+                {"detail": "WOMPI_PRIVATE_KEY no está configurada en el servidor."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        raw = f"{reference}{amount_in_cents}{currency}{integrity_key}"
+        signature = hashlib.sha256(raw.encode()).hexdigest()
+
+        return Response({"signature": signature}, status=status.HTTP_200_OK)
 
 
 class WompiVerifyView(APIView):
