@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   userProfile: any = null;
   isAdmin = false;
   isLoading = true;
+  brokenImages: Set<string> = new Set();
 
   ngOnInit() {
     this.loadProfile();
@@ -98,6 +99,15 @@ export class DashboardComponent implements OnInit {
     if (!path) return null;
     if (path.startsWith('http')) return path;
     return `${this.mediaUrl}${path}`;
+  }
+
+  onImageError(key: string) {
+    this.brokenImages.add(key);
+    this.cdr.detectChanges();
+  }
+
+  isImageBroken(key: string): boolean {
+    return this.brokenImages.has(key);
   }
 
   logout(event?: Event) {

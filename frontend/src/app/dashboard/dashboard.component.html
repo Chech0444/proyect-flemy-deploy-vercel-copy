@@ -169,8 +169,10 @@
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
     <div *ngFor="let enrollment of userProfile?.active_enrollments" class="glass-card rounded-xl overflow-hidden flex flex-col group/card">
       <div class="h-40 relative overflow-hidden">
-        <img *ngIf="getThumbnailUrl(enrollment.course.thumbnail)" [alt]="enrollment.course.title" class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" [src]="getThumbnailUrl(enrollment.course.thumbnail)" />
-        <div *ngIf="!getThumbnailUrl(enrollment.course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-500/10 to-indigo-500/10"></div>
+        <img *ngIf="!isImageBroken('active-' + enrollment.course.slug) && getThumbnailUrl(enrollment.course.thumbnail)" (error)="onImageError('active-' + enrollment.course.slug)" alt="" class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" [src]="getThumbnailUrl(enrollment.course.thumbnail)" />
+        <div *ngIf="isImageBroken('active-' + enrollment.course.slug) || !getThumbnailUrl(enrollment.course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
+          <span class="material-symbols-outlined text-5xl text-white/20">auto_stories</span>
+        </div>
         <div class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-[#0ea5e9]/15 border border-[#0ea5e9]/30 backdrop-blur-md font-label-caps text-label-caps text-[10px] flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
           <span class="text-sky-200">En Progreso</span>
@@ -259,7 +261,10 @@
   </div>
   <div class="flex gap-3">
     <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-sky-500/10">
-      <img [src]="getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" class="w-full h-full object-cover">
+      <img *ngIf="!isImageBroken('next-lesson') && getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" [src]="getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" (error)="onImageError('next-lesson')" alt="" class="w-full h-full object-cover">
+      <div *ngIf="isImageBroken('next-lesson') || !getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
+        <span class="material-symbols-outlined text-lg text-white/20">auto_stories</span>
+      </div>
     </div>
     <div class="flex-1 min-w-0">
       <p class="text-xs text-sky-400 font-medium mb-0.5 truncate">{{ userProfile.next_lesson.course_title }}</p>
