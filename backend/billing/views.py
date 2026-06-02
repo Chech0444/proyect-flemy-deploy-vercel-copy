@@ -175,10 +175,10 @@ class WompiSignatureView(APIView):
         if not reference or not amount_in_cents:
             return Response({"detail": "Faltan referencia o monto."}, status=status.HTTP_400_BAD_REQUEST)
 
-        integrity_key = settings.WOMPI_PRIVATE_KEY
+        integrity_key = settings.WOMPI_INTEGRITY_KEY or settings.WOMPI_PRIVATE_KEY
         if not integrity_key:
             return Response(
-                {"detail": "WOMPI_PRIVATE_KEY no está configurada en el servidor."},
+                {"detail": "WOMPI_INTEGRITY_KEY no está configurada en el servidor."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
