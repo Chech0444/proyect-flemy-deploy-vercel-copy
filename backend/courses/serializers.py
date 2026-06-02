@@ -257,7 +257,11 @@ class VideoUploadSerializer(serializers.Serializer):
     MAX_FILE_SIZE = 500 * 1024 * 1024  # 500MB
 
     def validate_video_file(self, value):
-        """Validar que el archivo sea un video válido."""
+        """Validar que el archivo sea un video válido y sanitizar filename."""
+        # Sanitizar filename: eliminar caracteres de path traversal
+        safe_name = value.name.replace('..', '').replace('/', '_').replace('\\', '_')
+        if safe_name != value.name:
+            value.name = safe_name
         ext = value.name.split('.')[-1].lower()
         if ext not in self.ALLOWED_EXTENSIONS:
             raise serializers.ValidationError(

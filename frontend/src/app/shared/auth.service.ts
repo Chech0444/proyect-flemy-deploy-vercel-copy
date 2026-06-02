@@ -33,13 +33,13 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login/`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/login/`, credentials, { withCredentials: true }).pipe(
       tap(res => {
         if (res.access && res.refresh) {
-          localStorage.setItem('access_token', res.access);
-          localStorage.setItem('refresh_token', res.refresh);
+          sessionStorage.setItem('access_token', res.access);
+          sessionStorage.setItem('refresh_token', res.refresh);
           if (res.is_staff !== undefined) {
-            localStorage.setItem('is_staff', res.is_staff ? 'true' : 'false');
+            sessionStorage.setItem('is_staff', res.is_staff ? 'true' : 'false');
           }
         }
       })
@@ -48,25 +48,25 @@ export class AuthService {
 
   logout() {
     try {
-      const refreshToken = localStorage.getItem('refresh_token');
+      const refreshToken = sessionStorage.getItem('refresh_token');
       if (refreshToken && this.isLoggedIn()) {
         this.http.post(`${this.apiUrl}/auth/logout/`, { refresh: refreshToken })
           .subscribe({ error: () => {} });
       }
     } catch (e) {}
 
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('first_name');
-    localStorage.removeItem('role');
-    localStorage.removeItem('is_staff');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('first_name');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('is_staff');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('access_token');
+    return sessionStorage.getItem('access_token');
   }
 
   loadUserProfile(): Observable<UserProfile> {
@@ -74,9 +74,9 @@ export class AuthService {
       tap(profile => {
         if (profile) {
           this.currentUserSubject.next(profile);
-          localStorage.setItem('username', profile.username);
-          localStorage.setItem('first_name', profile.first_name);
-          localStorage.setItem('role', profile.role);
+          sessionStorage.setItem('username', profile.username);
+          sessionStorage.setItem('first_name', profile.first_name);
+          sessionStorage.setItem('role', profile.role);
         }
       }),
       catchError(err => {
@@ -92,14 +92,17 @@ export class AuthService {
     return this.http.patch<UserProfile>(`${this.apiUrl}/auth/profile/`, profileData).pipe(
       tap(profile => {
         this.currentUserSubject.next(profile);
-        if (profile.first_name) localStorage.setItem('first_name', profile.first_name);
-        if (profile.role) localStorage.setItem('role', profile.role);
+        if (profile.first_name) sessionStorage.setItem('first_name', profile.first_name);
+        if (profile.role) sessionStorage.setItem('role', profile.role);
       })
     );
   }
 
-  changePassword(password: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/auth/profile/change-password/`, { new_password: password });
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/auth/profile/change-password/`, {
+      old_password: oldPassword,
+      new_password: newPassword
+    });
   }
 
   deleteAccount(): Observable<any> {
@@ -114,13 +117,13 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    const role = this.currentUserValue?.role || localStorage.getItem('role');
-    const isStaff = localStorage.getItem('is_staff') === 'true';
+    const role = this.currentUserValue?.role || sessionStorage.getItem('role');
+    const isStaff = sessionStorage.getItem('is_staff') === 'true';
     return role === 'ROLE_ADMIN' || isStaff;
   }
 
   isPremium(): boolean {
-    const role = this.currentUserValue?.role || localStorage.getItem('role');
+    const role = this.currentUserValue?.role || sessionStorage.getItem('role');
     return role === 'ROLE_PREMIUM' || role === 'ROLE_ADMIN' || this.isAdmin();
   }
 

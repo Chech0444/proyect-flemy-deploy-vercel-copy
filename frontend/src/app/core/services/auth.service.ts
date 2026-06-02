@@ -17,7 +17,7 @@ export class AuthService {
   readonly isAuthenticated$ = this.isAuthSubject.asObservable();
 
   login(credentials: { username: string | null; password: string | null }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login/`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login/`, credentials, { withCredentials: true }).pipe(
       tap((response) => this.storeTokens(response.access, response.refresh))
     );
   }
@@ -44,18 +44,18 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
     this.isAuthSubject.next(false);
     this.router.navigate(['/login']);
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('access_token');
+    return !!sessionStorage.getItem('access_token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('access_token');
+    return sessionStorage.getItem('access_token');
   }
 
   private redirectToProvider(provider: 'google' | 'github'): void {
@@ -67,10 +67,10 @@ export class AuthService {
       return;
     }
 
-    localStorage.setItem('access_token', access);
+    sessionStorage.setItem('access_token', access);
 
     if (refresh) {
-      localStorage.setItem('refresh_token', refresh);
+      sessionStorage.setItem('refresh_token', refresh);
     }
 
     this.isAuthSubject.next(true);

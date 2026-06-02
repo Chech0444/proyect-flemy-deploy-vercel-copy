@@ -10,6 +10,10 @@ from billing.serializers import ProductSerializer
 import requests
 import hashlib
 from django.conf import settings
+import re
+
+
+TRANSACTION_ID_RE = re.compile(r'^[a-zA-Z0-9\-_]+$')
 
 
 class ProductListView(APIView):
@@ -29,8 +33,6 @@ class SimulatedPaymentView(APIView):
         cvv = str(request.data.get("cvv", ""))
         expiry = str(request.data.get("expiry", "")).replace("/", "")
         plan = request.data.get("plan", "PREMIUM")
-
-        print(f"DEBUG: Intento de pago - Tarjeta: {card_number[-4:]} CVV: {cvv} Plan: {plan}")
 
         if not card_number.endswith("4242") or len(card_number) < 16:
             return Response(
@@ -83,9 +85,8 @@ class SimulatedPaymentView(APIView):
                 "expiry": end_date.strftime("%Y-%m-%d")
             }, status=status.HTTP_200_OK)
         except Exception as e:
-            print(f"ERROR CRÍTICO EN PAGO: {str(e)}")
             return Response(
-                {"detail": f"Error interno al procesar la suscripción: {str(e)}"},
+                {"detail": "Error interno al procesar la suscripción. Intenta de nuevo."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -105,8 +106,6 @@ class SimulatedPurchaseView(APIView):
             product = Product.objects.get(id=product_id, is_active=True)
         except Product.DoesNotExist:
             return Response({"detail": "Producto no encontrado."}, status=status.HTTP_404_NOT_FOUND)
-
-        print(f"DEBUG: Intento de compra - Producto: {product.name} ({product.price_cop} COP)")
 
         if not card_number.endswith("4242") or len(card_number) < 16:
             return Response(
@@ -147,9 +146,8 @@ class SimulatedPurchaseView(APIView):
                 "amount": product.price_cop
             }, status=status.HTTP_200_OK)
         except Exception as e:
-            print(f"ERROR CRÍTICO EN COMPRA: {str(e)}")
             return Response(
-                {"detail": f"Error interno al procesar la compra: {str(e)}"},
+                {"detail": "Error interno al procesar la compra. Intenta de nuevo."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -175,7 +173,7 @@ class WompiSignatureView(APIView):
         if not reference or not amount_in_cents:
             return Response({"detail": "Faltan referencia o monto."}, status=status.HTTP_400_BAD_REQUEST)
 
-        integrity_key = settings.WOMPI_INTEGRITY_KEY or settings.WOMPI_PRIVATE_KEY
+        integrity_key = settings.WOMPI_INTEGRITY_KEY
         if not integrity_key:
             return Response(
                 {"detail": "WOMPI_INTEGRITY_KEY no está configurada en el servidor."},
@@ -198,14 +196,16 @@ class WompiVerifyView(APIView):
         if not transaction_id:
             return Response({"detail": "Falta el ID de transacción de Wompi."}, status=status.HTTP_400_BAD_REQUEST)
 
+        if not TRANSACTION_ID_RE.match(str(transaction_id)):
+            return Response({"detail": "El ID de transacción tiene un formato inválido."}, status=status.HTTP_400_BAD_REQUEST)
+
         url = f"{settings.WOMPI_API_URL}/transactions/{transaction_id}"
-        print(f"DEBUG: Consultando Wompi para verificación. URL: {url}")
 
         try:
             res = requests.get(url, timeout=10)
             if res.status_code != 200:
                 return Response(
-                    {"detail": f"No se pudo consultar la transacción en Wompi (Código {res.status_code})."},
+                    {"detail": "No se pudo consultar la transacción en Wompi."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -213,8 +213,6 @@ class WompiVerifyView(APIView):
             status_wompi = data.get("status")
             amount_in_cents = data.get("amount_in_cents", 0)
             amount = amount_in_cents / 100
-
-            print(f"DEBUG: Wompi Response Status: {status_wompi} for ID: {transaction_id}")
 
             if status_wompi == "APPROVED":
                 user = request.user
@@ -266,13 +264,12 @@ class WompiVerifyView(APIView):
             else:
                 return Response({
                     "status": status_wompi,
-                    "detail": f"El pago no fue aprobado. Estado de Wompi: {status_wompi}"
+                    "detail": "El pago no fue aprobado."
                 }, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            print(f"ERROR CRÍTICO VERIFICACIÓN WOMPI: {str(e)}")
             return Response(
-                {"detail": f"Error interno en verificación de pago: {str(e)}"},
+                {"detail": "Error interno en verificación de pago."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -286,6 +283,8 @@ class WompiPurchaseVerifyView(APIView):
 
         if not transaction_id:
             return Response({"detail": "Falta el ID de transacción de Wompi."}, status=status.HTTP_400_BAD_REQUEST)
+        if not TRANSACTION_ID_RE.match(str(transaction_id)):
+            return Response({"detail": "El ID de transacción tiene un formato inválido."}, status=status.HTTP_400_BAD_REQUEST)
         if not product_id:
             return Response({"detail": "Falta el ID del producto."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -295,20 +294,17 @@ class WompiPurchaseVerifyView(APIView):
             return Response({"detail": "Producto no encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
         url = f"{settings.WOMPI_API_URL}/transactions/{transaction_id}"
-        print(f"DEBUG: Consultando Wompi para verificación de compra. URL: {url}")
 
         try:
             res = requests.get(url, timeout=10)
             if res.status_code != 200:
                 return Response(
-                    {"detail": f"No se pudo consultar la transacción en Wompi (Código {res.status_code})."},
+                    {"detail": "No se pudo consultar la transacción en Wompi."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
             data = res.json().get("data", {})
             status_wompi = data.get("status")
-
-            print(f"DEBUG: Wompi Response Status: {status_wompi} for ID: {transaction_id}")
 
             if status_wompi == "APPROVED":
                 user = request.user
@@ -348,12 +344,11 @@ class WompiPurchaseVerifyView(APIView):
             else:
                 return Response({
                     "status": status_wompi,
-                    "detail": f"El pago no fue aprobado. Estado de Wompi: {status_wompi}"
+                    "detail": "El pago no fue aprobado."
                 }, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            print(f"ERROR CRÍTICO VERIFICACIÓN WOMPI: {str(e)}")
             return Response(
-                {"detail": f"Error interno en verificación de pago: {str(e)}"},
+                {"detail": "Error interno en verificación de pago."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

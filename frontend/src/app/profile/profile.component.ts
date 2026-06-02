@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
   saveSuccess = false;
 
   showPasswordModal = false;
+  oldPassword = '';
   newPassword = '';
   confirmPassword = '';
   isSavingPassword = false;
@@ -87,7 +88,7 @@ export class ProfileComponent implements OnInit {
         this.isSaving = false;
         this.saveSuccess = true;
         if (this.userProfile.first_name) {
-          localStorage.setItem('first_name', this.userProfile.first_name);
+          sessionStorage.setItem('first_name', this.userProfile.first_name);
         }
         setTimeout(() => { this.saveSuccess = false; this.cdr.detectChanges(); }, 3000);
         this.cdr.detectChanges();
@@ -103,6 +104,7 @@ export class ProfileComponent implements OnInit {
 
   openPasswordModal() {
     this.showPasswordModal = true;
+    this.oldPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';
     this.passwordSuccess = false;
@@ -111,12 +113,17 @@ export class ProfileComponent implements OnInit {
 
   closePasswordModal() {
     this.showPasswordModal = false;
+    this.oldPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';
     this.passwordError = '';
   }
 
   changePassword() {
+    if (!this.oldPassword) {
+      this.passwordError = 'Debes ingresar tu contrasena actual.';
+      return;
+    }
     if (this.newPassword !== this.confirmPassword) {
       this.passwordError = 'Las contrasenas no coinciden.';
       return;
@@ -129,7 +136,7 @@ export class ProfileComponent implements OnInit {
     this.isSavingPassword = true;
     this.passwordError = '';
 
-    this.authService.changePassword(this.newPassword).subscribe({
+    this.authService.changePassword(this.oldPassword, this.newPassword).subscribe({
       next: () => {
         this.isSavingPassword = false;
         this.passwordSuccess = true;

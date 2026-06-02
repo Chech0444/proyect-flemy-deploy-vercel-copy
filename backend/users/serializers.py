@@ -83,7 +83,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class UpgradePremiumSerializer(serializers.Serializer):
     role = serializers.ChoiceField(
-        choices=[UserRole.PREMIUM, UserRole.ADMIN],
+        choices=[UserRole.PREMIUM],
         default=UserRole.PREMIUM,
     )
 

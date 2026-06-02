@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from certificates.models import Certificate
 from courses.models import Course, Lesson, Section
@@ -23,7 +24,11 @@ class Command(BaseCommand):
                 "is_superuser": True,
             },
         )
-        admin.set_password("Admin12345!")
+        admin_password = settings.ADMIN_PASSWORD if hasattr(settings, 'ADMIN_PASSWORD') and settings.ADMIN_PASSWORD else None
+        if admin_password:
+            admin.set_password(admin_password)
+        else:
+            admin.set_password(user_model.objects.make_random_password())
         admin.save()
 
         premium_user, _ = user_model.objects.get_or_create(
@@ -37,7 +42,7 @@ class Command(BaseCommand):
                 "study_streak": 5,
             },
         )
-        premium_user.set_password("Premium123!")
+        premium_user.set_password(user_model.objects.make_random_password())
         premium_user.save()
 
         free_user, _ = user_model.objects.get_or_create(
@@ -51,7 +56,7 @@ class Command(BaseCommand):
                 "study_streak": 2,
             },
         )
-        free_user.set_password("Free12345!")
+        free_user.set_password(user_model.objects.make_random_password())
         free_user.save()
 
         python_course, _ = Course.objects.get_or_create(

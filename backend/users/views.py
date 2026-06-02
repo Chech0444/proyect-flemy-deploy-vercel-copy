@@ -46,15 +46,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # Buscar usuario por username O por email
         user = User.objects.filter(models.Q(username=username) | models.Q(email=username)).first()
         
-        if not user:
+        if not user or not user.check_password(password):
             return Response(
-                {"detail": "El usuario o correo ingresado no existe en nuestra base de datos."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-
-        if not user.check_password(password):
-            return Response(
-                {"detail": "La contraseña ingresada es incorrecta. Por favor, verifica tus datos."},
+                {"detail": "Credenciales inválidas. Verifica tus datos e intenta de nuevo."},
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
@@ -172,6 +166,7 @@ import string
 
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_scope = 'password_reset'
 
     def post(self, request):
         email = request.data.get("email")
@@ -186,7 +181,7 @@ class PasswordResetRequestView(APIView):
             user = User.objects.filter(email__iexact=email).first()
             if user:
                 # Generate a 6 digit code
-                code = ''.join(random.choices(string.digits, k=6))
+                code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
                 
                 # Delete any existing valid codes for this user to avoid confusion
                 PasswordResetCode.objects.filter(user=user).delete()
@@ -227,6 +222,7 @@ class PasswordResetRequestView(APIView):
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_scope = 'password_reset'
 
     def post(self, request):
         email = request.data.get("email")
@@ -263,16 +259,30 @@ class ChangePasswordView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request):
+        old_password = request.data.get("old_password")
         new_password = request.data.get("new_password")
-        if not new_password or len(new_password) < 8:
+
+        if not old_password:
             return Response(
-                {"error": "La nueva contraseña es obligatoria y debe tener al menos 8 caracteres."},
+                {"error": "Debes ingresar tu contraseña actual."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
+
+        if not request.user.check_password(old_password):
+            return Response(
+                {"error": "La contraseña actual es incorrecta."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not new_password or len(new_password) < 8:
+            return Response(
+                {"error": "La nueva contraseña debe tener al menos 8 caracteres."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         request.user.set_password(new_password)
         request.user.save()
-        return Response({"message": "Tu contraseña interna ha sido actualizada correctamente."})
+        return Response({"message": "Tu contraseña ha sido actualizada correctamente."})
 
 class DeleteAccountView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -292,12 +302,12 @@ from dj_rest_auth.registration.views import SocialLoginView
 class GoogleLogin(SocialLoginView):
     """Login con Google"""
     adapter_class = GoogleOAuth2Adapter
-    callback_url = "http://localhost:4200"   # Cambia esto en producción
+    callback_url = settings.FRONTEND_AUTH_CALLBACK_URL
     client_class = OAuth2Client
 
 
 class GitHubLogin(SocialLoginView):
     """Login con GitHub"""
     adapter_class = GitHubOAuth2Adapter
-    callback_url = "http://localhost:4200"
+    callback_url = settings.FRONTEND_AUTH_CALLBACK_URL
     client_class = OAuth2Client
