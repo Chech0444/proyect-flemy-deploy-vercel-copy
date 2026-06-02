@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { NgIf, NgFor, NgClass, KeyValuePipe } from '@angular/common';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, KeyValuePipe, RouterLink, TopbarComponent, SkeletonComponent],
+  imports: [NgIf, NgFor, NgClass, RouterLink, TopbarComponent, SkeletonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private apiUrl = environment.apiUrl;
+  private mediaUrl = environment.apiUrl.replace('/api/v1', '');
 
   userProfile: any = null;
   isAdmin = false;
@@ -93,8 +94,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  heatmapTitle(key: any, value: any): string {
-    return `${key} - ${value ? 'Actividad' : 'Sin actividad'}`;
+  getThumbnailUrl(path: string | null | undefined): string {
+    if (!path) return 'https://via.placeholder.com/400x200?text=Curso';
+    if (path.startsWith('http')) return path;
+    return `${this.mediaUrl}${path}`;
   }
 
   logout(event?: Event) {
