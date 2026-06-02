@@ -22,6 +22,7 @@ export class CatalogComponent implements OnInit {
   isLoading = true;
   userProfile: any = null;
   isAdmin = false;
+  brokenImages: Set<any> = new Set();
   private authService = inject(AuthService);
 
   ngOnInit() {
@@ -94,6 +95,15 @@ export class CatalogComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  onImageError(course: any) {
+    this.brokenImages.add(course);
+    this.cdr.detectChanges();
+  }
+
+  isImageBroken(course: any): boolean {
+    return this.brokenImages.has(course);
   }
 
   logout(event?: Event) {
