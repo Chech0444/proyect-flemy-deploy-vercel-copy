@@ -133,10 +133,12 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isSavingPassword = false;
         this.passwordSuccess = true;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.isSavingPassword = false;
         this.passwordError = err.error?.error || 'Error de conexion. Intente nuevamente.';
+        this.cdr.detectChanges();
       }
     });
   }
