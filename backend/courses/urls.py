@@ -9,6 +9,7 @@ from courses.views import (
     AdminSectionListCreateView,
     CourseCatalogView,
     CourseDetailView,
+    CourseSuggestionsView,
     # Video AI views
     VideoUploadView,
     VideoStatusView,
@@ -23,6 +24,7 @@ from courses.views import (
 urlpatterns = [
     path("courses/catalog/", CourseCatalogView.as_view(), name="courses-catalog"),
     path("courses/catalog/<slug:slug>/", CourseDetailView.as_view(), name="course-detail"),
+    path("courses/suggestions/", CourseSuggestionsView.as_view(), name="courses-suggestions"),
     path("courses/admin/courses/", AdminCourseListCreateView.as_view(), name="admin-courses"),
     path("courses/admin/courses/<int:pk>/", AdminCourseDetailView.as_view(), name="admin-course-detail"),
     path(

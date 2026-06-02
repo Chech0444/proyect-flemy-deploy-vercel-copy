@@ -1,7 +1,6 @@
 <div
   class="relative bg-background text-on-background min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
 
-  <!-- Blobs -->
   <div
     class="blob-bg bg-primary-container w-[500px] h-[500px] top-[-100px] left-[-100px] absolute mix-blend-screen opacity-20 filter blur-[100px] pointer-events-none rounded-full">
   </div>
@@ -9,7 +8,6 @@
     class="blob-bg bg-tertiary-container w-[600px] h-[600px] bottom-[-200px] right-[-200px] absolute mix-blend-screen opacity-20 filter blur-[100px] pointer-events-none rounded-full">
   </div>
 
-  <!-- Unified Sidebar -->
   <nav
     class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
     <div class="flex items-center gap-3 mb-12 px-4">
@@ -46,9 +44,13 @@
         <span class="material-symbols-outlined">workspace_premium</span>
         Suscripción
       </a>
+      <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white transition-all duration-300 font-body-md text-body-md border border-sky-500/10 bg-sky-500/5">
+        <span class="material-symbols-outlined text-sky-400">admin_panel_settings</span>
+        Panel Admin
+      </a>
     </div>
     <div class="mt-auto space-y-4">
-      <!-- User Profile Section in Sidebar -->
       <div class="px-4 py-4 mb-2 bg-white/5 rounded-xl border border-white/5">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full border border-sky-500/30 overflow-hidden bg-sky-500/10">
@@ -75,12 +77,11 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
   <main class="flex-1 flex flex-col min-h-screen z-10 relative">
     <app-topbar [userProfile]="userProfile" title="Catálogo de Cursos"></app-topbar>
 
     <div class="p-8 max-w-[1280px] mx-auto w-full">
-      <div class="mb-10">
+      <div class="mb-8">
         <h1
           class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-purple-500 bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">
           Descubre Nuevas Habilidades</h1>
@@ -88,7 +89,68 @@
           Inteligencia Artificial.</p>
       </div>
 
-      <!-- Loading State / Skeletons -->
+      <div class="flex flex-col lg:flex-row gap-4 mb-8 items-start lg:items-center">
+        <div class="relative flex-1 max-w-md">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+          <input type="text" placeholder="Buscar cursos..." [ngModel]="searchQuery" (ngModelChange)="onSearchChange()"
+            class="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:bg-white/10 transition-all text-sm">
+        </div>
+        <select [ngModel]="selectedCategory" (ngModelChange)="onFilterChange()"
+          class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
+          <option value="">Todas las categorías</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+        <select [ngModel]="selectedLevel" (ngModelChange)="onFilterChange()"
+          class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
+          <option value="">Todos los niveles</option>
+          <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+        </select>
+        <select [ngModel]="selectedOrder" (ngModelChange)="onFilterChange()"
+          class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
+          <option value="-created_at">Más recientes</option>
+          <option value="created_at">Más antiguos</option>
+          <option value="title">A-Z</option>
+          <option value="-title">Z-A</option>
+          <option value="total_duration_minutes">Menor duración</option>
+          <option value="-total_duration_minutes">Mayor duración</option>
+          <option value="-enrollment_count">Más populares</option>
+        </select>
+      </div>
+
+      <div *ngIf="suggestions.length > 0" class="mb-10">
+        <div class="flex items-center gap-2 mb-5">
+          <span class="material-symbols-outlined text-sky-400 text-xl">auto_awesome</span>
+          <h2 class="text-lg font-bold text-white">Recomendados para ti</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div *ngFor="let course of suggestions"
+            class="bg-[#ffffff08] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors flex flex-col group backdrop-blur-sm shadow-xl hover:shadow-sky-500/10">
+            <div class="relative h-36 overflow-hidden">
+              <img *ngIf="!isImageBroken(course)"
+                [src]="course.thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop'"
+                (error)="onImageError(course)" alt=""
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div *ngIf="isImageBroken(course)"
+                class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
+                <span class="material-symbols-outlined text-4xl text-white/20">auto_stories</span>
+              </div>
+              <div class="absolute top-3 right-3 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-bold"
+                [ngClass]="{'text-yellow-400': course.is_premium, 'text-emerald-400': !course.is_premium}">
+                {{ course.is_premium ? 'PREMIUM' : 'GRATIS' }}
+              </div>
+            </div>
+            <div class="p-4 flex-1 flex flex-col">
+              <h3 class="text-sm font-bold text-white mb-1 group-hover:text-sky-400 transition-colors">{{ course.title }}</h3>
+              <p class="text-xs text-slate-400 flex-1 line-clamp-2">{{ course.short_description }}</p>
+              <a [routerLink]="['/catalog', course.slug]"
+                class="mt-3 w-full py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs text-center transition-all">
+                Ver Curso
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let i of [1,2,3,4,5,6]"
           class="bg-white/5 border border-white/10 rounded-2xl h-[400px] animate-pulse overflow-hidden">
@@ -102,10 +164,9 @@
         </div>
       </div>
 
-      <!-- Catalog Grid -->
-      <div *ngIf="!isLoading"
+      <div *ngIf="!isLoading && filteredCourses.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
-        <div *ngFor="let course of courses"
+        <div *ngFor="let course of filteredCourses"
           class="bg-[#ffffff08] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors flex flex-col group backdrop-blur-sm shadow-xl hover:shadow-sky-500/10">
           <div class="relative h-48 overflow-hidden">
             <img *ngIf="!isImageBroken(course)"
@@ -134,6 +195,10 @@
               <span class="flex items-center gap-1"><span
                   class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> {{ course.level || 'Básico'
                 }}</span>
+              <span *ngIf="course.sections_count > 0" class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                {{ course.sections_count }} {{ course.sections_count === 1 ? 'sección' : 'secciones' }}
+              </span>
             </div>
 
             <h3 class="text-lg font-bold text-white mb-2 leading-tight group-hover:text-sky-400 transition-colors">{{
@@ -152,25 +217,32 @@
               </div>
             </div>
 
+            <div *ngIf="course.enrollment_count > 0" class="text-[11px] text-slate-500 mb-3 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">group</span>
+              {{ course.enrollment_count }} {{ course.enrollment_count === 1 ? 'estudiante' : 'estudiantes' }}
+            </div>
+
             <a [routerLink]="['/catalog', course.slug]"
-              class="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-center transition-all shadow-lg shadow-sky-500/20 block cursor-pointer transform group-hover:translate-y-[-2px]">
-              Ver Detalles del Curso
+              class="w-full py-3 rounded-xl font-bold text-center transition-all block cursor-pointer transform group-hover:translate-y-[-2px]"
+              [ngClass]="course.is_enrolled && course.progress_percent > 0
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-lg shadow-emerald-500/20'
+                : 'bg-sky-500 hover:bg-sky-400 text-white shadow-lg shadow-sky-500/20'">
+              {{ course.is_enrolled && course.progress_percent > 0 ? 'Continuar Curso' : 'Ver Detalles del Curso' }}
             </a>
           </div>
         </div>
+      </div>
 
-        <!-- Empty State -->
-        <div *ngIf="courses.length === 0"
-          class="col-span-full flex flex-col items-center justify-center p-20 text-slate-400 bg-white/5 rounded-2xl border border-white/10 border-dashed animate-in fade-in zoom-in duration-500">
-          <span class="material-symbols-outlined text-6xl mb-4 opacity-50">inventory_2</span>
-          <h2 class="text-xl font-bold text-white mb-2">No pudimos cargar los cursos.</h2>
-          <p class="mb-6">Es posible que el servidor esté tardando en responder o no haya contenido publicado.</p>
-          <button (click)="loadCatalog()"
-            class="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white font-bold transition-all flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">refresh</span>
-            Intentar de nuevo
-          </button>
-        </div>
+      <div *ngIf="!isLoading && filteredCourses.length === 0"
+        class="flex flex-col items-center justify-center p-20 text-slate-400 bg-white/5 rounded-2xl border border-white/10 border-dashed animate-in fade-in zoom-in duration-500">
+        <span class="material-symbols-outlined text-6xl mb-4 opacity-50">inventory_2</span>
+        <h2 class="text-xl font-bold text-white mb-2">No encontramos cursos con esos filtros.</h2>
+        <p class="mb-6">Intenta cambiar los filtros o el término de búsqueda.</p>
+        <button (click)="searchQuery=''; selectedCategory=''; selectedLevel=''; selectedOrder='-created_at'; onFilterChange()"
+          class="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white font-bold transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">refresh</span>
+          Limpiar filtros
+        </button>
       </div>
     </div>
 

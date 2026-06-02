@@ -66,6 +66,8 @@ class CourseCatalogSerializer(serializers.ModelSerializer):
     sections_count = serializers.SerializerMethodField()
     total_duration_minutes = serializers.SerializerMethodField()
     progress_percent = serializers.SerializerMethodField()
+    is_enrolled = serializers.SerializerMethodField()
+    enrollment_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Course
@@ -80,6 +82,8 @@ class CourseCatalogSerializer(serializers.ModelSerializer):
             "total_duration_minutes",
             "sections_count",
             "progress_percent",
+            "is_enrolled",
+            "enrollment_count",
         )
 
     def get_sections_count(self, obj):
@@ -92,13 +96,23 @@ class CourseCatalogSerializer(serializers.ModelSerializer):
             return compute_course_progress(request.user, obj)
         return 0
 
+    def get_is_enrolled(self, obj):
+        request = self.context.get('request')
+        if request and request.user and not request.user.is_anonymous:
+            from learning.models import Enrollment
+            return Enrollment.objects.filter(user=request.user, course=obj).exists()
+        return False
+
     def get_total_duration_minutes(self, obj):
-        total_seconds = obj.sections.aggregate(
+        total_video = obj.sections.aggregate(
             total=Sum('lessons__video__duration')
         )['total']
-        if total_seconds:
-            return int(total_seconds // 60)
-        return 0
+        if total_video:
+            return int(total_video // 60)
+        total_manual = obj.sections.aggregate(
+            total=Sum('lessons__duration_minutes')
+        )['total']
+        return total_manual or 0
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -139,12 +153,15 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         return compute_course_progress(user, obj)
 
     def get_total_duration_minutes(self, obj):
-        total_seconds = obj.sections.aggregate(
+        total_video = obj.sections.aggregate(
             total=Sum('lessons__video__duration')
         )['total']
-        if total_seconds:
-            return int(total_seconds // 60)
-        return 0
+        if total_video:
+            return int(total_video // 60)
+        total_manual = obj.sections.aggregate(
+            total=Sum('lessons__duration_minutes')
+        )['total']
+        return total_manual or 0
 
 
 # ===================================================

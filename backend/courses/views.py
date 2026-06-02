@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Count
 from rest_framework import generics, permissions, filters, status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -32,13 +33,15 @@ logger = logging.getLogger(__name__)
 
 
 class CourseCatalogView(generics.ListAPIView):
-    queryset = Course.objects.filter(is_published=True).order_by("-created_at")
+    queryset = Course.objects.filter(is_published=True).annotate(
+        enrollment_count=Count('enrollments')
+    ).order_by("-created_at")
     serializer_class = CourseCatalogSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'level', 'is_premium']
     search_fields = ['title', 'short_description', 'description']
-    ordering_fields = ['price', 'duration_hours', 'created_at']
+    ordering_fields = ['price', 'duration_hours', 'created_at', 'enrollment_count']
 
 
 class CourseDetailView(generics.RetrieveAPIView):
@@ -374,3 +377,16 @@ class VideoRegenerateQuizView(APIView):
             'status': 'success',
             'message': 'Regeneración del quiz iniciada en segundo plano.'
         })
+
+
+class CourseSuggestionsView(generics.ListAPIView):
+    serializer_class = CourseCatalogSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        enrolled_ids = self.request.user.enrollments.values_list("course_id", flat=True)
+        return Course.objects.filter(is_published=True).exclude(
+            id__in=enrolled_ids
+        ).annotate(
+            enrollment_count=Count('enrollments')
+        ).order_by("?")[:3]

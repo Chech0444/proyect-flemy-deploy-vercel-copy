@@ -24,6 +24,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   courseId: string | null = null;
   course: any = null;
   isLoading = true;
+  brokenImages: Set<string> = new Set();
   
   // Estado de la UI
   activeTab: 'description' | 'chat' | 'transcription' | 'editor' | 'summary' | 'quiz' = 'description';
@@ -76,6 +77,15 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stopPolling();
+  }
+
+  onImageError(key: string) {
+    this.brokenImages.add(key);
+    this.cdr.detectChanges();
+  }
+
+  isImageBroken(key: string): boolean {
+    return this.brokenImages.has(key);
   }
 
   loadCourseData() {
