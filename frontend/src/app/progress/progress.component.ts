@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { NgIf, NgFor, KeyValuePipe, NgClass } from '@angular/common';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
 import { AuthService } from '../shared/auth.service';
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-progress',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, RouterLink, KeyValuePipe, TopbarComponent],
+  imports: [NgIf, NgFor, NgClass, RouterLink, TopbarComponent, SkeletonComponent],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })
@@ -20,14 +21,17 @@ export class ProgressComponent implements OnInit {
 
   progressData: any = null;
   isLoading = true;
+  hasError = false;
   userProfile: any = null;
   isAdmin = false;
+  brokenImages: Set<string> = new Set();
+  heatmapWeeks: { date: string; value: number; day: number }[][] = [];
   private authService = inject(AuthService);
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
-    this.loadProgress();
     this.loadProfile();
+    this.loadProgress();
   }
 
   loadProfile() {
@@ -42,26 +46,109 @@ export class ProgressComponent implements OnInit {
     const token = localStorage.getItem('access_token');
     if (!token) {
       this.isLoading = false;
-      this.router.navigate(['/login']);
+      this.hasError = true;
       return;
     }
+
+    this.isLoading = true;
+    this.hasError = false;
 
     this.http.get<any>(`${environment.apiUrl}/gamification/progress/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (data) => {
-        console.log('Progress data loaded:', data);
         this.progressData = data;
+        this.buildHeatmap(data.heatmap_data);
         this.isLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading progress:', err);
         this.isLoading = false;
+        this.hasError = true;
         this.cdr.detectChanges();
-        // Ya no redirigimos al login para evitar el bucle de cierre de sesión
       }
     });
+  }
+
+  buildHeatmap(heatmapData: Record<string, number>) {
+    if (!heatmapData) return;
+    const sorted = Object.entries(heatmapData).sort(([a], [b]) => a.localeCompare(b));
+    const weeks: { date: string; value: number; day: number }[][] = [];
+    let currentWeek: { date: string; value: number; day: number }[] = [];
+    let firstDate = new Date(sorted[0][0]);
+    let firstDay = firstDate.getDay();
+    let pad = firstDay === 0 ? 6 : firstDay - 1;
+    for (let i = 0; i < pad; i++) {
+      currentWeek.push({ date: '', value: -1, day: i });
+    }
+    for (const [date, value] of sorted) {
+      const d = new Date(date);
+      let day = d.getDay();
+      if (day === 0) day = 7;
+      currentWeek.push({ date, value, day: day - 1 });
+      if (currentWeek.length === 7) {
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+    }
+    if (currentWeek.length > 0) {
+      while (currentWeek.length < 7) {
+        currentWeek.push({ date: '', value: -1, day: currentWeek.length });
+      }
+      weeks.push(currentWeek);
+    }
+    this.heatmapWeeks = weeks;
+  }
+
+  get level(): number {
+    return this.progressData?.level || 1;
+  }
+
+  get xpInLevel(): number {
+    return this.progressData?.xp_progress || 0;
+  }
+
+  get xpProgressPercent(): number {
+    return this.xpInLevel;
+  }
+
+  get nextLevelXp(): number {
+    return 100 - this.xpInLevel;
+  }
+
+  timeAgo(dateStr: string): string {
+    if (!dateStr) return '';
+    const now = new Date();
+    const date = new Date(dateStr.replace(' ', 'T'));
+    const diffMs = now.getTime() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'Ahora';
+    if (diffMin < 60) return `hace ${diffMin}min`;
+    const diffHrs = Math.floor(diffMin / 60);
+    if (diffHrs < 24) return `hace ${diffHrs}h`;
+    const diffDays = Math.floor(diffHrs / 24);
+    if (diffDays === 1) return 'ayer';
+    return `hace ${diffDays}días`;
+  }
+
+  onImageError(key: string) {
+    this.brokenImages.add(key);
+    this.cdr.detectChanges();
+  }
+
+  isImageBroken(key: string): boolean {
+    return this.brokenImages.has(key);
+  }
+
+  getMediaUrl(path: string | null | undefined): string | null {
+    if (!path) return null;
+    if (path.startsWith('http')) return path;
+    return `${environment.apiUrl.replace('/api/v1', '')}${path}`;
+  }
+
+  getCertificateDownloadUrl(code: string): string {
+    return `${environment.apiUrl}/certificates/${code}/download/`;
   }
 
   logout(event?: Event) {
