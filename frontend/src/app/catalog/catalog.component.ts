@@ -20,7 +20,6 @@ export class CatalogComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   courses: any[] = [];
-  suggestions: any[] = [];
   filteredCourses: any[] = [];
   isLoading = true;
   userProfile: any = null;
@@ -38,7 +37,6 @@ export class CatalogComponent implements OnInit {
     this.restoreProfileFromCache();
     this.loadCatalog();
     this.loadProfileDetails();
-    this.loadSuggestions();
   }
 
   restoreProfileFromCache() {
@@ -106,19 +104,6 @@ export class CatalogComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
-  }
-
-  loadSuggestions() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
-    this.http.get<any[]>(`${environment.apiUrl}/courses/suggestions/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).pipe(timeout(5000), catchError(() => of([]))).subscribe({
-      next: (data) => {
-        this.suggestions = data || [];
-        this.cdr.detectChanges();
-      }
-    });
   }
 
   toggleLevel(level: string) {

@@ -110,40 +110,6 @@
         </div>
       </div>
 
-      <div *ngIf="suggestions.length > 0" class="mb-10">
-        <div class="flex items-center gap-2 mb-5">
-          <span class="material-symbols-outlined text-sky-400 text-xl">auto_awesome</span>
-          <h2 class="text-lg font-bold text-white">Recomendados para ti</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div *ngFor="let course of suggestions"
-            class="bg-[#ffffff08] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors flex flex-col group backdrop-blur-sm shadow-xl hover:shadow-sky-500/10">
-            <div class="relative h-36 overflow-hidden">
-              <img *ngIf="!isImageBroken(course)"
-                [src]="course.thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop'"
-                (error)="onImageError(course)" alt=""
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div *ngIf="isImageBroken(course)"
-                class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
-                <span class="material-symbols-outlined text-4xl text-white/20">auto_stories</span>
-              </div>
-              <div class="absolute top-3 right-3 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-bold"
-                [ngClass]="{'text-yellow-400': course.is_premium, 'text-emerald-400': !course.is_premium}">
-                {{ course.is_premium ? 'PREMIUM' : 'GRATIS' }}
-              </div>
-            </div>
-            <div class="p-4 flex-1 flex flex-col">
-              <h3 class="text-sm font-bold text-white mb-1 group-hover:text-sky-400 transition-colors">{{ course.title }}</h3>
-              <p class="text-xs text-slate-400 flex-1 line-clamp-2">{{ course.short_description }}</p>
-              <a [routerLink]="['/catalog', course.slug]"
-                class="mt-3 w-full py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs text-center transition-all">
-                Ver Curso
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let i of [1,2,3,4,5,6]"
           class="bg-white/5 border border-white/10 rounded-2xl h-[400px] animate-pulse overflow-hidden">
