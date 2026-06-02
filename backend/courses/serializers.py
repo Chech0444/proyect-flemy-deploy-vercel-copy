@@ -79,7 +79,6 @@ class CourseCatalogSerializer(serializers.ModelSerializer):
             "thumbnail",
             "is_premium",
             "level",
-            "created_at",
             "total_duration_minutes",
             "sections_count",
             "progress_percent",

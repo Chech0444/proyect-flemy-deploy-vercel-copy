@@ -30,7 +30,6 @@ export class CatalogComponent implements OnInit {
 
   searchQuery = '';
   selectedLevel = '';
-  selectedOrder = '-created_at';
 
   levels: string[] = ['Básico', 'Intermedio', 'Avanzado'];
 
@@ -142,32 +141,10 @@ export class CatalogComponent implements OnInit {
       result = result.filter(c => c.level === this.selectedLevel);
     }
 
-    if (this.selectedOrder === 'title') {
-      result.sort((a, b) => a.title.localeCompare(b.title));
-    } else if (this.selectedOrder === '-title') {
-      result.sort((a, b) => b.title.localeCompare(a.title));
-    } else if (this.selectedOrder === 'total_duration_minutes') {
-      result.sort((a, b) => (a.total_duration_minutes || 0) - (b.total_duration_minutes || 0));
-    } else if (this.selectedOrder === '-total_duration_minutes') {
-      result.sort((a, b) => (b.total_duration_minutes || 0) - (a.total_duration_minutes || 0));
-    } else if (this.selectedOrder === 'enrollment_count') {
-      result.sort((a, b) => (a.enrollment_count || 0) - (b.enrollment_count || 0));
-    } else if (this.selectedOrder === '-enrollment_count') {
-      result.sort((a, b) => (b.enrollment_count || 0) - (a.enrollment_count || 0));
-    } else if (this.selectedOrder === 'created_at') {
-      result.sort((a, b) => new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime());
-    } else {
-      result.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
-    }
-
     this.filteredCourses = result;
   }
 
   onSearchChange() {
-    this.applyFilters();
-  }
-
-  onFilterChange() {
     this.applyFilters();
   }
 
