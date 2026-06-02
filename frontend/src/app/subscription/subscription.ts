@@ -140,53 +140,36 @@ export class SubscriptionComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (config) => {
-        const publicKey = config.public_key;
         const priceCop = plan === 'MONTHLY' ? 2000 : 799000;
         const amountInCents = priceCop * 100;
         const userId = this.userProfile?.id || 'guest';
         const reference = `flemy_${userId}_${Date.now()}`;
         const redirectUrl = window.location.origin + '/subscription';
 
-        this.http.post<any>(`${environment.apiUrl}/billing/wompi/signature/`, {
-          reference: reference,
-          amount_in_cents: amountInCents,
-          currency: 'COP'
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        }).subscribe({
-          next: (sigRes) => {
-            this.loadWompiScript().then(() => {
-              this.isWompiLoading = false;
-              this.cdr.detectChanges();
+        this.loadWompiScript().then(() => {
+          this.isWompiLoading = false;
+          this.cdr.detectChanges();
 
-              const checkout = new (window as any).WidgetCheckout({
-                currency: 'COP',
-                amountInCents: amountInCents,
-                reference: reference,
-                publicKey: publicKey,
-                redirectUrl: redirectUrl,
-                signature: sigRes.signature
-              });
+          const checkout = new (window as any).WidgetCheckout({
+            currency: 'COP',
+            amountInCents: amountInCents,
+            reference: reference,
+            publicKey: config.public_key,
+            redirectUrl: redirectUrl,
+            integrityKey: config.integrity_key
+          });
 
-              checkout.open((result: any) => {
-                const transaction = result.transaction;
-                if (transaction && transaction.id) {
-                  this.verifyWompiTransaction(transaction.id);
-                }
-              });
-            }).catch((err) => {
-              this.isWompiLoading = false;
-              console.error('ERROR:', err);
-              this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
-              this.cdr.detectChanges();
-            });
-          },
-          error: (err) => {
-            this.isWompiLoading = false;
-            console.error('ERROR AL OBTENER FIRMA:', err);
-            this.notificationService.showError(err.error?.detail || 'Error de configuración de Wompi.');
-            this.cdr.detectChanges();
-          }
+          checkout.open((result: any) => {
+            const transaction = result.transaction;
+            if (transaction && transaction.id) {
+              this.verifyWompiTransaction(transaction.id);
+            }
+          });
+        }).catch((err) => {
+          this.isWompiLoading = false;
+          console.error('ERROR:', err);
+          this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
+          this.cdr.detectChanges();
         });
       },
       error: (err) => {
@@ -308,46 +291,30 @@ export class SubscriptionComponent implements OnInit {
         const reference = `flemy_product_${product.id}_${userId}_${Date.now()}`;
         const redirectUrl = window.location.origin + '/subscription?purchase_id=REF&product_id=' + product.id;
 
-        this.http.post<any>(`${environment.apiUrl}/billing/wompi/signature/`, {
-          reference: reference,
-          amount_in_cents: amountInCents,
-          currency: 'COP'
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        }).subscribe({
-          next: (sigRes) => {
-            this.loadWompiScript().then(() => {
-              this.isProductWompiLoading = false;
-              this.cdr.detectChanges();
+        this.loadWompiScript().then(() => {
+          this.isProductWompiLoading = false;
+          this.cdr.detectChanges();
 
-              const checkout = new (window as any).WidgetCheckout({
-                currency: 'COP',
-                amountInCents: amountInCents,
-                reference: reference,
-                publicKey: config.public_key,
-                redirectUrl: redirectUrl.replace('REF', reference),
-                signature: sigRes.signature
-              });
+          const checkout = new (window as any).WidgetCheckout({
+            currency: 'COP',
+            amountInCents: amountInCents,
+            reference: reference,
+            publicKey: config.public_key,
+            redirectUrl: redirectUrl.replace('REF', reference),
+            integrityKey: config.integrity_key
+          });
 
-              checkout.open((result: any) => {
-                const transaction = result.transaction;
-                if (transaction && transaction.id) {
-                  this.verifyWompiProductPurchase(transaction.id, product.id);
-                }
-              });
-            }).catch((err) => {
-              this.isProductWompiLoading = false;
-              console.error('ERROR:', err);
-              this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
-              this.cdr.detectChanges();
-            });
-          },
-          error: (err) => {
-            this.isProductWompiLoading = false;
-            console.error('ERROR AL OBTENER FIRMA:', err);
-            this.notificationService.showError(err.error?.detail || 'Error de configuración de Wompi.');
-            this.cdr.detectChanges();
-          }
+          checkout.open((result: any) => {
+            const transaction = result.transaction;
+            if (transaction && transaction.id) {
+              this.verifyWompiProductPurchase(transaction.id, product.id);
+            }
+          });
+        }).catch((err) => {
+          this.isProductWompiLoading = false;
+          console.error('ERROR:', err);
+          this.notificationService.showError('No se pudo cargar la pasarela de pagos.');
+          this.cdr.detectChanges();
         });
       },
       error: (err) => {
