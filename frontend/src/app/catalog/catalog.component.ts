@@ -29,11 +29,9 @@ export class CatalogComponent implements OnInit {
   private authService = inject(AuthService);
 
   searchQuery = '';
-  selectedCategory = '';
   selectedLevel = '';
   selectedOrder = '-created_at';
 
-  categories: string[] = [];
   levels: string[] = ['Básico', 'Intermedio', 'Avanzado'];
 
   ngOnInit() {
@@ -95,7 +93,6 @@ export class CatalogComponent implements OnInit {
         next: (data) => {
           if (data) {
             this.courses = data;
-            this.extractCategories(data);
             this.applyFilters();
           } else {
             this.courses = [];
@@ -125,12 +122,9 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  extractCategories(courses: any[]) {
-    const cats = new Set<string>();
-    for (const c of courses) {
-      if (c.category) cats.add(c.category);
-    }
-    this.categories = Array.from(cats).sort();
+  toggleLevel(level: string) {
+    this.selectedLevel = this.selectedLevel === level ? '' : level;
+    this.applyFilters();
   }
 
   applyFilters() {
@@ -142,10 +136,6 @@ export class CatalogComponent implements OnInit {
         c.title.toLowerCase().includes(q) ||
         (c.short_description || '').toLowerCase().includes(q)
       );
-    }
-
-    if (this.selectedCategory) {
-      result = result.filter(c => c.category === this.selectedCategory);
     }
 
     if (this.selectedLevel) {

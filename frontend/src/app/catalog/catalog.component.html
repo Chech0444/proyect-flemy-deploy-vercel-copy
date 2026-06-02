@@ -95,16 +95,19 @@
           <input type="text" placeholder="Buscar cursos..." [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()"
             class="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:bg-white/10 transition-all text-sm">
         </div>
-        <select [ngModel]="selectedCategory" (ngModelChange)="onFilterChange()"
-          class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
-          <option value="">Todas las categorías</option>
-          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-        </select>
-        <select [ngModel]="selectedLevel" (ngModelChange)="onFilterChange()"
-          class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
-          <option value="">Todos los niveles</option>
-          <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
-        </select>
+        <div class="flex items-center gap-2">
+          <button *ngFor="let lvl of levels" (click)="toggleLevel(lvl)"
+            class="px-4 py-2 rounded-xl text-xs font-bold transition-all border"
+            [ngClass]="selectedLevel === lvl
+              ? 'bg-sky-500/20 text-sky-400 border-sky-500/40 shadow-sm shadow-sky-500/10'
+              : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white'">
+            {{ lvl }}
+          </button>
+          <button *ngIf="selectedLevel" (click)="toggleLevel('')"
+            class="px-3 py-2 rounded-xl text-xs font-bold bg-white/5 text-slate-500 border border-white/10 hover:bg-white/10 transition-all">
+            <span class="material-symbols-outlined text-[14px]">close</span>
+          </button>
+        </div>
         <select [ngModel]="selectedOrder" (ngModelChange)="onFilterChange()"
           class="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-sky-500/50 transition-all text-sm cursor-pointer">
           <option value="-created_at">Más recientes</option>
@@ -238,7 +241,7 @@
         <span class="material-symbols-outlined text-6xl mb-4 opacity-50">inventory_2</span>
         <h2 class="text-xl font-bold text-white mb-2">No encontramos cursos con esos filtros.</h2>
         <p class="mb-6">Intenta cambiar los filtros o el término de búsqueda.</p>
-        <button (click)="searchQuery=''; selectedCategory=''; selectedLevel=''; selectedOrder='-created_at'; onFilterChange()"
+        <button (click)="searchQuery=''; selectedLevel=''; selectedOrder='-created_at'; onFilterChange()"
           class="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white font-bold transition-all flex items-center gap-2">
           <span class="material-symbols-outlined text-sm">refresh</span>
           Limpiar filtros
