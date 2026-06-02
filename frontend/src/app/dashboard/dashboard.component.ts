@@ -94,8 +94,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getThumbnailUrl(path: string | null | undefined): string {
-    if (!path) return 'https://via.placeholder.com/400x200?text=Curso';
+  getThumbnailUrl(path: string | null | undefined): string | null {
+    if (!path) return null;
     if (path.startsWith('http')) return path;
     return `${this.mediaUrl}${path}`;
   }

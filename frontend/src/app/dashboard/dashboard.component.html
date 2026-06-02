@@ -169,7 +169,8 @@
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
     <div *ngFor="let enrollment of userProfile?.active_enrollments" class="glass-card rounded-xl overflow-hidden flex flex-col group/card">
       <div class="h-40 relative overflow-hidden">
-        <img [alt]="enrollment.course.title" class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" [src]="getThumbnailUrl(enrollment.course.thumbnail)" />
+        <img *ngIf="getThumbnailUrl(enrollment.course.thumbnail)" [alt]="enrollment.course.title" class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" [src]="getThumbnailUrl(enrollment.course.thumbnail)" />
+        <div *ngIf="!getThumbnailUrl(enrollment.course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-500/10 to-indigo-500/10"></div>
         <div class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-[#0ea5e9]/15 border border-[#0ea5e9]/30 backdrop-blur-md font-label-caps text-label-caps text-[10px] flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
           <span class="text-sky-200">En Progreso</span>
