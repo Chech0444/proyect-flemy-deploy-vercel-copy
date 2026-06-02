@@ -27,3 +27,14 @@
     opacity: 0.4;
     pointer-events: none;
 }
+
+.heatmap-day {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+.heatmap-day:hover {
+    transform: scale(1.5);
+    z-index: 10;
+}
