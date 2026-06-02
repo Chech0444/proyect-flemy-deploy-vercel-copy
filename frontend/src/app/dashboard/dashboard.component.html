@@ -269,31 +269,33 @@
   </div>
 </div>
 
-<div *ngIf="userProfile?.ai_suggestions?.length" class="glass-card rounded-xl p-5">
+<div *ngIf="userProfile?.next_lesson" class="glass-card rounded-xl p-5 border-l-2 border-sky-400">
   <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
-    <span class="material-symbols-outlined text-purple-400 text-xl animate-pulse">auto_awesome</span>
-    <h3 class="font-h3 text-h3 text-white text-base">Recomendados para ti</h3>
+    <span class="material-symbols-outlined text-sky-400 text-xl">play_circle</span>
+    <h3 class="font-h3 text-h3 text-white text-base">Continúa tu Aprendizaje</h3>
   </div>
-  <p class="text-xs text-slate-500 mb-4">Cursos que podrían interesarte según tu perfil.</p>
-  <div class="space-y-4">
-    <div *ngFor="let suggestion of userProfile.ai_suggestions" class="glass-card rounded-lg overflow-hidden bg-white/5 group/sug">
-      <div class="h-28 relative overflow-hidden">
-        <img [alt]="suggestion.title" class="w-full h-full object-cover opacity-80 transition-transform duration-500 group-hover/sug:scale-105" [src]="suggestion.thumbnail || 'https://via.placeholder.com/400x200?text=' + suggestion.title" />
-      </div>
-      <div class="p-3">
-        <h4 class="text-sm text-white font-semibold mb-1 truncate">{{ suggestion.title }}</h4>
-        <p class="text-xs text-slate-400 mb-3 line-clamp-2">{{ suggestion.short_description }}</p>
-        <button [routerLink]="['/catalog', suggestion.slug]" class="w-full py-1.5 rounded-lg bg-gradient-to-r from-primary-container to-tertiary-container text-white text-xs font-medium shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:opacity-90 transition-opacity">Ver Detalles</button>
-      </div>
+  <div class="flex gap-3">
+    <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-sky-500/10">
+      <img [src]="userProfile.next_lesson.course_thumbnail || 'https://via.placeholder.com/64?text=' + userProfile.next_lesson.course_title.charAt(0)" class="w-full h-full object-cover">
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-xs text-sky-400 font-medium mb-0.5 truncate">{{ userProfile.next_lesson.course_title }}</p>
+      <p class="text-xs text-slate-500 mb-0.5">{{ userProfile.next_lesson.section_title }}</p>
+      <p class="text-sm text-white font-semibold truncate">{{ userProfile.next_lesson.lesson_title }}</p>
     </div>
   </div>
+  <button [routerLink]="['/catalog', userProfile.next_lesson.course_slug]" class="w-full mt-4 py-2.5 rounded-lg bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-lg">play_arrow</span>
+    Seguir Aprendiendo
+  </button>
 </div>
 
-<div *ngIf="!userProfile?.ai_suggestions?.length" class="glass-card rounded-xl p-5">
+<div *ngIf="!userProfile?.next_lesson && userProfile?.active_enrollments?.length === 0" class="glass-card rounded-xl p-5">
   <div class="text-center py-8 bg-white/5 rounded-lg border border-dashed border-white/20 flex flex-col items-center">
-    <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">neurology</span>
-    <p class="text-sm text-slate-400 font-medium">Nuestra IA está analizando tu perfil</p>
-    <p class="text-xs text-slate-500 mt-1">Sugeriremos nuevos cursos pronto.</p>
+    <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">school</span>
+    <p class="text-sm text-slate-400 font-medium">No tienes cursos activos</p>
+    <p class="text-xs text-slate-500 mt-1">Inscríbete en un curso para empezar.</p>
+    <button routerLink="/catalog" class="mt-4 px-4 py-2 text-xs rounded-lg bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-medium">Explorar Catálogo</button>
   </div>
 </div>
 

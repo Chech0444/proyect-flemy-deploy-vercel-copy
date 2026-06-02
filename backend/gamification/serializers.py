@@ -24,6 +24,7 @@ class DashboardSerializer(serializers.ModelSerializer):
     learning_hours = serializers.SerializerMethodField()
     global_progress = serializers.SerializerMethodField()
     recent_activity = serializers.SerializerMethodField()
+    next_lesson = serializers.SerializerMethodField()
     ai_suggestions = serializers.SerializerMethodField()
     heatmap_data = serializers.SerializerMethodField()
 
@@ -35,7 +36,7 @@ class DashboardSerializer(serializers.ModelSerializer):
             "recent_transactions", "active_enrollments",
             "total_enrollments", "learning_hours",
             "global_progress", "recent_activity",
-            "ai_suggestions", "heatmap_data",
+            "next_lesson", "ai_suggestions", "heatmap_data",
         )
 
     def get_level(self, obj):
@@ -99,6 +100,41 @@ class DashboardSerializer(serializers.ModelSerializer):
         for entry in activity:
             heatmap[str(entry["completed_at__date"])] = 1
         return heatmap
+
+    def get_next_lesson(self, obj):
+        from learning.models import Enrollment, LessonProgress
+        enrollments = obj.enrollments.prefetch_related(
+            "course__sections__lessons"
+        ).all()
+        best = None
+        for enrollment in enrollments:
+            course = enrollment.course
+            for section in course.sections.all():
+                for lesson in section.lessons.all():
+                    is_completed = LessonProgress.objects.filter(
+                        user=obj, lesson=lesson, completed=True
+                    ).exists()
+                    if not is_completed:
+                        candidate = {
+                            "course_title": course.title,
+                            "course_slug": course.slug,
+                            "course_thumbnail": (
+                                course.thumbnail.url if course.thumbnail else None
+                            ),
+                            "section_title": section.title,
+                            "lesson_title": lesson.title,
+                            "lesson_id": lesson.id,
+                        }
+                        if best is None or (
+                            enrollment.created_at
+                            > best.get("_enrolled_at", enrollment.created_at)
+                        ):
+                            best = candidate
+                            best["_enrolled_at"] = enrollment.created_at
+                        break
+        if best:
+            best.pop("_enrolled_at", None)
+        return best
 
     def get_ai_suggestions(self, obj):
         from courses.models import Course
