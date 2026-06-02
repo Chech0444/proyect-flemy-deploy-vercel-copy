@@ -153,12 +153,69 @@ class AdminDashboardView(APIView):
     permission_classes = [IsAdminRole]
 
     def get(self, request):
+        now = timezone.now()
+        today = timezone.localdate()
+        month_start = today.replace(day=1)
+        prev_month_start = (month_start - timedelta(days=1)).replace(day=1)
+
+        # ── KPIs base ──
         total_users = User.objects.count()
         premium_users = User.objects.filter(role='ROLE_PREMIUM').count()
         total_enrollments = Enrollment.objects.count()
         total_revenue = Transaction.objects.aggregate(total=Sum('amount'))['total'] or 0
-        
-        # Últimas 5 transacciones
+
+        # ── Valores periodo anterior ──
+        total_users_prev = max(0, total_users - User.objects.filter(date_joined__gte=prev_month_start).count())
+        premium_users_prev = max(0, premium_users - User.objects.filter(role='ROLE_PREMIUM', date_joined__gte=prev_month_start).count())
+        enrollments_this_month = Enrollment.objects.filter(created_at__gte=month_start).count()
+        total_enrollments_prev = max(0, total_enrollments - enrollments_this_month)
+        total_revenue_prev = float(Transaction.objects.filter(created_at__lt=prev_month_start).aggregate(total=Sum('amount'))['total'] or 0)
+
+        # ── Nuevos usuarios este mes ──
+        new_users_month = User.objects.filter(date_joined__gte=month_start).count()
+        new_users_prev = User.objects.filter(date_joined__gte=prev_month_start, date_joined__lt=month_start).count()
+
+        # ── Ingresos este mes ──
+        monthly_revenue = Transaction.objects.filter(created_at__gte=month_start).aggregate(total=Sum('amount'))['total'] or 0
+        prev_monthly_revenue = Transaction.objects.filter(
+            created_at__gte=prev_month_start, created_at__lt=month_start
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        # ── Evolucion usuarios ultimos 12 meses ──
+        user_growth = []
+        for i in range(11, -1, -1):
+            end = (today.replace(day=1) - timedelta(days=30 * i)).replace(day=1)
+            if end > today:
+                end = today
+            cnt = User.objects.filter(date_joined__lt=end).count()
+            user_growth.append(cnt)
+
+        # ── Evolucion ingresos ultimos 12 meses ──
+        revenue_growth = []
+        for i in range(11, -1, -1):
+            end = (today.replace(day=1) - timedelta(days=30 * i)).replace(day=1)
+            if end > today:
+                end = today
+            rev = Transaction.objects.filter(created_at__lt=end).aggregate(total=Sum('amount'))['total'] or 0
+            revenue_growth.append(float(rev))
+
+        # ── Actividad ultimos 30 dias (usuarios que hicieron login o completaron leccion) ──
+        from learning.models import LessonProgress
+        from django.contrib.admin.models import LogEntry
+        activity = []
+        for i in range(29, -1, -1):
+            day = today - timedelta(days=i)
+            active = User.objects.filter(last_login__date=day).count()
+            lesson_active = LessonProgress.objects.filter(completed_at__date=day).values('user').distinct().count()
+            activity.append(max(active, lesson_active))
+
+        # ── Proyectos por estado ──
+        from courses.models import Course
+        total_courses = Course.objects.count()
+        published = Course.objects.filter(is_published=True).count()
+        draft = Course.objects.filter(is_published=False).count()
+
+        # ── Ventas recientes ──
         recent_sales = Transaction.objects.select_related('user').order_by('-created_at')[:5]
         sales_list = [{
             "user": s.user.username,
@@ -167,12 +224,30 @@ class AdminDashboardView(APIView):
         } for s in recent_sales]
 
         data = {
-            "stats": {
+            "kpis": {
                 "total_users": total_users,
+                "total_users_prev": total_users_prev,
                 "premium_users": premium_users,
+                "premium_users_prev": premium_users_prev,
                 "total_enrollments": total_enrollments,
-                "total_revenue": float(total_revenue)
+                "total_enrollments_prev": total_enrollments_prev,
+                "new_users_month": new_users_month,
+                "new_users_prev": new_users_prev,
+                "total_revenue": float(total_revenue),
+                "total_revenue_prev": total_revenue_prev,
+                "monthly_revenue": float(monthly_revenue),
+                "prev_monthly_revenue": float(prev_monthly_revenue),
             },
-            "recent_sales": sales_list
+            "charts": {
+                "user_growth": user_growth,
+                "revenue_growth": revenue_growth,
+                "activity_30d": activity,
+            },
+            "courses": {
+                "total": total_courses,
+                "published": published,
+                "draft": draft,
+            },
+            "recent_sales": sales_list,
         }
         return Response(data)

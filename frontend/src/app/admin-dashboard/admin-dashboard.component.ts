@@ -20,13 +20,13 @@ export class AdminDashboardComponent implements OnInit {
 
   // --- Stats State ---
   kpiData: any = null;
+  courseStats: any = null;
   recentSales: any[] = [];
+  userGrowth: number[] = [];
+  revenueGrowth: number[] = [];
+  activityData: number[] = [];
   isLoadingStats = true;
   statsError = false;
-
-  // Demo-generated chart data
-  chartData: any = null;
-  activityData: number[] = [];
 
   // Tabs
   activeTab = 'stats';
@@ -76,49 +76,14 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // ==========================================
-  // STATS — GENERATE DEMO CHART DATA
+  // STATS — HELPERS
   // ==========================================
-  generateChartData(baseUsers: number, baseRevenue: number) {
-    const now = new Date();
-    const userGrowth: number[] = [];
-    const revenueGrowth: number[] = [];
-    let userAccum = Math.max(0, baseUsers - Math.floor(Math.random() * 200) - 50);
-    let revAccum = Math.max(0, baseRevenue - Math.random() * 500 - 100);
-
-    for (let i = 0; i < 12; i++) {
-      const monthDate = new Date(now.getFullYear(), now.getMonth() - 11 + i, 1);
-      const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
-      const isRecent = i >= 9;
-      const growth = isRecent
-        ? Math.floor(Math.random() * 40) + 15
-        : Math.floor(Math.random() * 25) + 5;
-      userAccum += growth;
-      userGrowth.push(userAccum);
-
-      const revGrowth = isRecent
-        ? parseFloat((Math.random() * 200 + 80).toFixed(2))
-        : parseFloat((Math.random() * 100 + 20).toFixed(2));
-      revAccum = parseFloat((revAccum + revGrowth).toFixed(2));
-      revenueGrowth.push(revAccum);
-    }
-
-    this.chartData = { userGrowth, revenueGrowth };
-  }
-
-  generateActivityData(): number[] {
-    const data: number[] = [];
-    for (let i = 0; i < 30; i++) {
-      data.push(Math.floor(Math.random() * 25) + 2);
-    }
-    return data;
-  }
-
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
   }
 
   percChange(current: number, previous: number): string {
-    if (previous === 0) return '+100%';
+    if (previous === 0) return current > 0 ? '+100%' : '0%';
     const change = ((current - previous) / previous) * 100;
     return (change >= 0 ? '+' : '') + change.toFixed(1) + '%';
   }
@@ -139,45 +104,19 @@ export class AdminDashboardComponent implements OnInit {
     this.statsError = false;
     this.http.get<any>(`${environment.apiUrl}/gamification/admin-stats/`, this.authHeaders).subscribe({
       next: (data) => {
-        const s = data.stats;
-        const prevUsers = Math.floor(s.total_users * 0.82);
-        const prevPremium = Math.floor(s.premium_users * 0.78);
-        const prevRevenue = s.total_revenue * 0.72;
-
-        this.kpiData = {
-          total_users: s.total_users,
-          total_users_prev: prevUsers,
-          premium_users: s.premium_users,
-          premium_users_prev: prevPremium,
-          total_enrollments: s.total_enrollments,
-          total_enrollments_prev: Math.floor(s.total_enrollments * 0.85),
-          new_users_month: Math.floor(s.total_users * 0.08),
-          new_users_month_prev: Math.floor(s.total_users * 0.06),
-          total_revenue: s.total_revenue,
-          total_revenue_prev: prevRevenue,
-          monthly_revenue: s.total_revenue * 0.11,
-          monthly_revenue_prev: s.total_revenue * 0.09,
-        };
-
+        this.kpiData = data.kpis;
+        this.courseStats = data.courses;
+        this.userGrowth = data.charts.user_growth;
+        this.revenueGrowth = data.charts.revenue_growth;
+        this.activityData = data.charts.activity_30d;
         this.recentSales = data.recent_sales || [];
-        this.generateChartData(s.total_users, s.total_revenue);
-        this.activityData = this.generateActivityData();
         this.isLoadingStats = false;
         this.cdr.detectChanges();
       },
       error: () => {
         this.isLoadingStats = false;
         this.statsError = true;
-        this.kpiData = {
-          total_users: 0, total_users_prev: 0,
-          premium_users: 0, premium_users_prev: 0,
-          total_enrollments: 0, total_enrollments_prev: 0,
-          new_users_month: 0, new_users_month_prev: 0,
-          total_revenue: 0, total_revenue_prev: 0,
-          monthly_revenue: 0, monthly_revenue_prev: 0,
-        };
-        this.chartData = { userGrowth: [0,0,0,0,0,0,0,0,0,0,0,0], revenueGrowth: [0,0,0,0,0,0,0,0,0,0,0,0] };
-        this.activityData = [];
+        this.kpiData = null;
         this.cdr.detectChanges();
       }
     });

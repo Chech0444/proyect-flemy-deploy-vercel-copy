@@ -81,9 +81,9 @@
               <div class="kpi-icon kpi-icon-emerald">
                 <span class="material-symbols-outlined">person_add</span>
               </div>
-              <span class="kpi-badge text-emerald-400">
-                <span class="material-symbols-outlined kpi-badge-icon">trending_up</span>
-                +{{ percChange(kpiData.new_users_month, kpiData.new_users_month_prev) }}
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.new_users_month, kpiData.new_users_month_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.new_users_month, kpiData.new_users_month_prev)) }}</span>
+                {{ percChange(kpiData.new_users_month, kpiData.new_users_month_prev) }}
               </span>
             </div>
             <div class="kpi-value">{{ kpiData.new_users_month | number }}</div>
@@ -147,13 +147,13 @@
             <div class="chart-body">
               <div class="bar-chart">
                 <div class="bar-chart-yaxis">
-                  <span>{{ chartData.userGrowth[11] > 500 ? (chartData.userGrowth[11] | number) : '0' }}</span>
-                  <span>{{ chartData.userGrowth[11] > 500 ? ((chartData.userGrowth[11] / 2) | number) : (chartData.userGrowth[5] | number) }}</span>
+                  <span>{{ userGrowth[11] > 500 ? (userGrowth[11] | number) : '0' }}</span>
+                  <span>{{ userGrowth[11] > 500 ? ((userGrowth[11] / 2) | number) : (userGrowth[5] | number) }}</span>
                   <span>0</span>
                 </div>
                 <div class="bar-chart-content">
-                  <div class="bar-group" *ngFor="let val of chartData.userGrowth; let i = index">
-                    <div class="bar" [style.height.%]="(val / (chartData.userGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
+                  <div class="bar-group" *ngFor="let val of userGrowth; let i = index">
+                    <div class="bar" [style.height.%]="(val / (userGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
                       <div class="bar-tooltip">{{ val | number }}</div>
                     </div>
                     <span class="bar-label">{{ last12Months[i] }}</span>
@@ -175,13 +175,13 @@
             <div class="chart-body">
               <div class="bar-chart">
                 <div class="bar-chart-yaxis">
-                  <span>{{ formatCurrency(chartData.revenueGrowth[11]) }}</span>
-                  <span>{{ formatCurrency(chartData.revenueGrowth[11] / 2) }}</span>
+                  <span>{{ formatCurrency(revenueGrowth[11]) }}</span>
+                  <span>{{ formatCurrency(revenueGrowth[11] / 2) }}</span>
                   <span>$0</span>
                 </div>
                 <div class="bar-chart-content">
-                  <div class="bar-group" *ngFor="let val of chartData.revenueGrowth; let i = index">
-                    <div class="bar bar-revenue" [style.height.%]="(val / (chartData.revenueGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
+                  <div class="bar-group" *ngFor="let val of revenueGrowth; let i = index">
+                    <div class="bar bar-revenue" [style.height.%]="(val / (revenueGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
                       <div class="bar-tooltip">{{ formatCurrency(val) }}</div>
                     </div>
                     <span class="bar-label">{{ last12Months[i] }}</span>
@@ -203,12 +203,11 @@
               <div class="donut-container">
                 <svg class="donut-svg" viewBox="0 0 36 36">
                   <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3.8"/>
-                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0ea5e9" stroke-width="3.8" stroke-dasharray="65, 100"/>
-                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#10b981" stroke-width="3.8" stroke-dasharray="20, 100" stroke-dashoffset="-65"/>
-                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#f59e0b" stroke-width="3.8" stroke-dasharray="15, 100" stroke-dashoffset="-85"/>
+                  <path *ngIf="courseStats" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0ea5e9" stroke-width="3.8" [attr.stroke-dasharray]="(courseStats.published / (courseStats.total || 1)) * 100 + ', 100'"/>
+                  <path *ngIf="courseStats" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#10b981" stroke-width="3.8" [attr.stroke-dasharray]="(courseStats.draft / (courseStats.total || 1)) * 100 + ', 100'" [attr.stroke-dashoffset]="'-' + ((courseStats.published / (courseStats.total || 1)) * 100)"/>
                 </svg>
                 <div class="donut-center">
-                  <span class="donut-center-value">{{ courses.length }}</span>
+                  <span class="donut-center-value">{{ courseStats?.total || 0 }}</span>
                   <span class="donut-center-label">Total</span>
                 </div>
               </div>
@@ -216,17 +215,12 @@
                 <div class="legend-item">
                   <span class="legend-dot" style="background:#0ea5e9"></span>
                   <span class="legend-label">Publicados</span>
-                  <span class="legend-value">65%</span>
+                  <span class="legend-value">{{ courseStats ? ((courseStats.published / (courseStats.total || 1)) * 100 | number:'1.0-0') + '%' : '0%' }}</span>
                 </div>
                 <div class="legend-item">
                   <span class="legend-dot" style="background:#10b981"></span>
                   <span class="legend-label">Borradores</span>
-                  <span class="legend-value">20%</span>
-                </div>
-                <div class="legend-item">
-                  <span class="legend-dot" style="background:#f59e0b"></span>
-                  <span class="legend-label">Inactivos</span>
-                  <span class="legend-value">15%</span>
+                  <span class="legend-value">{{ courseStats ? ((courseStats.draft / (courseStats.total || 1)) * 100 | number:'1.0-0') + '%' : '0%' }}</span>
                 </div>
               </div>
             </div>
