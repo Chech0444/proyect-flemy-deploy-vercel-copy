@@ -20,6 +20,7 @@ export class ProgressComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   progressData: any = null;
+  leaderboardData: any[] = [];
   isLoading = true;
   hasError = false;
   userProfile: any = null;
@@ -32,6 +33,7 @@ export class ProgressComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     this.loadProfile();
     this.loadProgress();
+    this.loadLeaderboard();
   }
 
   loadProfile() {
@@ -68,6 +70,20 @@ export class ProgressComponent implements OnInit {
         this.hasError = true;
         this.cdr.detectChanges();
       }
+    });
+  }
+
+  loadLeaderboard() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+    this.http.get<any[]>(`${environment.apiUrl}/gamification/leaderboard/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data) => {
+        this.leaderboardData = data.slice(0, 5);
+        this.cdr.detectChanges();
+      },
+      error: () => {}
     });
   }
 
@@ -117,6 +133,11 @@ export class ProgressComponent implements OnInit {
     return 100 - this.xpInLevel;
   }
 
+  get completedCourses(): number {
+    if (!this.progressData?.course_breakdown) return 0;
+    return this.progressData.course_breakdown.filter((c: any) => c.progress >= 100).length;
+  }
+
   timeAgo(dateStr: string): string {
     if (!dateStr) return '';
     const now = new Date();
@@ -149,6 +170,10 @@ export class ProgressComponent implements OnInit {
 
   getCertificateDownloadUrl(code: string): string {
     return `${environment.apiUrl}/certificates/${code}/download/`;
+  }
+
+  isCurrentUser(username: string): boolean {
+    return this.progressData?.username === username;
   }
 
   logout(event?: Event) {

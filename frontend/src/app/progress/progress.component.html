@@ -13,18 +13,17 @@
       <app-skeleton width="300px" height="2.5rem" class="mb-2"></app-skeleton>
       <app-skeleton width="200px" height="1.2rem"></app-skeleton>
     </section>
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <app-skeleton height="130px" radius="16px" *ngFor="let i of [1,2,3,4]"></app-skeleton>
+    <section class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+      <app-skeleton height="120px" radius="16px" *ngFor="let i of [1,2,3,4,5]"></app-skeleton>
     </section>
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-8 space-y-8">
         <app-skeleton height="280px" radius="16px"></app-skeleton>
-        <app-skeleton height="300px" radius="16px"></app-skeleton>
+        <app-skeleton height="350px" radius="16px"></app-skeleton>
       </div>
       <div class="lg:col-span-4 space-y-8">
-        <app-skeleton height="400px" radius="16px"></app-skeleton>
-        <app-skeleton height="180px" radius="16px"></app-skeleton>
-        <app-skeleton height="200px" radius="16px"></app-skeleton>
+        <app-skeleton height="420px" radius="16px"></app-skeleton>
+        <app-skeleton height="250px" radius="16px"></app-skeleton>
       </div>
     </section>
   </div>
@@ -93,62 +92,36 @@
   </nav>
 
   <main class="flex-1 flex flex-col min-h-screen">
-    <app-topbar [userProfile]="userProfile" title="Tu Progreso"></app-topbar>
+    <app-topbar [userProfile]="userProfile" title="Estadísticas y Progreso"></app-topbar>
 
     <div class="p-8 max-w-7xl mx-auto w-full">
 
-      <section class="mb-8">
-        <h2 class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-purple-500 bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">Tu Progreso</h2>
-        <p class="text-slate-400 mt-2">Sigue así, cada paso cuenta.</p>
-      </section>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div class="flex items-center justify-between mb-4 relative z-10">
-            <span class="material-symbols-outlined text-sky-400 p-2 bg-sky-500/10 rounded-lg">auto_awesome</span>
-            <span class="text-xs text-sky-500 font-bold">Nivel {{ level }}</span>
-          </div>
-          <div class="text-3xl font-bold text-white relative z-10">{{ progressData?.xp }} XP</div>
-          <div class="w-full mt-2 relative z-10">
-            <div class="flex justify-between text-[10px] text-slate-500 mb-1">
-              <span>Nivel {{ level }}</span>
-              <span>{{ nextLevelXp }} XP para nivel {{ level + 1 }}</span>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div class="glass-card rounded-xl p-5 flex flex-col items-center text-center">
+          <span class="text-3xl font-bold text-sky-400">{{ level }}</span>
+          <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">Nivel Actual</span>
+          <div class="w-full mt-3">
+            <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-sky-500 rounded-full transition-all duration-500" [style.width.%]="xpProgressPercent"></div>
             </div>
-            <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div class="h-full progress-bar-fill rounded-full transition-all duration-500" [style.width.%]="xpProgressPercent"></div>
-            </div>
+            <div class="text-[10px] text-slate-500 mt-1">{{ xpInLevel }}/100 XP</div>
           </div>
         </div>
-
-        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div class="flex items-center justify-between mb-4 relative z-10">
-            <span class="material-symbols-outlined text-orange-400 p-2 bg-orange-500/10 rounded-lg">local_fire_department</span>
-            <span class="text-xs text-orange-500 font-bold">¡Días seguidos!</span>
-          </div>
-          <div class="text-3xl font-bold text-white relative z-10">{{ progressData?.learning_streak || 0 }}</div>
-          <div class="text-xs text-on-surface-variant uppercase tracking-wider mt-1 relative z-10">Racha de Aprendizaje</div>
+        <div class="glass-card rounded-xl p-5 flex flex-col items-center text-center">
+          <span class="text-3xl font-bold text-white">{{ progressData?.xp || 0 }}</span>
+          <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">XP Totales</span>
         </div>
-
-        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div class="flex items-center justify-between mb-4 relative z-10">
-            <span class="material-symbols-outlined text-yellow-400 p-2 bg-yellow-500/10 rounded-lg">schedule</span>
-            <span class="text-xs text-yellow-500 font-bold">+{{ progressData?.weekly_hours || 0 }}h esta semana</span>
-          </div>
-          <div class="text-3xl font-bold text-white relative z-10">{{ progressData?.learning_hours || 0 }}h</div>
-          <div class="text-xs text-on-surface-variant uppercase tracking-wider mt-1 relative z-10">Horas de Estudio</div>
+        <div class="glass-card rounded-xl p-5 flex flex-col items-center text-center">
+          <span class="text-3xl font-bold text-amber-400">{{ progressData?.learning_hours || 0 }}<span class="text-lg text-slate-400">h</span></span>
+          <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">Horas Estudio</span>
         </div>
-
-        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div class="flex items-center justify-between mb-4 relative z-10">
-            <span class="material-symbols-outlined text-purple-400 p-2 bg-purple-500/10 rounded-lg">quiz</span>
-            <span class="text-xs text-purple-500 font-bold">Promedio general</span>
-          </div>
-          <div class="text-3xl font-bold text-white relative z-10">{{ progressData?.avg_quiz_score || 0 }}/100</div>
-          <div class="text-xs text-on-surface-variant uppercase tracking-wider mt-1 relative z-10">Puntaje Promedio Quizzes</div>
+        <div class="glass-card rounded-xl p-5 flex flex-col items-center text-center">
+          <span class="text-3xl font-bold text-purple-400">{{ progressData?.avg_quiz_score || 0 }}</span>
+          <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">Promedio Quiz</span>
+        </div>
+        <div class="glass-card rounded-xl p-5 flex flex-col items-center text-center">
+          <span class="text-3xl font-bold text-emerald-400">{{ completedCourses }}/{{ progressData?.course_breakdown?.length || 0 }}</span>
+          <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">Cursos Completados</span>
         </div>
       </div>
 
@@ -195,6 +168,37 @@
           </section>
 
           <section class="glass-card rounded-2xl p-8">
+            <h3 class="text-lg font-bold text-white mb-6">Progreso por Curso</h3>
+            <div class="space-y-5">
+              <div *ngFor="let course of progressData?.course_breakdown" class="space-y-1">
+                <div class="flex justify-between text-sm mb-1 items-center">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0 bg-sky-500/10">
+                      <img *ngIf="!isImageBroken('course-' + course.slug) && getMediaUrl(course.thumbnail)" [src]="getMediaUrl(course.thumbnail)" (error)="onImageError('course-' + course.slug)" alt="" class="w-full h-full object-cover">
+                      <div *ngIf="isImageBroken('course-' + course.slug) || !getMediaUrl(course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-sm text-white/20">auto_stories</span>
+                      </div>
+                    </div>
+                    <span class="text-white font-medium truncate">{{ course.title }}</span>
+                  </div>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="text-sky-400 font-bold text-sm">{{ course.progress }}%</span>
+                    <span *ngIf="course.progress >= 100" class="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+                  </div>
+                </div>
+                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-sky-500 to-purple-500 rounded-full transition-all duration-700" [style.width.%]="course.progress"></div>
+                </div>
+              </div>
+              <div *ngIf="!progressData?.course_breakdown?.length" class="text-center py-8 text-slate-500">
+                <span class="material-symbols-outlined text-4xl mb-2">school</span>
+                <p class="mb-3">No estás inscrito en ningún curso aún.</p>
+                <a routerLink="/catalog" class="text-sky-400 font-bold text-sm">Explorar catálogo</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="glass-card rounded-2xl p-8">
             <h3 class="text-lg font-bold text-white mb-6">Actividad Reciente</h3>
             <div class="space-y-4">
               <div *ngFor="let activity of progressData?.recent_activity"
@@ -210,7 +214,7 @@
               </div>
               <div *ngIf="!progressData?.recent_activity?.length" class="text-center py-8 text-slate-500">
                 <span class="material-symbols-outlined text-4xl mb-2">history</span>
-                <p>Aún no tienes actividad reciente.</p>
+                <p>Aún no tienes actividad reciente. ¡Empieza a aprender!</p>
               </div>
             </div>
           </section>
@@ -220,7 +224,6 @@
 
           <section class="glass-card rounded-2xl p-8 text-center flex flex-col items-center">
             <h3 class="text-lg font-bold text-white mb-8">Progreso Global</h3>
-
             <div class="relative w-48 h-48 mb-8">
               <svg class="w-full h-full transform -rotate-90">
                 <circle cx="96" cy="96" r="88" fill="transparent" stroke="rgba(255,255,255,0.05)" stroke-width="12"></circle>
@@ -241,46 +244,24 @@
                 <span class="text-xs text-on-surface-variant uppercase tracking-tighter">Completado</span>
               </div>
             </div>
-
-            <div class="w-full space-y-4">
-              <div *ngFor="let course of progressData?.course_breakdown" class="space-y-1">
-                <div class="flex justify-between text-xs mb-1">
-                  <span class="text-white truncate mr-2">{{ course.title }}</span>
-                  <span class="text-sky-400 font-bold whitespace-nowrap">{{ course.progress }}%</span>
-                </div>
-                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-sky-500 to-purple-500" [style.width.%]="course.progress"></div>
-                </div>
+            <div class="w-full space-y-3">
+              <div class="flex justify-between text-xs text-slate-400">
+                <span>Racha de estudio</span>
+                <span class="text-white font-bold">{{ progressData?.learning_streak || 0 }} días</span>
               </div>
-              <div *ngIf="!progressData?.course_breakdown?.length" class="text-center py-4 text-slate-500">
-                <p class="text-sm">No estás inscrito en ningún curso.</p>
-                <a routerLink="/catalog" class="text-sky-400 text-sm font-bold mt-2 inline-block">Explorar catálogo</a>
+              <div class="flex justify-between text-xs text-slate-400">
+                <span>Horas esta semana</span>
+                <span class="text-white font-bold">{{ progressData?.weekly_hours || 0 }}h</span>
               </div>
-            </div>
-          </section>
-
-          <section *ngIf="progressData?.next_lesson" class="glass-card rounded-2xl p-6 bg-gradient-to-br from-sky-600/20 to-purple-600/20 border-sky-500/20">
-            <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
-              <span class="material-symbols-outlined text-sky-400 text-xl">play_circle</span>
-              <h3 class="text-lg font-bold text-white text-base">Continúa tu Aprendizaje</h3>
-            </div>
-            <div class="flex gap-3">
-              <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-sky-500/10">
-                <img *ngIf="!isImageBroken('next-lesson') && getMediaUrl(progressData.next_lesson.course_thumbnail)" [src]="getMediaUrl(progressData.next_lesson.course_thumbnail)" (error)="onImageError('next-lesson')" alt="" class="w-full h-full object-cover">
-                <div *ngIf="isImageBroken('next-lesson') || !getMediaUrl(progressData.next_lesson.course_thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-lg text-white/20">auto_stories</span>
-                </div>
+              <div class="flex justify-between text-xs text-slate-400">
+                <span>Cursos inscritos</span>
+                <span class="text-white font-bold">{{ progressData?.course_breakdown?.length || 0 }}</span>
               </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs text-sky-400 font-medium mb-0.5 truncate">{{ progressData.next_lesson.course_title }}</p>
-                <p class="text-xs text-slate-500 mb-0.5">{{ progressData.next_lesson.section_title }}</p>
-                <p class="text-sm text-white font-semibold truncate">{{ progressData.next_lesson.lesson_title }}</p>
+              <div class="flex justify-between text-xs text-slate-400">
+                <span>Nivel</span>
+                <span class="text-white font-bold">{{ level }}</span>
               </div>
             </div>
-            <button [routerLink]="['/catalog', progressData.next_lesson.course_slug]" class="w-full mt-4 py-2.5 rounded-lg bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-lg">play_arrow</span>
-              Seguir Aprendiendo
-            </button>
           </section>
 
           <section *ngIf="progressData?.certificates?.length" class="glass-card rounded-2xl p-6">
@@ -295,15 +276,44 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-bold text-white truncate">Certificado</p>
-                  <p class="text-xs text-slate-500">Código: {{ cert.code }}</p>
+                  <p class="text-xs text-slate-500 truncate">Código: {{ cert.code }}</p>
                 </div>
-                <a [href]="getCertificateDownloadUrl(cert.code)"
-                  class="text-sky-400 hover:text-sky-300 transition-colors" title="Descargar certificado">
+                <a [href]="getCertificateDownloadUrl(cert.code)" class="text-sky-400 hover:text-sky-300 transition-colors" title="Descargar certificado">
                   <span class="material-symbols-outlined">download</span>
                 </a>
               </div>
             </div>
+            <div *ngIf="!progressData?.certificates?.length" class="text-center py-4 text-slate-500">
+              <p class="text-xs">Completa cursos al 100% para obtener certificados.</p>
+            </div>
           </section>
+
+          <section *ngIf="leaderboardData.length" class="glass-card rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
+              <span class="material-symbols-outlined text-emerald-400 text-xl">leaderboard</span>
+              <h3 class="text-lg font-bold text-white text-base">Top Estudiantes</h3>
+            </div>
+            <div class="space-y-3">
+              <div *ngFor="let user of leaderboardData; let i = index" class="flex items-center gap-3 p-2 rounded-lg"
+                [class.bg-sky-500/10]="isCurrentUser(user.username)"
+                [class.border]="isCurrentUser(user.username)"
+                [class.border-sky-500/30]="isCurrentUser(user.username)">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                  [class.bg-amber-500/20]="i === 0"
+                  [class.text-amber-400]="i === 0"
+                  [class.bg-slate-500/20]="i > 0"
+                  [class.text-slate-400]="i > 0">
+                  {{ i + 1 }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold text-white truncate">{{ user.username }}</p>
+                  <p class="text-[10px] text-slate-500">Nivel {{ user.level }} · {{ user.xp }} XP</p>
+                </div>
+                <div class="text-xs text-slate-400 font-bold">{{ user.study_streak }} días</div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </div>
     </div>
