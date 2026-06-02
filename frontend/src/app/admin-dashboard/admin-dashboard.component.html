@@ -1,239 +1,450 @@
-<div class="h-screen bg-[#050810] flex flex-col font-['Inter'] text-white">
+<div class="page-wrapper">
   <app-topbar></app-topbar>
 
-  <div class="flex-1 overflow-y-auto p-8">
-    <div class="max-w-7xl mx-auto space-y-8">
-      
-      <!-- HEADER & TABS -->
-      <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
-        <div>
-          <h1 class="text-3xl font-black font-space mb-2">Panel de Administración</h1>
-          <p class="text-slate-400">Gestiona la plataforma, cursos e Inteligencia Artificial.</p>
+  <div class="page-content">
+    <!-- HEADER -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Panel de Administracion</h1>
+        <p class="page-subtitle">Gestiona la plataforma, cursos e Inteligencia Artificial.</p>
+      </div>
+      <div class="tab-group">
+        <button (click)="switchTab('stats')" [class.tab-active]="activeTab === 'stats'" class="tab-btn tab-btn-stats">Estadisticas</button>
+        <button (click)="switchTab('courses')" [class.tab-active]="activeTab === 'courses'" class="tab-btn tab-btn-courses">Gestor de Cursos</button>
+      </div>
+    </div>
+
+    <!-- ====== TAB: ESTADISTICAS ====== -->
+    <div *ngIf="activeTab === 'stats'">
+
+      <!-- Loading -->
+      <div *ngIf="isLoadingStats" class="space-y-6 animate-pulse">
+        <div class="kpi-grid">
+          <div class="kpi-skeleton" *ngFor="let _ of [1,2,3,4,5,6]"></div>
         </div>
-        <div class="flex bg-white/5 p-1 rounded-xl">
-          <button (click)="switchTab('stats')" [class.bg-sky-500]="activeTab === 'stats'" class="px-6 py-2 rounded-lg text-sm font-bold transition-all">Estadísticas</button>
-          <button (click)="switchTab('courses')" [class.bg-purple-500]="activeTab === 'courses'" class="px-6 py-2 rounded-lg text-sm font-bold transition-all">Gestor de Cursos</button>
+        <div class="charts-grid">
+          <div class="chart-skeleton h-72"></div>
+          <div class="chart-skeleton h-72"></div>
+          <div class="chart-skeleton h-64"></div>
+          <div class="chart-skeleton h-64"></div>
         </div>
       </div>
 
-      <!-- TAB: ESTADÍSTICAS (Original) -->
-      <div *ngIf="activeTab === 'stats'">
-        <div *ngIf="isLoading" class="text-center py-20 text-sky-400"><span class="material-symbols-outlined animate-spin text-4xl">autorenew</span></div>
-        <div *ngIf="!isLoading && stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div class="bg-[#0b0f19] border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
-            <div class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Total Usuarios</div>
-            <div class="text-4xl font-black text-white font-space">{{ stats.total_users }}</div>
-          </div>
-          <div class="bg-[#0b0f19] border border-sky-500/20 rounded-2xl p-6 shadow-xl shadow-sky-500/5">
-            <div class="text-sky-400 text-sm font-bold uppercase tracking-wider mb-2">Usuarios Premium</div>
-            <div class="text-4xl font-black text-sky-300 font-space">{{ stats.premium_users }}</div>
-          </div>
-          <div class="bg-[#0b0f19] border border-emerald-500/20 rounded-2xl p-6 shadow-xl shadow-emerald-500/5">
-            <div class="text-emerald-400 text-sm font-bold uppercase tracking-wider mb-2">Ingresos Totales</div>
-            <div class="text-4xl font-black text-emerald-300 font-space">${{ stats.total_revenue }}</div>
-          </div>
-          <div class="bg-[#0b0f19] border border-purple-500/20 rounded-2xl p-6 shadow-xl shadow-purple-500/5">
-            <div class="text-purple-400 text-sm font-bold uppercase tracking-wider mb-2">Videos Procesados IA</div>
-            <div class="text-4xl font-black text-purple-300 font-space">Automático</div>
-          </div>
+      <!-- Error -->
+      <div *ngIf="!isLoadingStats && statsError" class="error-state">
+        <div class="error-card">
+          <span class="material-symbols-outlined error-icon">error_outline</span>
+          <h3>Error al cargar estadisticas</h3>
+          <p>No se pudieron obtener los datos del servidor. Verifica tu conexion e intenta de nuevo.</p>
+          <button (click)="retryStats()" class="retry-btn">
+            <span class="material-symbols-outlined">refresh</span>
+            Reintentar
+          </button>
         </div>
       </div>
 
-      <!-- TAB: CURSOS (CRUD) -->
-      <div *ngIf="activeTab === 'courses'" class="grid grid-cols-12 gap-6 h-[70vh]">
-        
-        <!-- COL 1: Cursos -->
-        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold font-space text-sky-400">Cursos</h2>
-            <button (click)="openCourseModal()" class="w-8 h-8 rounded-lg bg-sky-500 hover:bg-sky-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
+      <!-- Stats Dashboard -->
+      <div *ngIf="!isLoadingStats && !statsError">
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-card-users">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-blue">
+                <span class="material-symbols-outlined">group</span>
+              </div>
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.total_users, kpiData.total_users_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.total_users, kpiData.total_users_prev)) }}</span>
+                {{ percChange(kpiData.total_users, kpiData.total_users_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ kpiData.total_users | number }}</div>
+            <div class="kpi-label">Usuarios Registrados</div>
           </div>
-          <div class="flex-1 overflow-y-auto space-y-2">
-            <div *ngFor="let c of courses" (click)="selectCourse(c)" [class.bg-sky-500]="selectedCourse?.id === c.id" [class.bg-white_5]="selectedCourse?.id !== c.id" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-transparent group">
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="font-bold text-sm">{{ c.title }}</div>
-                  <div class="text-[10px] uppercase text-slate-400 mt-1">
-                    <span *ngIf="c.is_published" class="text-emerald-400">Publicado</span>
-                    <span *ngIf="!c.is_published" class="text-amber-400">Borrador</span>
-                    • {{ c.is_premium ? 'Premium' : 'Gratis' }}
+
+          <div class="kpi-card kpi-card-premium">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-amber">
+                <span class="material-symbols-outlined">workspace_premium</span>
+              </div>
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.premium_users, kpiData.premium_users_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.premium_users, kpiData.premium_users_prev)) }}</span>
+                {{ percChange(kpiData.premium_users, kpiData.premium_users_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ kpiData.premium_users | number }}</div>
+            <div class="kpi-label">Usuarios Premium</div>
+          </div>
+
+          <div class="kpi-card kpi-card-new">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-emerald">
+                <span class="material-symbols-outlined">person_add</span>
+              </div>
+              <span class="kpi-badge text-emerald-400">
+                <span class="material-symbols-outlined kpi-badge-icon">trending_up</span>
+                +{{ percChange(kpiData.new_users_month, kpiData.new_users_month_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ kpiData.new_users_month | number }}</div>
+            <div class="kpi-label">Nuevos Este Mes</div>
+          </div>
+
+          <div class="kpi-card kpi-card-enroll">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-purple">
+                <span class="material-symbols-outlined">school</span>
+              </div>
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.total_enrollments, kpiData.total_enrollments_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.total_enrollments, kpiData.total_enrollments_prev)) }}</span>
+                {{ percChange(kpiData.total_enrollments, kpiData.total_enrollments_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ kpiData.total_enrollments | number }}</div>
+            <div class="kpi-label">Inscripciones</div>
+          </div>
+
+          <div class="kpi-card kpi-card-revenue">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-rose">
+                <span class="material-symbols-outlined">payments</span>
+              </div>
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.total_revenue, kpiData.total_revenue_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.total_revenue, kpiData.total_revenue_prev)) }}</span>
+                {{ percChange(kpiData.total_revenue, kpiData.total_revenue_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ formatCurrency(kpiData.total_revenue) }}</div>
+            <div class="kpi-label">Ingresos Totales</div>
+          </div>
+
+          <div class="kpi-card kpi-card-mrev">
+            <div class="kpi-header">
+              <div class="kpi-icon kpi-icon-sky">
+                <span class="material-symbols-outlined">trending_up</span>
+              </div>
+              <span class="kpi-badge" [ngClass]="percClass(percChange(kpiData.monthly_revenue, kpiData.monthly_revenue_prev))">
+                <span class="material-symbols-outlined kpi-badge-icon">{{ percIcon(percChange(kpiData.monthly_revenue, kpiData.monthly_revenue_prev)) }}</span>
+                {{ percChange(kpiData.monthly_revenue, kpiData.monthly_revenue_prev) }}
+              </span>
+            </div>
+            <div class="kpi-value">{{ formatCurrency(kpiData.monthly_revenue) }}</div>
+            <div class="kpi-label">Ingresos Este Mes</div>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+          <!-- Chart 1: User Growth -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-title">Evolucion de Usuarios</h3>
+                <p class="chart-subtitle">Crecimiento mensual de usuarios registrados</p>
+              </div>
+              <span class="chart-period">Ultimos 12 meses</span>
+            </div>
+            <div class="chart-body">
+              <div class="bar-chart">
+                <div class="bar-chart-yaxis">
+                  <span>{{ chartData.userGrowth[11] > 500 ? (chartData.userGrowth[11] | number) : '0' }}</span>
+                  <span>{{ chartData.userGrowth[11] > 500 ? ((chartData.userGrowth[11] / 2) | number) : (chartData.userGrowth[5] | number) }}</span>
+                  <span>0</span>
+                </div>
+                <div class="bar-chart-content">
+                  <div class="bar-group" *ngFor="let val of chartData.userGrowth; let i = index">
+                    <div class="bar" [style.height.%]="(val / (chartData.userGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
+                      <div class="bar-tooltip">{{ val | number }}</div>
+                    </div>
+                    <span class="bar-label">{{ last12Months[i] }}</span>
                   </div>
                 </div>
-                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button (click)="openCourseModal(c); $event.stopPropagation()" class="p-1 text-sky-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-                  <button (click)="deleteCourse(c.id); $event.stopPropagation()" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart 2: Revenue Growth -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-title">Evolucion de Ingresos</h3>
+                <p class="chart-subtitle">Ingresos acumulados mensuales</p>
+              </div>
+              <span class="chart-period">Ultimos 12 meses</span>
+            </div>
+            <div class="chart-body">
+              <div class="bar-chart">
+                <div class="bar-chart-yaxis">
+                  <span>{{ formatCurrency(chartData.revenueGrowth[11]) }}</span>
+                  <span>{{ formatCurrency(chartData.revenueGrowth[11] / 2) }}</span>
+                  <span>$0</span>
+                </div>
+                <div class="bar-chart-content">
+                  <div class="bar-group" *ngFor="let val of chartData.revenueGrowth; let i = index">
+                    <div class="bar bar-revenue" [style.height.%]="(val / (chartData.revenueGrowth[11] || 1)) * 100" [style.animation-delay.ms]="i * 50">
+                      <div class="bar-tooltip">{{ formatCurrency(val) }}</div>
+                    </div>
+                    <span class="bar-label">{{ last12Months[i] }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <div *ngIf="courses.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay cursos</div>
+          </div>
+
+          <!-- Chart 3: Project Status Distribution (Donut) -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-title">Estado de Proyectos</h3>
+                <p class="chart-subtitle">Distribucion de cursos por estado</p>
+              </div>
+            </div>
+            <div class="chart-body chart-body-center">
+              <div class="donut-container">
+                <svg class="donut-svg" viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3.8"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0ea5e9" stroke-width="3.8" stroke-dasharray="65, 100"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#10b981" stroke-width="3.8" stroke-dasharray="20, 100" stroke-dashoffset="-65"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#f59e0b" stroke-width="3.8" stroke-dasharray="15, 100" stroke-dashoffset="-85"/>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center-value">{{ courses.length }}</span>
+                  <span class="donut-center-label">Total</span>
+                </div>
+              </div>
+              <div class="donut-legend">
+                <div class="legend-item">
+                  <span class="legend-dot" style="background:#0ea5e9"></span>
+                  <span class="legend-label">Publicados</span>
+                  <span class="legend-value">65%</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot" style="background:#10b981"></span>
+                  <span class="legend-label">Borradores</span>
+                  <span class="legend-value">20%</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot" style="background:#f59e0b"></span>
+                  <span class="legend-label">Inactivos</span>
+                  <span class="legend-value">15%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart 4: Activity Last 30 Days -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-title">Actividad Reciente</h3>
+                <p class="chart-subtitle">Usuarios activos por dia (ultimos 30 dias)</p>
+              </div>
+              <span class="chart-period">30 dias</span>
+            </div>
+            <div class="chart-body">
+              <div class="activity-grid" *ngIf="activityData.length > 0">
+                <div class="activity-bar-group" *ngFor="let val of activityData; let i = index">
+                  <div class="activity-bar" [style.height.%]="(val / 27) * 100" 
+                       [style.background]="val > 20 ? '#0ea5e9' : val > 10 ? '#0ea5e980' : '#0ea5e930'">
+                    <div class="activity-tooltip">{{ val }} usuarios</div>
+                  </div>
+                  <span class="activity-label" *ngIf="i % 5 === 0 || i === 29">{{ i + 1 }}</span>
+                </div>
+              </div>
+              <div class="activity-footer" *ngIf="activityData.length > 0">
+                <span>Hace 30 dias</span>
+                <span class="activity-summary">{{ activityData.reduce((a,b) => a + b, 0) }} actividades este mes</span>
+                <span>Hoy</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- COL 2: Secciones -->
-        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full" [class.opacity-50]="!selectedCourse" [class.pointer-events-none]="!selectedCourse">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold font-space text-purple-400">Secciones</h2>
-            <button *ngIf="selectedCourse" (click)="openSectionModal()" class="w-8 h-8 rounded-lg bg-purple-500 hover:bg-purple-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
-          </div>
-          <div class="text-xs text-slate-500 mb-4" *ngIf="selectedCourse">En: {{ selectedCourse.title }}</div>
-          
-          <div class="flex-1 overflow-y-auto space-y-2">
-            <div *ngFor="let s of sections" (click)="selectSection(s)" [class.bg-purple-500]="selectedSection?.id === s.id" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-transparent group">
-              <div class="flex justify-between items-center">
-                <div class="font-bold text-sm">#{{ s.order }} - {{ s.title }}</div>
-                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button (click)="openSectionModal(s); $event.stopPropagation()" class="p-1 text-purple-300 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-                  <button (click)="deleteSection(s.id); $event.stopPropagation()" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
-                </div>
-              </div>
+        <!-- Recent Sales Table -->
+        <div class="recent-sales-card">
+          <div class="recent-sales-header">
+            <div>
+              <h3 class="chart-title">Ventas Recientes</h3>
+              <p class="chart-subtitle">Ultimas transacciones registradas</p>
             </div>
-            <div *ngIf="selectedCourse && sections.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay secciones</div>
           </div>
-        </div>
-
-        <!-- COL 3: Lecciones -->
-        <div class="col-span-4 bg-[#0b0f19] border border-white/10 rounded-2xl p-4 flex flex-col h-full" [class.opacity-50]="!selectedSection" [class.pointer-events-none]="!selectedSection">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold font-space text-emerald-400">Lecciones</h2>
-            <button *ngIf="selectedSection" (click)="openLessonModal()" class="w-8 h-8 rounded-lg bg-emerald-500 hover:bg-emerald-400 flex items-center justify-center text-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
-          </div>
-          <div class="text-xs text-slate-500 mb-4" *ngIf="selectedSection">En: {{ selectedSection.title }}</div>
-          
-          <div class="flex-1 overflow-y-auto space-y-2">
-            <div *ngFor="let l of lessons" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 group">
-              <div class="flex justify-between items-start mb-2">
-                <div>
-                  <div class="font-bold text-sm">#{{ l.order }} - {{ l.title }}</div>
-                  <div class="text-[10px] text-slate-400 mt-1 uppercase">{{ l.is_premium ? 'PREMIUM' : 'GRATIS' }}</div>
-                </div>
-                <div class="flex gap-1">
-                  <button (click)="openLessonModal(l)" class="p-1 text-emerald-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-                  <button (click)="deleteLesson(l.id)" class="p-1 text-red-400 hover:text-white"><span class="material-symbols-outlined text-[16px]">delete</span></button>
-                </div>
-              </div>
-              <div class="text-[10px] text-slate-500 border-t border-white/5 pt-2 mt-2">
-                💡 TIP: Ve al catálogo como usuario para subir videos a las lecciones.
-              </div>
+          <div class="recent-sales-body">
+            <table class="sales-table" *ngIf="recentSales.length > 0">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Monto</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sale of recentSales">
+                  <td>
+                    <div class="sale-user-cell">
+                      <div class="sale-avatar">{{ sale.user.charAt(0).toUpperCase() }}</div>
+                      <span>{{ sale.user }}</span>
+                    </div>
+                  </td>
+                  <td class="sale-amount">${{ sale.amount }}</td>
+                  <td class="sale-date">{{ sale.date }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="empty-sales" *ngIf="recentSales.length === 0">
+              <span class="material-symbols-outlined empty-icon">receipt_long</span>
+              <p>No hay ventas recientes</p>
             </div>
-            <div *ngIf="selectedSection && lessons.length === 0" class="text-center text-slate-500 text-sm mt-10">No hay lecciones</div>
           </div>
         </div>
 
       </div>
     </div>
+
+    <!-- ====== TAB: CURSOS ====== -->
+    <div *ngIf="activeTab === 'courses'" class="courses-tab">
+      <div class="courses-grid">
+        <div class="course-col">
+          <div class="col-header">
+            <h2 class="col-title col-title-sky">Cursos</h2>
+            <button (click)="openCourseModal()" class="col-add-btn col-add-sky"><span class="material-symbols-outlined">add</span></button>
+          </div>
+          <div class="col-list">
+            <div *ngFor="let c of courses" (click)="selectCourse(c)" class="col-item" [class.col-item-active]="selectedCourse?.id === c.id" [class.col-item-sky]="selectedCourse?.id === c.id">
+              <div class="col-item-top">
+                <div class="col-item-info">
+                  <div class="col-item-title">{{ c.title }}</div>
+                  <div class="col-item-meta">
+                    <span *ngIf="c.is_published" class="meta-published">Publicado</span>
+                    <span *ngIf="!c.is_published" class="meta-draft">Borrador</span>
+                    <span>• {{ c.is_premium ? 'Premium' : 'Gratis' }}</span>
+                  </div>
+                </div>
+                <div class="col-item-actions">
+                  <button (click)="openCourseModal(c); $event.stopPropagation()" class="action-btn action-edit"><span class="material-symbols-outlined">edit</span></button>
+                  <button (click)="deleteCourse(c.id); $event.stopPropagation()" class="action-btn action-delete"><span class="material-symbols-outlined">delete</span></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="courses.length === 0" class="col-empty">No hay cursos</div>
+          </div>
+        </div>
+
+        <div class="course-col" [class.col-disabled]="!selectedCourse">
+          <div class="col-header">
+            <h2 class="col-title col-title-purple">Secciones</h2>
+            <button *ngIf="selectedCourse" (click)="openSectionModal()" class="col-add-btn col-add-purple"><span class="material-symbols-outlined">add</span></button>
+          </div>
+          <div class="col-subtitle" *ngIf="selectedCourse">En: {{ selectedCourse.title }}</div>
+          <div class="col-list">
+            <div *ngFor="let s of sections" (click)="selectSection(s)" class="col-item" [class.col-item-active]="selectedSection?.id === s.id" [class.col-item-purple]="selectedSection?.id === s.id">
+              <div class="col-item-top">
+                <div class="col-item-info">
+                  <div class="col-item-title">#{{ s.order }} - {{ s.title }}</div>
+                </div>
+                <div class="col-item-actions">
+                  <button (click)="openSectionModal(s); $event.stopPropagation()" class="action-btn action-edit"><span class="material-symbols-outlined">edit</span></button>
+                  <button (click)="deleteSection(s.id); $event.stopPropagation()" class="action-btn action-delete"><span class="material-symbols-outlined">delete</span></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedCourse && sections.length === 0" class="col-empty">No hay secciones</div>
+            <div *ngIf="!selectedCourse" class="col-empty col-empty-muted">Selecciona un curso</div>
+          </div>
+        </div>
+
+        <div class="course-col" [class.col-disabled]="!selectedSection">
+          <div class="col-header">
+            <h2 class="col-title col-title-emerald">Lecciones</h2>
+            <button *ngIf="selectedSection" (click)="openLessonModal()" class="col-add-btn col-add-emerald"><span class="material-symbols-outlined">add</span></button>
+          </div>
+          <div class="col-subtitle" *ngIf="selectedSection">En: {{ selectedSection.title }}</div>
+          <div class="col-list">
+            <div *ngFor="let l of lessons" class="col-item">
+              <div class="col-item-top">
+                <div class="col-item-info">
+                  <div class="col-item-title">#{{ l.order }} - {{ l.title }}</div>
+                  <div class="col-item-meta">{{ l.is_premium ? 'PREMIUM' : 'GRATIS' }}</div>
+                </div>
+                <div class="col-item-actions">
+                  <button (click)="openLessonModal(l)" class="action-btn action-edit"><span class="material-symbols-outlined">edit</span></button>
+                  <button (click)="deleteLesson(l.id)" class="action-btn action-delete"><span class="material-symbols-outlined">delete</span></button>
+                </div>
+              </div>
+              <div class="col-lesson-tip">Sube un video para procesarlo con Whisper + Gemini</div>
+            </div>
+            <div *ngIf="selectedSection && lessons.length === 0" class="col-empty">No hay lecciones</div>
+            <div *ngIf="!selectedSection" class="col-empty col-empty-muted">Selecciona una seccion</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- MODAL: COURSE -->
-  <div *ngIf="isCourseModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-      <h3 class="text-2xl font-bold font-space mb-6">{{ newCourse.id ? 'Editar Curso' : 'Nuevo Curso' }}</h3>
-      <div class="space-y-4">
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
-          <input [(ngModel)]="newCourse.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Slug (URL amigable)</label>
-          <input [(ngModel)]="newCourse.slug" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Descripción Corta</label>
-          <input [(ngModel)]="newCourse.short_description" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Descripción Larga</label>
-          <textarea [(ngModel)]="newCourse.description" rows="3" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none resize-none"></textarea>
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Nivel de Dificultad</label>
-          <select [(ngModel)]="newCourse.level" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-sky-500 focus:outline-none appearance-none">
-            <option value="Básico">Básico</option>
+  <!-- MODAL: CURSO -->
+  <div *ngIf="isCourseModalOpen" class="modal-overlay" (click)="isCourseModalOpen = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">{{ newCourse.id ? 'Editar Curso' : 'Nuevo Curso' }}</h3>
+      <div class="modal-body">
+        <div class="field"><label>Titulo</label><input [(ngModel)]="newCourse.title" class="input"></div>
+        <div class="field"><label>Slug</label><input [(ngModel)]="newCourse.slug" class="input"></div>
+        <div class="field"><label>Descripcion Corta</label><input [(ngModel)]="newCourse.short_description" class="input"></div>
+        <div class="field"><label>Descripcion Larga</label><textarea [(ngModel)]="newCourse.description" rows="3" class="input"></textarea></div>
+        <div class="field">
+          <label>Nivel</label>
+          <select [(ngModel)]="newCourse.level" class="input">
+            <option value="Basico">Basico</option>
             <option value="Intermedio">Intermedio</option>
             <option value="Avanzado">Avanzado</option>
           </select>
         </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Imagen del Curso (Thumbnail)</label>
-          <input type="file" accept="image/*" (change)="onCourseImageSelected($event)" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-sky-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30">
-        </div>
-        <div class="flex gap-6 pt-2">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" [(ngModel)]="newCourse.is_premium" class="w-5 h-5 rounded bg-black/40 border-white/10 text-sky-500 focus:ring-sky-500 focus:ring-offset-slate-900">
-            <span class="text-sm font-bold">Es Premium</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" [(ngModel)]="newCourse.is_published" class="w-5 h-5 rounded bg-black/40 border-white/10 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
-            <span class="text-sm font-bold">Publicado</span>
-          </label>
+        <div class="field"><label>Thumbnail</label><input type="file" accept="image/*" (change)="onCourseImageSelected($event)" class="file-input"></div>
+        <div class="checkbox-group">
+          <label class="checkbox"><input type="checkbox" [(ngModel)]="newCourse.is_premium"><span>Premium</span></label>
+          <label class="checkbox"><input type="checkbox" [(ngModel)]="newCourse.is_published"><span>Publicado</span></label>
         </div>
       </div>
-      <div class="flex justify-end gap-4 mt-8">
-        <button (click)="isCourseModalOpen = false" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10">Cancelar</button>
-        <button (click)="saveCourse()" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-sky-500 hover:bg-sky-400 text-white">Guardar</button>
+      <div class="modal-actions">
+        <button (click)="isCourseModalOpen = false" class="btn btn-cancel">Cancelar</button>
+        <button (click)="saveCourse()" class="btn btn-primary btn-primary-sky">Guardar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: SECTION -->
-  <div *ngIf="isSectionModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-md">
-      <h3 class="text-2xl font-bold font-space mb-6">{{ newSection.id ? 'Editar Sección' : 'Nueva Sección' }}</h3>
-      <div class="space-y-4">
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
-          <input [(ngModel)]="newSection.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-purple-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Orden (Número)</label>
-          <input type="number" [(ngModel)]="newSection.order" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-purple-500 focus:outline-none">
-        </div>
+  <!-- MODAL: SECCION -->
+  <div *ngIf="isSectionModalOpen" class="modal-overlay" (click)="isSectionModalOpen = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">{{ newSection.id ? 'Editar Seccion' : 'Nueva Seccion' }}</h3>
+      <div class="modal-body">
+        <div class="field"><label>Titulo</label><input [(ngModel)]="newSection.title" class="input"></div>
+        <div class="field"><label>Orden</label><input type="number" [(ngModel)]="newSection.order" class="input"></div>
       </div>
-      <div class="flex justify-end gap-4 mt-8">
-        <button (click)="isSectionModalOpen = false" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10">Cancelar</button>
-        <button (click)="saveSection()" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-purple-500 hover:bg-purple-400 text-white">Guardar</button>
+      <div class="modal-actions">
+        <button (click)="isSectionModalOpen = false" class="btn btn-cancel">Cancelar</button>
+        <button (click)="saveSection()" class="btn btn-primary btn-primary-purple">Guardar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: LESSON -->
-  <div *ngIf="isLessonModalOpen" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-    <div class="bg-[#0f172a] border border-white/10 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-      <h3 class="text-2xl font-bold font-space mb-6">{{ newLesson.id ? 'Editar Lección' : 'Nueva Lección' }}</h3>
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs text-slate-400 font-bold uppercase">Título</label>
-            <input [(ngModel)]="newLesson.title" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="text-xs text-slate-400 font-bold uppercase">Orden</label>
-            <input type="number" [(ngModel)]="newLesson.order" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none">
-          </div>
+  <!-- MODAL: LECCION -->
+  <div *ngIf="isLessonModalOpen" class="modal-overlay" (click)="isLessonModalOpen = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">{{ newLesson.id ? 'Editar Leccion' : 'Nueva Leccion' }}</h3>
+      <div class="modal-body">
+        <div class="field-row">
+          <div class="field"><label>Titulo</label><input [(ngModel)]="newLesson.title" class="input"></div>
+          <div class="field"><label>Orden</label><input type="number" [(ngModel)]="newLesson.order" class="input"></div>
         </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Contenido de Texto</label>
-          <textarea [(ngModel)]="newLesson.content" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none resize-none"></textarea>
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 font-bold uppercase">Archivo de Video (Lanza IA)</label>
-          <input type="file" accept="video/*" (change)="onLessonVideoSelected($event)" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30">
-          <p class="text-[10px] text-slate-500 mt-2">Al subir un video, pasará automáticamente a ser procesado por Whisper y Gemini en segundo plano.</p>
-        </div>
-        <div class="flex gap-6 pt-2">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" [(ngModel)]="newLesson.is_premium" class="w-5 h-5 rounded bg-black/40 border-white/10 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
-            <span class="text-sm font-bold">Lección Exclusiva Premium</span>
-          </label>
-        </div>
+        <div class="field"><label>Contenido</label><textarea [(ngModel)]="newLesson.content" rows="4" class="input"></textarea></div>
+        <div class="field"><label>Video (procesamiento IA)</label><input type="file" accept="video/*" (change)="onLessonVideoSelected($event)" class="file-input"></div>
+        <label class="checkbox"><input type="checkbox" [(ngModel)]="newLesson.is_premium"><span>Leccion Premium</span></label>
       </div>
-      <div class="flex justify-end gap-4 mt-8">
-        <button (click)="isLessonModalOpen = false" [disabled]="isUploadingVideo" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 disabled:opacity-50">Cancelar</button>
-        <button (click)="saveLesson()" [disabled]="isUploadingVideo" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-white disabled:opacity-50 flex items-center gap-2">
-          <span *ngIf="isUploadingVideo" class="material-symbols-outlined animate-spin text-[16px]">sync</span>
+      <div class="modal-actions">
+        <button (click)="isLessonModalOpen = false" [disabled]="isUploadingVideo" class="btn btn-cancel">Cancelar</button>
+        <button (click)="saveLesson()" [disabled]="isUploadingVideo" class="btn btn-primary btn-primary-emerald flex items-center gap-2">
+          <span *ngIf="isUploadingVideo" class="material-symbols-outlined animate-spin">sync</span>
           {{ isUploadingVideo ? 'Subiendo video...' : 'Guardar' }}
         </button>
       </div>
     </div>
   </div>
-
 </div>
