@@ -9,7 +9,7 @@
   </div>
 
   <nav
-    class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 sticky top-0 z-50">
+    class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 fixed top-0 left-0 z-50">
     <div class="flex items-center gap-3 mb-12 px-4">
       <div
         class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
@@ -77,7 +77,7 @@
     </div>
   </nav>
 
-  <main class="flex-1 flex flex-col min-h-screen z-10 relative">
+  <main class="flex-1 flex flex-col min-h-screen z-10 relative md:ml-64">
     <app-topbar [userProfile]="userProfile" title="Catálogo de Cursos"></app-topbar>
 
     <div class="p-8 max-w-[1280px] mx-auto w-full">
