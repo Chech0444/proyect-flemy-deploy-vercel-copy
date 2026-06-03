@@ -10,6 +10,39 @@
   margin: 0 auto;
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.65rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(148,163,184,0.12);
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.back-btn:hover {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.2);
+  color: #7dd3fc;
+}
+
+.back-btn .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
 .roadmap-header {
   text-align: center;
   margin-bottom: 2.5rem;
