@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 // Importaciones directas (como las que ya tienes)
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RoadmapComponent } from './roadmap/roadmap.component';
 import { Register } from './register/register';
 import { ProgressComponent } from './progress/progress.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'catalog', component: CatalogComponent },
   { path: 'catalog/:slug', component: CourseDetailComponent },
 
+  { path: 'roadmap', component: RoadmapComponent },
   { path: 'progreso', component: ProgressComponent },
   { path: 'perfil', component: ProfileComponent },
   { path: 'subscription', component: SubscriptionComponent },
