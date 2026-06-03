@@ -3,9 +3,7 @@ import { Routes } from '@angular/router';
 // Importaciones directas (como las que ya tienes)
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { RoadmapComponent } from './roadmap/roadmap.component';
-import { RoadmapAltComponent } from './roadmap-alt/roadmap-alt.component';
-import { RoadmapNeonComponent } from './roadmap-neon/roadmap-neon.component';
+
 import { RoadmapProComponent } from './roadmap-pro/roadmap-pro.component';
 import { Register } from './register/register';
 import { ProgressComponent } from './progress/progress.component';
@@ -32,9 +30,6 @@ export const routes: Routes = [
   { path: 'catalog', component: CatalogComponent },
   { path: 'catalog/:slug', component: CourseDetailComponent },
 
-  { path: 'roadmap', component: RoadmapComponent },
-  { path: 'roadmap-alt', component: RoadmapAltComponent },
-  { path: 'roadmap-neon', component: RoadmapNeonComponent },
   { path: 'roadmap-pro', component: RoadmapProComponent },
   { path: 'progreso', component: ProgressComponent },
   { path: 'perfil', component: ProfileComponent },
