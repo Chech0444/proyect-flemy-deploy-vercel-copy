@@ -50,14 +50,11 @@ export class SubscriptionComponent implements OnInit {
 
   loadProfile() {
     this.isLoadingPage = true;
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!this.authService.isLoggedIn()) {
       this.isLoadingPage = false;
       return;
     }
-    this.http.get<any>(`${environment.apiUrl}/auth/profile/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/auth/profile/`).subscribe({
       next: (data) => {
         this.userProfile = data;
         this.isAdmin = this.authService.isAdmin();
@@ -108,11 +105,9 @@ export class SubscriptionComponent implements OnInit {
     this.isWompiLoading = true;
     this.cdr.detectChanges();
 
-    const token = localStorage.getItem('access_token');
+    if (!this.authService.isLoggedIn()) return;
 
-    this.http.get<any>(`${environment.apiUrl}/billing/wompi/config/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/billing/wompi/config/`).subscribe({
       next: (config) => {
         const priceCop = plan === 'MONTHLY' ? 79900 : 799000;
         const amountInCents = priceCop * 100;
@@ -122,7 +117,7 @@ export class SubscriptionComponent implements OnInit {
 
         this.http.post<any>(`${environment.apiUrl}/billing/wompi/signature/`, {
           reference, amount_in_cents: amountInCents, currency: 'COP'
-        }, { headers: { Authorization: `Bearer ${token}` } }).subscribe({
+        }).subscribe({
           next: (sig) => {
             this.loadWompiScript().then(() => {
               this.isWompiLoading = false;
@@ -168,15 +163,14 @@ export class SubscriptionComponent implements OnInit {
     this.isVerifyingPayment = true;
     this.cdr.detectChanges();
 
-    const token = localStorage.getItem('access_token');
+    if (!this.authService.isLoggedIn()) return;
+
     const payload = {
       transaction_id: transactionId,
       plan: this.selectedPlan
     };
 
-    this.http.post<any>(`${environment.apiUrl}/billing/wompi/verify/`, payload, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/billing/wompi/verify/`, payload).subscribe({
       next: (res) => {
         this.isVerifyingPayment = false;
 
@@ -236,11 +230,6 @@ export class SubscriptionComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('first_name');
-    localStorage.removeItem('role');
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

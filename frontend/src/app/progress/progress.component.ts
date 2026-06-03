@@ -39,9 +39,9 @@ export class ProgressComponent implements OnInit {
 
   loadProfile() {
     this.userProfile = {
-      first_name: localStorage.getItem('first_name') || 'Estudiante',
-      username: localStorage.getItem('username') || 'Usuario',
-      role: localStorage.getItem('role') || 'ROLE_FREE'
+      first_name: sessionStorage.getItem('first_name') || 'Estudiante',
+      username: sessionStorage.getItem('username') || 'Usuario',
+      role: sessionStorage.getItem('role') || 'ROLE_FREE'
     };
   }
 
