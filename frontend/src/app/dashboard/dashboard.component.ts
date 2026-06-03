@@ -80,7 +80,9 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.userProfile = {
           ...data,
-          first_name: localStorage.getItem('first_name') || 'Estudiante'
+          first_name: sessionStorage.getItem('first_name') || data?.first_name || 'Estudiante',
+          username: sessionStorage.getItem('username') || data?.username || 'Usuario',
+          role: sessionStorage.getItem('role') || data?.role || 'ROLE_FREE'
         };
         this.isLoading = false;
         this.cdr.detectChanges();
