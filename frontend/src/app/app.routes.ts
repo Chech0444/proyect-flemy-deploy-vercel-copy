@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
+import { RoadmapAltComponent } from './roadmap-alt/roadmap-alt.component';
 import { Register } from './register/register';
 import { ProgressComponent } from './progress/progress.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'catalog/:slug', component: CourseDetailComponent },
 
   { path: 'roadmap', component: RoadmapComponent },
+  { path: 'roadmap-alt', component: RoadmapAltComponent },
   { path: 'progreso', component: ProgressComponent },
   { path: 'perfil', component: ProfileComponent },
   { path: 'subscription', component: SubscriptionComponent },
