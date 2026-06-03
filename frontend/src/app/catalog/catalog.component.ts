@@ -4,6 +4,7 @@ import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { AuthService } from '../shared/auth.service';
 import { timeout, catchError, of } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -11,7 +12,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, NgIf, NgFor, RouterLink, TopbarComponent, FormsModule],
+  imports: [CommonModule, NgIf, NgFor, RouterLink, TopbarComponent, SidebarComponent, FormsModule],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']
 })

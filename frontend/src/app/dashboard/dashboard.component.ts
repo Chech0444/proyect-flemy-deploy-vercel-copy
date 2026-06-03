@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
 import { AuthService } from '../shared/auth.service';
 import { environment } from '../../environments/environment';
@@ -10,7 +11,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, RouterLink, TopbarComponent, SkeletonComponent],
+  imports: [NgIf, NgFor, RouterLink, TopbarComponent, SidebarComponent, SkeletonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

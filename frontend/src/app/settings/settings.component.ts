@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
-import { Router, RouterLink } from '@angular/router';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../shared/auth.service';
 import { NotificationService } from '../shared/notification.service';
-
-@Component({
+ 
+ @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, TopbarComponent, RouterLink],
+  imports: [CommonModule, FormsModule, TopbarComponent, SidebarComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
@@ -18,6 +20,7 @@ export class SettingsComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
   private notificationService = inject(NotificationService);
+  private authService = inject(AuthService);
 
   userProfile: any = null;
 
@@ -41,11 +44,13 @@ export class SettingsComponent implements OnInit {
   isLoading = true;
   isSaving = false;
   saveSuccess = false;
+  isAdmin = false;
   newLanguage = '';
 
   constructor(private router: Router) {}
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin();
     this.userProfile = {
       first_name: localStorage.getItem('first_name') || 'Estudiante',
       username: localStorage.getItem('username') || 'Usuario',

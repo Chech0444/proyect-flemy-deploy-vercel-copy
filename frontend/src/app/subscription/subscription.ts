@@ -5,12 +5,13 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NotificationService } from '../shared/notification.service';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-subscription',
   standalone: true,
-  imports: [CommonModule, RouterLink, TopbarComponent],
+  imports: [CommonModule, RouterLink, TopbarComponent, SidebarComponent],
   templateUrl: './subscription.html',
   styleUrls: ['./subscription.css']
 })

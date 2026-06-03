@@ -1,15 +1,15 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { NgIf, NgClass } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { AuthService } from '../shared/auth.service';
 import { NotificationService } from '../shared/notification.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [NgIf, NgClass, RouterLink, FormsModule, TopbarComponent],
+  imports: [NgIf, FormsModule, TopbarComponent, SidebarComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

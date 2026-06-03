@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
 import { AuthService } from '../shared/auth.service';
 import { environment } from '../../environments/environment';
@@ -10,7 +11,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-progress',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, RouterLink, TopbarComponent, SkeletonComponent],
+  imports: [NgIf, NgFor, RouterLink, TopbarComponent, SidebarComponent, SkeletonComponent],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })
