@@ -52,9 +52,9 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
     this.userProfile = {
-      first_name: localStorage.getItem('first_name') || 'Estudiante',
-      username: localStorage.getItem('username') || 'Usuario',
-      role: localStorage.getItem('role') || 'ROLE_FREE',
+      first_name: sessionStorage.getItem('first_name') || 'Estudiante',
+      username: sessionStorage.getItem('username') || 'Usuario',
+      role: sessionStorage.getItem('role') || 'ROLE_FREE',
       photo: null
     };
     this.loadSettings();
@@ -73,20 +73,17 @@ export class SettingsComponent implements OnInit {
   }
 
   loadSettings() {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!this.authService.isLoggedIn()) {
       this.isLoading = false;
       return;
     }
 
-    this.http.get<any>(`${environment.apiUrl}/auth/profile/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/auth/profile/`).subscribe({
       next: (data) => {
         this.userProfile = data;
-        localStorage.setItem('username', data.username || '');
-        localStorage.setItem('first_name', data.first_name || '');
-        localStorage.setItem('role', data.role || '');
+        sessionStorage.setItem('username', data.username || '');
+        sessionStorage.setItem('first_name', data.first_name || '');
+        sessionStorage.setItem('role', data.role || '');
         if (data.preferences && Object.keys(data.preferences).length > 0) {
           this.settings = this.deepMerge(this.settings, data.preferences);
         }
@@ -123,14 +120,12 @@ export class SettingsComponent implements OnInit {
   }
 
   saveSettings() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
     this.isSaving = true;
     this.cdr.detectChanges();
     this.http.patch<any>(`${environment.apiUrl}/auth/profile/`,
-      { preferences: this.settings },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { preferences: this.settings }
     ).subscribe({
       next: () => {
         this.isSaving = false;
@@ -155,11 +150,12 @@ export class SettingsComponent implements OnInit {
 
   logout(event?: Event) {
     if (event) event.preventDefault();
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('first_name');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('first_name');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('is_staff');
     this.router.navigate(['/login']);
   }
 }
