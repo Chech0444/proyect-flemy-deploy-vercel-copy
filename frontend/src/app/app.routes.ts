@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { RoadmapAltComponent } from './roadmap-alt/roadmap-alt.component';
+import { RoadmapNeonComponent } from './roadmap-neon/roadmap-neon.component';
 import { Register } from './register/register';
 import { ProgressComponent } from './progress/progress.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -32,6 +33,7 @@ export const routes: Routes = [
 
   { path: 'roadmap', component: RoadmapComponent },
   { path: 'roadmap-alt', component: RoadmapAltComponent },
+  { path: 'roadmap-neon', component: RoadmapNeonComponent },
   { path: 'progreso', component: ProgressComponent },
   { path: 'perfil', component: ProfileComponent },
   { path: 'subscription', component: SubscriptionComponent },
