@@ -7,6 +7,7 @@ import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
 import { AuthService } from '../shared/auth.service';
 import { environment } from '../../environments/environment';
+import { timeout, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-progress',
@@ -33,6 +34,7 @@ export class ProgressComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
     this.loadProfile();
+    this.loadProfileDetails();
     this.loadProgress();
     this.loadLeaderboard();
   }
@@ -43,6 +45,24 @@ export class ProgressComponent implements OnInit {
       username: sessionStorage.getItem('username') || 'Usuario',
       role: sessionStorage.getItem('role') || 'ROLE_FREE'
     };
+  }
+
+  loadProfileDetails() {
+    if (!this.authService.isLoggedIn()) return;
+    this.http.get<any>(`${environment.apiUrl}/auth/profile/`).pipe(
+      timeout(5000),
+      catchError(() => of(null))
+    ).subscribe({
+      next: (data) => {
+        if (data) {
+          this.userProfile = { ...this.userProfile, ...data };
+          sessionStorage.setItem('username', data.username || '');
+          sessionStorage.setItem('first_name', data.first_name || '');
+          sessionStorage.setItem('role', data.role || '');
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 
   loadProgress() {

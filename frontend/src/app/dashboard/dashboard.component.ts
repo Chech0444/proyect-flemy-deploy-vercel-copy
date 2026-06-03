@@ -7,6 +7,7 @@ import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { SkeletonComponent } from '../shared/skeleton/skeleton.component';
 import { AuthService } from '../shared/auth.service';
 import { environment } from '../../environments/environment';
+import { timeout, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,8 +30,10 @@ export class DashboardComponent implements OnInit {
   brokenImages: Set<string> = new Set();
 
   ngOnInit() {
-    this.loadProfile();
+    this.restoreProfileFromCache();
     this.isAdmin = this.authService.isAdmin();
+    this.loadProfile();
+    this.loadProfileDetails();
   }
 
   get level(): number {
@@ -67,6 +70,39 @@ export class DashboardComponent implements OnInit {
     const diffDays = Math.floor(diffHrs / 24);
     if (diffDays === 1) return 'ayer';
     return `hace ${diffDays}días`;
+  }
+
+  restoreProfileFromCache() {
+    const username = sessionStorage.getItem('username');
+    const firstName = sessionStorage.getItem('first_name');
+    const role = sessionStorage.getItem('role');
+    if (username || firstName) {
+      this.userProfile = {
+        username: username || 'Usuario',
+        first_name: firstName || 'Estudiante',
+        role: role || 'ROLE_FREE',
+        photo: null
+      };
+      this.cdr.detectChanges();
+    }
+  }
+
+  loadProfileDetails() {
+    if (!this.authService.isLoggedIn()) return;
+    this.http.get<any>(`${environment.apiUrl}/auth/profile/`).pipe(
+      timeout(5000),
+      catchError(() => of(null))
+    ).subscribe({
+      next: (data) => {
+        if (data) {
+          this.userProfile = { ...this.userProfile, ...data };
+          sessionStorage.setItem('username', data.username || '');
+          sessionStorage.setItem('first_name', data.first_name || '');
+          sessionStorage.setItem('role', data.role || '');
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 
   loadProfile() {
