@@ -46,8 +46,7 @@ export class ProgressComponent implements OnInit {
   }
 
   loadProgress() {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!this.authService.isLoggedIn()) {
       this.isLoading = false;
       this.hasError = true;
       return;
@@ -56,9 +55,7 @@ export class ProgressComponent implements OnInit {
     this.isLoading = true;
     this.hasError = false;
 
-    this.http.get<any>(`${environment.apiUrl}/gamification/progress/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/gamification/progress/`).subscribe({
       next: (data) => {
         this.progressData = data;
         this.buildHeatmap(data.heatmap_data);
@@ -75,11 +72,8 @@ export class ProgressComponent implements OnInit {
   }
 
   loadLeaderboard() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
-    this.http.get<any[]>(`${environment.apiUrl}/gamification/leaderboard/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    if (!this.authService.isLoggedIn()) return;
+    this.http.get<any[]>(`${environment.apiUrl}/gamification/leaderboard/`).subscribe({
       next: (data) => {
         this.leaderboardData = data.slice(0, 5);
         this.cdr.detectChanges();

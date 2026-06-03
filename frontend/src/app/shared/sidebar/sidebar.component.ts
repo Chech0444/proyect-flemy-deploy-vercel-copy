@@ -14,11 +14,12 @@ export class SidebarComponent {
   @Input() isAdmin = false;
 
   logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('first_name');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('first_name');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('is_staff');
     window.location.href = '/login';
   }
 }
