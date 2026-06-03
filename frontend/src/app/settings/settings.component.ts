@@ -83,6 +83,10 @@ export class SettingsComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (data) => {
+        this.userProfile = data;
+        localStorage.setItem('username', data.username || '');
+        localStorage.setItem('first_name', data.first_name || '');
+        localStorage.setItem('role', data.role || '');
         if (data.preferences && Object.keys(data.preferences).length > 0) {
           this.settings = this.deepMerge(this.settings, data.preferences);
         }
