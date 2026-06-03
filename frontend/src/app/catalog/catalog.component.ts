@@ -41,9 +41,9 @@ export class CatalogComponent implements OnInit {
   }
 
   restoreProfileFromCache() {
-    const username = localStorage.getItem('username');
-    const firstName = localStorage.getItem('first_name');
-    const role = localStorage.getItem('role');
+    const username = sessionStorage.getItem('username');
+    const firstName = sessionStorage.getItem('first_name');
+    const role = sessionStorage.getItem('role');
     if (username || firstName) {
       this.userProfile = {
         username: username || 'Usuario',
@@ -56,19 +56,16 @@ export class CatalogComponent implements OnInit {
   }
 
   loadProfileDetails() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
-    this.http.get<any>(`${environment.apiUrl}/auth/profile/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).pipe(
+    if (!this.authService.isLoggedIn()) return;
+    this.http.get<any>(`${environment.apiUrl}/auth/profile/`).pipe(
       timeout(5000),
       catchError(() => of(this.userProfile))
     ).subscribe({
       next: (data) => {
         if (data) {
           this.userProfile = data;
-          if (data.username) localStorage.setItem('username', data.username);
-          if (data.first_name) localStorage.setItem('first_name', data.first_name);
+          if (data.username) sessionStorage.setItem('username', data.username);
+          if (data.first_name) sessionStorage.setItem('first_name', data.first_name);
           this.cdr.detectChanges();
         }
       }
@@ -145,11 +142,7 @@ export class CatalogComponent implements OnInit {
 
   logout(event?: Event) {
     if (event) event.preventDefault();
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('first_name');
-    localStorage.removeItem('role');
+    sessionStorage.clear();
     window.location.href = '/login';
   }
 }

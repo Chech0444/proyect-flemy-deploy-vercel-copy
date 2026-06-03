@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
 import { NotificationService } from '../../shared/notification.service';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -20,6 +21,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
 
   courseId: string | null = null;
   course: any = null;
@@ -64,10 +66,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   private pollingInterval: any = null;
 
   ngOnInit() {
-    // Detectar si el usuario es admin
-    const role = localStorage.getItem('role');
-    const isStaff = localStorage.getItem('is_staff') === 'true';
-    this.isAdmin = role === 'ROLE_ADMIN' || isStaff;
+    this.isAdmin = this.authService.isAdmin();
 
     this.route.paramMap.subscribe(params => {
       this.courseId = params.get('slug');
@@ -89,16 +88,13 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   loadCourseData() {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!this.authService.isLoggedIn()) {
       this.isLoading = false;
       this.router.navigate(['/login']);
       return;
     }
 
-    this.http.get<any>(`${environment.apiUrl}/courses/catalog/${this.courseId}/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/courses/catalog/${this.courseId}/`).subscribe({
       next: (data: any) => {
         this.course = data;
         
@@ -131,10 +127,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   // ===================================================
 
   loadLessonVideoData(lessonId: number) {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
-    // Limpiar datos anteriores (se sobrescribirán o cargarán después)
     this.activeLessonVideoData = null;
     this.processingStatus = null;
     this.transcriptionData = null;
@@ -142,9 +136,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.quizData = [];
     this.stopPolling();
 
-    this.http.get<any>(`${environment.apiUrl}/courses/lessons/${lessonId}/video/`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/courses/lessons/${lessonId}/video/`).subscribe({
       next: (res) => {
         if (res.data) {
           this.activeLessonVideoData = res.data;
@@ -189,12 +181,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   startPolling(videoId: number) {
     this.stopPolling();
     this.pollingInterval = setInterval(() => {
-      const token = localStorage.getItem('access_token');
-      if (!token) return;
+      if (!this.authService.isLoggedIn()) return;
 
-      this.http.get<any>(`${environment.apiUrl}/courses/videos/${videoId}/status/`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).subscribe({
+      this.http.get<any>(`${environment.apiUrl}/courses/videos/${videoId}/status/`).subscribe({
         next: (res) => {
           this.processingStatus = res.data;
           
@@ -234,8 +223,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
     const formData = new FormData();
     formData.append('video_file', file);
@@ -246,10 +234,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.http.post<any>(
       `${environment.apiUrl}/courses/admin/lessons/${activeLesson.id}/upload-video/`,
       formData,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        reportProgress: true
-      }
+      { reportProgress: true }
     ).subscribe({
       next: (res) => {
         this.isUploadingVideo = false;
@@ -267,14 +252,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   regenerateSummary() {
-    const token = localStorage.getItem('access_token');
-    if (!token || !this.activeLessonVideoData) return;
+    if (!this.authService.isLoggedIn() || !this.activeLessonVideoData) return;
     
     if (!confirm('¿Estás seguro de que quieres regenerar solo el resumen con la IA? Esto sobreescribirá el resumen actual.')) return;
 
-    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-summary/`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-summary/`, {}).subscribe({
       next: (res) => {
         this.notificationService.showSuccess('Regenerando resumen con IA. Puede tardar unos segundos...');
         this.startPolling(this.activeLessonVideoData.id);
@@ -286,14 +268,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   regenerateQuiz() {
-    const token = localStorage.getItem('access_token');
-    if (!token || !this.activeLessonVideoData) return;
+    if (!this.authService.isLoggedIn() || !this.activeLessonVideoData) return;
     
     if (!confirm('¿Estás seguro de que quieres regenerar solo las preguntas del quiz con la IA? Esto sobreescribirá las preguntas actuales y borrará el progreso del quiz.')) return;
 
-    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-quiz/`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-quiz/`, {}).subscribe({
       next: (res) => {
         this.notificationService.showSuccess('Regenerando quiz con IA. Puede tardar unos segundos...');
         localStorage.removeItem(`quiz_state_${this.activeLessonVideoData.id}`);
@@ -382,14 +361,10 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.aiQuery = '';
     this.isAiTyping = true;
     this.cdr.detectChanges();
-
-    const token = localStorage.getItem('access_token');
     
     this.http.post<any>(`${environment.apiUrl}/ai/chatbot/`, {
       lesson_id: activeLesson.id,
       question: question
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (res) => {
         this.chatMessages.push({ role: 'ai', text: res.answer });
@@ -405,14 +380,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   enroll() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
     this.isLoading = true;
     this.http.post(`${environment.apiUrl}/learning/enrollments/`, {
       course: this.course.id
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {
         this.notificationService.showSuccess('¡Inscripción exitosa! Bienvenido al curso.');
@@ -428,12 +400,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   completeLesson(lessonId: number) {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
-    this.http.post(`${environment.apiUrl}/learning/lessons/${lessonId}/complete/`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.post(`${environment.apiUrl}/learning/lessons/${lessonId}/complete/`, {}).subscribe({
       next: () => {
         this.notificationService.showSuccess('¡Lección completada! Has ganado XP.');
         // Recargar los datos del curso para actualizar el % de progreso y los chulitos
@@ -488,12 +457,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   loadChatHistory(lessonId: number) {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
+    if (!this.authService.isLoggedIn()) return;
 
-    this.http.get<any[]>(`${environment.apiUrl}/ai/chatbot/?lesson_id=${lessonId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/ai/chatbot/?lesson_id=${lessonId}`).subscribe({
       next: (history) => {
         if (history && history.length > 0) {
            this.chatMessages = history;
@@ -514,8 +480,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       this.http.post<any>(`${environment.apiUrl}/ai/code-feedback/`, {
         language: 'python',
         code: this.codeContent
-      }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
       }).subscribe({
         next: (res) => {
           this.outputContent = `> Resultado de la activación: 0.5841905243301777\n\n[IA FEEDBACK]: ${res.feedback}`;
