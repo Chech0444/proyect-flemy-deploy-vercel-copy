@@ -1,0 +1,96 @@
+<div class="rt-container">
+  <header class="rt-hero">
+    <h1>Ruta de Aprendizaje</h1>
+    <p>Tu camino paso a paso en programación. Desde los fundamentos hasta proyectos profesionales, con rutas adaptadas a cada especialización.</p>
+  </header>
+
+  <div class="rt-selector">
+    <div class="rt-selector-inner">
+      <div class="rt-selector-label">
+        <span class="rt-selector-icon">🎯</span>
+        <span>Selecciona tu objetivo:</span>
+      </div>
+      <div class="rt-selector-buttons">
+        <button *ngFor="let r of routes | keyvalue"
+                class="rt-pill"
+                [class.active]="activeCert === r.key"
+                (click)="setCert(r.key)">
+          {{ r.value.title }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rt-desc" *ngIf="activeCert !== 'completa'">
+    <p>{{ currentRoute.description }}</p>
+  </div>
+
+  <section class="rt-timeline-section">
+    <div class="rt-timeline">
+      <div class="rt-line"></div>
+
+      <div class="rt-item" *ngFor="let item of filteredCourses; let i = index"
+           [class.rt-item-left]="i % 2 === 0"
+           [class.rt-item-right]="i % 2 !== 0">
+
+        <div class="rt-card">
+          <div class="rt-card-header">
+            <span class="rt-badge" [ngClass]="levelClass(item.course.level)">
+              {{ levelLabel(item.course.level) }}
+            </span>
+            <span class="rt-badge-comp" *ngIf="item.isComplementary && activeCert !== 'completa'">
+              Complementario
+            </span>
+          </div>
+          <h3 class="rt-card-title">{{ item.course.title }}</h3>
+          <p class="rt-card-desc">{{ item.course.description }}</p>
+          <div class="rt-card-meta">
+            <div class="rt-meta-item">
+              <span class="rt-meta-icon rt-icon-clock">⏱</span>
+              <div class="rt-meta-text">
+                <span class="rt-meta-label">Duración</span>
+                <span class="rt-meta-value">{{ item.course.duration }}</span>
+              </div>
+            </div>
+            <div class="rt-meta-item">
+              <span class="rt-meta-icon rt-icon-book">📖</span>
+              <div class="rt-meta-text">
+                <span class="rt-meta-label">Clases</span>
+                <span class="rt-meta-value">{{ item.course.lessons }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="rt-card-action">
+            <a [routerLink]="['/catalog']" class="rt-btn-course">
+              Ver curso
+              <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="rt-node">{{ item.course.emoji }}</div>
+        <span class="rt-step-label">Paso {{ item.stepNumber }}: {{ item.course.stepName }}</span>
+      </div>
+    </div>
+
+    <div class="rt-cert-goal" *ngIf="showCertGoal">
+      <div class="rt-cert-goal-badge">
+        <span class="rt-cert-goal-icon">🏆</span>
+        <span>Certificación {{ currentRoute.title }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="rt-material">
+    <div class="rt-material-card">
+      <div class="rt-material-icon">📘</div>
+      <div class="rt-material-content">
+        <h3>Material de Refuerzo</h3>
+        <p>Accede a recursos adicionales, ejercicios, cheat sheets y referencias complementarias para cada curso de la ruta.</p>
+      </div>
+      <a href="https://github.com" target="_blank" rel="noopener" class="rt-btn-material">
+        Ver recursos &rarr;
+      </a>
+    </div>
+  </section>
+</div>

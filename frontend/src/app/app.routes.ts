@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { RoadmapProComponent } from './roadmap-pro/roadmap-pro.component';
+import { RoadmapTimelineComponent } from './roadmap-timeline/roadmap-timeline.component';
 import { Register } from './register/register';
 import { ProgressComponent } from './progress/progress.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'catalog/:slug', component: CourseDetailComponent },
 
   { path: 'roadmap-pro', component: RoadmapProComponent },
+  { path: 'roadmap-timeline', component: RoadmapTimelineComponent },
   { path: 'progreso', component: ProgressComponent },
   { path: 'perfil', component: ProfileComponent },
   { path: 'subscription', component: SubscriptionComponent },
