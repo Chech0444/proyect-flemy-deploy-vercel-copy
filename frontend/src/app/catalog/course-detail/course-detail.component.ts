@@ -87,7 +87,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     return this.brokenImages.has(key);
   }
 
-  loadCourseData() {
+  loadCourseData(targetLessonId?: number | null) {
     if (!this.authService.isLoggedIn()) {
       this.isLoading = false;
       this.router.navigate(['/login']);
@@ -100,11 +100,21 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         
         if (!this.course.sections) this.course.sections = [];
         
-        // Seleccionar la primera lección como activa
-        if (this.course.sections.length > 0 && this.course.sections[0].lessons?.length > 0) {
-          this.course.sections[0].lessons[0].active = true;
-          this.loadLessonVideoData(this.course.sections[0].lessons[0].id);
-          this.loadChatHistory(this.course.sections[0].lessons[0].id);
+        // Seleccionar la lección indicada, o la primera por defecto
+        let targetLesson: any = null;
+        if (targetLessonId) {
+          for (const s of this.course.sections) {
+            targetLesson = s.lessons?.find((l: any) => l.id === targetLessonId);
+            if (targetLesson) break;
+          }
+        }
+        if (!targetLesson && this.course.sections.length > 0 && this.course.sections[0].lessons?.length > 0) {
+          targetLesson = this.course.sections[0].lessons[0];
+        }
+        if (targetLesson) {
+          targetLesson.active = true;
+          this.loadLessonVideoData(targetLesson.id);
+          this.loadChatHistory(targetLesson.id);
         }
         
         this.isLoading = false;
@@ -402,11 +412,17 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   completeLesson(lessonId: number) {
     if (!this.authService.isLoggedIn()) return;
 
+    // Buscar la siguiente lección para navegar automáticamente
+    const lessons = this.getFlatLessons();
+    const currentIdx = lessons.findIndex((l: any) => l.id === lessonId);
+    const nextLessonId = (currentIdx >= 0 && currentIdx < lessons.length - 1)
+      ? lessons[currentIdx + 1].id
+      : null;
+
     this.http.post(`${environment.apiUrl}/learning/lessons/${lessonId}/complete/`, {}).subscribe({
       next: () => {
         this.notificationService.showSuccess('¡Lección completada! Has ganado XP.');
-        // Recargar los datos del curso para actualizar el % de progreso y los chulitos
-        this.loadCourseData();
+        this.loadCourseData(nextLessonId);
       },
       error: () => {
         this.notificationService.showError('Hubo un problema al marcar la lección.');
