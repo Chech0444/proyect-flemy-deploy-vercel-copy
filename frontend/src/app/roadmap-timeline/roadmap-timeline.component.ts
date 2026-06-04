@@ -28,95 +28,89 @@ interface CertRoute {
   styleUrl: './roadmap-timeline.component.css'
 })
 export class RoadmapTimelineComponent {
-  activeCert = 'fullstack';
+  activeCert = 'backend';
 
   courses: TimelineCourse[] = [
     {
-      id: 1, title: 'Introducción a la Programación',
-      description: 'Domina la lógica computacional, variables, estructuras de control, funciones y los fundamentos que todo programador debe conocer.',
-      duration: '15 horas', lessons: 60, level: 'beginner',
-      emoji: '🧠', stepName: 'Fundamentos', slug: 'intro-programacion'
+      id: 1, title: 'Java desde Cero',
+      description: 'Aprende la sintaxis de Java, variables, tipos de datos, estructuras de control, arrays y los fundamentos del lenguaje más usado en el mundo empresarial.',
+      duration: '20 horas', lessons: 75, level: 'beginner',
+      emoji: '☕', stepName: 'Fundamentos', slug: 'java-desde-cero'
     },
     {
-      id: 2, title: 'HTML y CSS desde Cero',
-      description: 'Construye interfaces web semánticas y responsivas. Aprende HTML5, CSS3, Flexbox, Grid y diseño adaptable.',
-      duration: '20 horas', lessons: 80, level: 'beginner',
-      emoji: '🎨', stepName: 'Web Basics', slug: 'html-css'
+      id: 2, title: 'POO con Java',
+      description: 'Domina la Programación Orientada a Objetos: clases, herencia, interfaces, polimorfismo, encapsulamiento y principios SOLID.',
+      duration: '25 horas', lessons: 80, level: 'beginner',
+      emoji: '🧩', stepName: 'POO', slug: 'poo-java'
     },
     {
-      id: 3, title: 'JavaScript Esencial',
-      description: 'Domina JavaScript moderno: ES6+, manipulación del DOM, eventos, asincronía y consumo de APIs.',
-      duration: '25 horas', lessons: 90, level: 'beginner',
-      emoji: '⚡', stepName: 'Lógica', slug: 'javascript'
+      id: 3, title: 'Java Standard Library',
+      description: 'Colecciones, Streams, lambdas, manejo de archivos, excepciones, genéricos y programación funcional en Java.',
+      duration: '18 horas', lessons: 60, level: 'beginner',
+      emoji: '📚', stepName: 'Librerías', slug: 'java-standard-library'
     },
     {
-      id: 4, title: 'Python Avanzado',
-      description: 'Programación orientada a objetos, módulos, testing, decoradores y automatización con Python.',
-      duration: '30 horas', lessons: 70, level: 'intermediate',
-      emoji: '🐍', stepName: 'Backend', slug: 'python-avanzado'
+      id: 4, title: 'JDBC y JPA con Hibernate',
+      description: 'Conexión a bases de datos relacionales con JDBC, mapeo objeto-relacional con JPA/Hibernate, relaciones y consultas JPQL.',
+      duration: '22 horas', lessons: 70, level: 'intermediate',
+      emoji: '🗄️', stepName: 'Bases de Datos', slug: 'jpa-hibernate'
     },
     {
-      id: 5, title: 'React Moderno',
-      description: 'Hooks, estado global, React Router, SSR con Next.js y patrones avanzados de componentes.',
-      duration: '35 horas', lessons: 100, level: 'intermediate',
-      emoji: '⚛️', stepName: 'Frontend', slug: 'react-moderno'
+      id: 5, title: 'Spring Boot Essentials',
+      description: 'Inversión de control, inyección de dependencias, Spring MVC, configuración automática y creación de aplicaciones empresariales.',
+      duration: '30 horas', lessons: 90, level: 'intermediate',
+      emoji: '🍃', stepName: 'Spring', slug: 'spring-boot'
     },
     {
-      id: 6, title: 'Bases de Datos SQL y NoSQL',
-      description: 'PostgreSQL, MongoDB, modelado de datos, consultas avanzadas, índices y optimización.',
-      duration: '20 horas', lessons: 50, level: 'intermediate',
-      emoji: '🗄️', stepName: 'Datos', slug: 'bases-datos'
+      id: 6, title: 'APIs REST con Spring Boot',
+      description: 'Crea APIs RESTful profesionales con Spring Boot: validación, seguridad con JWT, documentación con Swagger y manejo de errores.',
+      duration: '20 horas', lessons: 65, level: 'intermediate',
+      emoji: '🔌', stepName: 'APIs REST', slug: 'api-rest-spring'
     },
     {
-      id: 7, title: 'Node.js y APIs REST',
-      description: 'Express, autenticación JWT, middlewares, WebSockets y despliegue de APIs en producción.',
-      duration: '25 horas', lessons: 65, level: 'advanced',
-      emoji: '🚀', stepName: 'APIs', slug: 'nodejs-apis'
+      id: 7, title: 'Java Testing Avanzado',
+      description: 'JUnit 5, Mockito, pruebas de integración con Spring Test, TDD y cobertura de código con JaCoCo.',
+      duration: '15 horas', lessons: 50, level: 'advanced',
+      emoji: '🧪', stepName: 'Testing', slug: 'java-testing'
     },
     {
-      id: 8, title: 'DevOps y Cloud',
-      description: 'Docker, CI/CD, AWS, Terraform, monitoreo y despliegue continuo de aplicaciones.',
-      duration: '30 horas', lessons: 55, level: 'advanced',
-      emoji: '☁️', stepName: 'DevOps', slug: 'devops-cloud'
+      id: 8, title: 'Microservicios con Spring Cloud',
+      description: 'Arquitectura de microservicios: Eureka, Gateway, Resilience4j, Config Server, tracing distribuido y comunicación asíncrona.',
+      duration: '28 horas', lessons: 80, level: 'advanced',
+      emoji: '🌐', stepName: 'Microservicios', slug: 'microservicios-spring'
     },
     {
-      id: 9, title: 'Proyecto Full Stack Final',
-      description: 'Construye una aplicación completa desde cero: frontend, backend, base de datos, testing y deploy.',
-      duration: '40 horas', lessons: 30, level: 'advanced',
-      emoji: '🏆', stepName: 'Integración', slug: 'proyecto-final'
+      id: 9, title: 'Proyecto Final: App Java Empresarial',
+      description: 'Construye una aplicación completa desde cero: backend con Spring Boot, frontend con Angular/Thymeleaf, base de datos, pruebas y deploy en producción.',
+      duration: '40 horas', lessons: 45, level: 'advanced',
+      emoji: '🏆', stepName: 'Proyecto Final', slug: 'proyecto-final-java'
     }
   ];
 
   routes: Record<string, CertRoute> = {
-    completa: {
-      courseIds: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      complementary: [],
-      title: 'Ruta Completa',
-      description: 'Todos los cursos de la plataforma, desde los fundamentos hasta el proyecto final integrador.'
-    },
-    frontend: {
-      courseIds: [2, 3, 5],
-      complementary: [4],
-      title: 'Frontend',
-      description: 'Especialización en desarrollo frontend. HTML, CSS, JavaScript y React con frameworks modernos.'
-    },
     backend: {
-      courseIds: [1, 4, 6, 7],
-      complementary: [8],
-      title: 'Backend',
-      description: 'Domina el desarrollo backend con Python, Node.js, bases de datos y APIs REST.'
+      courseIds: [1, 2, 3, 4, 5, 6, 9],
+      complementary: [7],
+      title: 'Backend Java',
+      description: 'Domina el desarrollo backend con Java: desde los fundamentos hasta APIs REST empresariales con Spring Boot y JPA.'
     },
     fullstack: {
-      courseIds: [1, 2, 3, 4, 5, 6, 7, 9],
-      complementary: [8],
-      title: 'Full Stack',
-      description: 'Conviértete en desarrollador Full Stack cubriendo frontend, backend, bases de datos y proyecto integrador.'
+      courseIds: [1, 2, 3, 4, 5, 6, 9],
+      complementary: [7, 8],
+      title: 'Full Stack Java',
+      description: 'Conviértete en desarrollador Full Stack Java cubriendo backend, APIs, microservicios y proyecto integrador.'
     },
-    devops: {
-      courseIds: [7, 8, 9],
-      complementary: [6],
-      title: 'DevOps & Cloud',
-      description: 'Infraestructura moderna, contenedores, CI/CD y despliegue en la nube.'
+    microservices: {
+      courseIds: [5, 6, 7, 8, 9],
+      complementary: [4],
+      title: 'Microservicios',
+      description: 'Especialización en microservicios con Spring Cloud: APIs, tolerancia a fallos, descubrimiento y despliegue.'
+    },
+    testing: {
+      courseIds: [1, 5, 6, 7],
+      complementary: [3],
+      title: 'Testing Java',
+      description: 'Enfócate en calidad de software: unit tests, integración, TDD y aseguramiento de calidad en proyectos Java.'
     }
   };
 
