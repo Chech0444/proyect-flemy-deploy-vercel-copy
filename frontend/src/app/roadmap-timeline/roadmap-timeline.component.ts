@@ -34,56 +34,56 @@ export class RoadmapTimelineComponent {
     {
       id: 1, title: 'Java desde Cero',
       description: 'Aprende la sintaxis de Java, variables, tipos de datos, estructuras de control, arrays y los fundamentos del lenguaje más usado en el mundo empresarial.',
-      duration: '20 horas', lessons: 75, level: 'beginner',
+      duration: '20 horas', lessons: 20, level: 'beginner',
       emoji: '☕', stepName: 'Fundamentos', slug: 'java-desde-cero'
     },
     {
       id: 2, title: 'POO con Java',
       description: 'Domina la Programación Orientada a Objetos: clases, herencia, interfaces, polimorfismo, encapsulamiento y principios SOLID.',
-      duration: '25 horas', lessons: 80, level: 'beginner',
-      emoji: '🧩', stepName: 'POO', slug: 'poo-java'
+      duration: '25 horas', lessons: 25, level: 'beginner',
+      emoji: '🧩', stepName: 'POO', slug: 'poo-con-java'
     },
     {
       id: 3, title: 'Java Standard Library',
       description: 'Colecciones, Streams, lambdas, manejo de archivos, excepciones, genéricos y programación funcional en Java.',
-      duration: '18 horas', lessons: 60, level: 'beginner',
+      duration: '18 horas', lessons: 24, level: 'beginner',
       emoji: '📚', stepName: 'Librerías', slug: 'java-standard-library'
     },
     {
       id: 4, title: 'JDBC y JPA con Hibernate',
       description: 'Conexión a bases de datos relacionales con JDBC, mapeo objeto-relacional con JPA/Hibernate, relaciones y consultas JPQL.',
-      duration: '22 horas', lessons: 70, level: 'intermediate',
-      emoji: '🗄️', stepName: 'Bases de Datos', slug: 'jpa-hibernate'
+      duration: '22 horas', lessons: 23, level: 'intermediate',
+      emoji: '🗄️', stepName: 'Bases de Datos', slug: 'jdbc-y-jpa-con-hibernate'
     },
     {
       id: 5, title: 'Spring Boot Essentials',
       description: 'Inversión de control, inyección de dependencias, Spring MVC, configuración automática y creación de aplicaciones empresariales.',
-      duration: '30 horas', lessons: 90, level: 'intermediate',
-      emoji: '🍃', stepName: 'Spring', slug: 'spring-boot'
+      duration: '30 horas', lessons: 24, level: 'intermediate',
+      emoji: '🍃', stepName: 'Spring', slug: 'spring-boot-essentials'
     },
     {
       id: 6, title: 'APIs REST con Spring Boot',
       description: 'Crea APIs RESTful profesionales con Spring Boot: validación, seguridad con JWT, documentación con Swagger y manejo de errores.',
-      duration: '20 horas', lessons: 65, level: 'intermediate',
-      emoji: '🔌', stepName: 'APIs REST', slug: 'api-rest-spring'
+      duration: '20 horas', lessons: 21, level: 'intermediate',
+      emoji: '🔌', stepName: 'APIs REST', slug: 'apis-rest-con-spring-boot'
     },
     {
       id: 7, title: 'Java Testing Avanzado',
       description: 'JUnit 5, Mockito, pruebas de integración con Spring Test, TDD y cobertura de código con JaCoCo.',
-      duration: '15 horas', lessons: 50, level: 'advanced',
-      emoji: '🧪', stepName: 'Testing', slug: 'java-testing'
+      duration: '15 horas', lessons: 17, level: 'advanced',
+      emoji: '🧪', stepName: 'Testing', slug: 'java-testing-avanzado'
     },
     {
       id: 8, title: 'Microservicios con Spring Cloud',
       description: 'Arquitectura de microservicios: Eureka, Gateway, Resilience4j, Config Server, tracing distribuido y comunicación asíncrona.',
-      duration: '28 horas', lessons: 80, level: 'advanced',
-      emoji: '🌐', stepName: 'Microservicios', slug: 'microservicios-spring'
+      duration: '28 horas', lessons: 20, level: 'advanced',
+      emoji: '🌐', stepName: 'Microservicios', slug: 'microservicios-con-spring-cloud'
     },
     {
       id: 9, title: 'Proyecto Final: App Java Empresarial',
-      description: 'Construye una aplicación completa desde cero: backend con Spring Boot, frontend con Angular/Thymeleaf, base de datos, pruebas y deploy en producción.',
-      duration: '40 horas', lessons: 45, level: 'advanced',
-      emoji: '🏆', stepName: 'Proyecto Final', slug: 'proyecto-final-java'
+      description: 'Construye una aplicación completa desde cero: backend con Spring Boot, frontend, base de datos, pruebas y deploy en producción.',
+      duration: '40 horas', lessons: 20, level: 'advanced',
+      emoji: '🏆', stepName: 'Proyecto Final', slug: 'proyecto-final-app-java-empresarial'
     }
   ];
 
