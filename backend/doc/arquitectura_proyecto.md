@@ -99,7 +99,7 @@ Cuando se sube un video, el backend debe preparar el audio para poder transcribi
 ### C. Generación de Resúmenes y Quizzes (`Google Gemini API`)
 Una vez obtenida la transcripción estructurada del audio, el backend genera el material académico.
 * **Tecnología**: **Google Gemini API** (gratuito) mediante la biblioteca oficial `google-generativeai` (v0.8.3).
-* **Modelo utilizado**: `gemini-3-flash-preview` (o versión de Flash de bajo consumo).
+* **Modelo utilizado**: `gemini-2.0-flash` (versión estable de Flash de bajo consumo, gratuita).
 * **Petición Única Optimizada (Single-Call Pipeline)**: Para ahorrar latencia, API Rate-Limits y tokens, el prompt diseñado en `ai_services.py` solicita simultáneamente:
   1. Un **Resumen detallado** estructurado en párrafos (de 4 a 7 párrafos, escrito como si analizara un video directamente).
   2. Un conjunto de **Conceptos Clave** (Key Points).

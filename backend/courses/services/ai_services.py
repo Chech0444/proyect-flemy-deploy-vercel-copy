@@ -44,7 +44,7 @@ class AIService:
         try:
             import google.generativeai as genai
             genai.configure(api_key=api_key)
-            self._model = genai.GenerativeModel('gemini-3-flash-preview')
+            self._model = genai.GenerativeModel('gemini-2.0-flash')
             self._is_configured = True
             logger.info('Google Gemini API inicializada correctamente')
         except Exception as e:
