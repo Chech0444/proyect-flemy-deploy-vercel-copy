@@ -5,7 +5,7 @@
 
 .login-wrapper {
   min-height: 100vh;
-  background-color: #0b0f19;
+  background-color: #0f1117;
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(20, 30, 80, 0.5) 0%, transparent 50%),
     radial-gradient(circle at 85% 30%, rgba(40, 20, 80, 0.5) 0%, transparent 50%);

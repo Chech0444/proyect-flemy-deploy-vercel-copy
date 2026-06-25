@@ -1,42 +1,42 @@
-<nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-[#0b0f1999] backdrop-blur-2xl py-8 px-4 fixed top-0 left-0 z-50">
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-[#ffffff1a] bg-surface-dim/60 backdrop-blur-2xl py-8 px-4 fixed top-0 left-0 z-50">
   <div class="flex items-center gap-3 mb-12 px-4">
-    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0ea5e9] to-[#8b5cf6] flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
       <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
     </div>
     <div>
-      <h1 class="text-2xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#a855f7] bg-clip-text text-transparent font-space tracking-tight">Flemy</h1>
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-space tracking-tight">Flemy</h1>
       <p class="font-label-caps text-label-caps text-[#cbd5e1] text-xs">AI Education</p>
     </div>
   </div>
 
   <div class="flex-1 space-y-2">
-    <a routerLink="/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+    <a routerLink="/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
       class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
       <span class="material-symbols-outlined">dashboard</span>
       Dashboard
     </a>
-    <a routerLink="/progreso" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+    <a routerLink="/progreso" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
       class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
       <span class="material-symbols-outlined">monitoring</span>
       Progreso
     </a>
-    <a routerLink="/roadmap-timeline" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+    <a routerLink="/roadmap-timeline" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
       class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
       <span class="material-symbols-outlined">timeline</span>
       Roadmap
     </a>
-    <a routerLink="/catalog" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+    <a routerLink="/catalog" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
       class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
       <span class="material-symbols-outlined">auto_stories</span>
       Catálogo
     </a>
-    <a routerLink="/subscription" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
+    <a routerLink="/subscription" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
       class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300 font-body-md text-body-md cursor-pointer border-transparent">
       <span class="material-symbols-outlined">workspace_premium</span>
       Suscripción
     </a>
-    <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-sky-500 font-bold"
-      class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300 font-body-md text-body-md border border-sky-500/10 bg-sky-500/5">
+    <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="bg-white/10 text-sky-400 border-l-4 border-emerald-500 font-bold"
+      class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300 font-body-md text-body-md border border-emerald-500/10 bg-emerald-500/5">
       <span class="material-symbols-outlined text-sky-400">admin_panel_settings</span>
       Panel Admin
     </a>
@@ -45,7 +45,7 @@
   <div class="mt-auto space-y-4">
     <div class="px-4 py-4 mb-2 bg-white/5 rounded-xl border border-white/5">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full border border-sky-500/30 overflow-hidden bg-sky-500/10">
+        <div class="w-10 h-10 rounded-full border border-emerald-500/30 overflow-hidden bg-emerald-500/10">
           <img [src]="'https://ui-avatars.com/api/?name=' + (userProfile?.first_name || userProfile?.username || 'U') + '&background=0ea5e9&color=fff'"
             class="w-full h-full object-cover">
         </div>

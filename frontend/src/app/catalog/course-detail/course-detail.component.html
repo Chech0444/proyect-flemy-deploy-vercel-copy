@@ -1,5 +1,5 @@
-<div *ngIf="isLoading" class="min-h-screen bg-[#0b0f19] flex flex-col">
-  <div class="h-16 border-b border-white/5 bg-[#0b0f19]/80 backdrop-blur-xl"></div>
+<div *ngIf="isLoading" class="min-h-screen bg-surface-dim flex flex-col">
+  <div class="h-16 border-b border-white/5 bg-surface-dim/80 backdrop-blur-xl"></div>
   <div class="flex-1 overflow-y-auto p-8">
     <div class="max-w-4xl mx-auto">
       <div class="w-full h-[350px] bg-white/5 rounded-2xl animate-pulse mb-8"></div>
@@ -18,10 +18,10 @@
   </div>
 </div>
 
-<div *ngIf="!isLoading && course" class="h-screen bg-[#050810] flex flex-col font-['Inter'] text-white overflow-hidden relative">
+<div *ngIf="!isLoading && course" class="h-screen bg-surface-container-lowest flex flex-col font-['Inter'] text-white overflow-hidden relative">
   
   <!-- BARRA SUPERIOR (Reproductor) -->
-  <header *ngIf="course.is_enrolled" class="h-16 border-b border-white/5 bg-[#0b0f19]/80 backdrop-blur-xl flex items-center justify-between px-6 z-50">
+  <header *ngIf="course.is_enrolled" class="h-16 border-b border-white/5 bg-surface-dim/80 backdrop-blur-xl flex items-center justify-between px-6 z-50">
     <div class="flex items-center gap-5">
       <button (click)="goBack()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-all group" title="Volver al catálogo">
         <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
@@ -37,7 +37,7 @@
       <div class="hidden md:flex flex-col items-end">
         <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">Tu Progreso General ({{ course.progress_percent || 0 }}%)</span>
         <div class="w-40 h-1.5 bg-white/5 rounded-full overflow-hidden">
-          <div class="h-full bg-gradient-to-r from-sky-500 to-purple-500 transition-all duration-1000" [style.width.%]="course.progress_percent || 0"></div>
+          <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 transition-all duration-1000" [style.width.%]="course.progress_percent || 0"></div>
         </div>
       </div>
       <button (click)="nextClass()" [disabled]="!hasNextClass()" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-xs font-bold transition-all">
@@ -47,16 +47,16 @@
   </header>
 
   <!-- ESTADO 1: LANDING PAGE (Si no está inscrito) -->
-  <div *ngIf="!course.is_enrolled" class="flex-1 overflow-y-auto bg-gradient-to-b from-[#0f172a] to-[#050810]">
+  <div *ngIf="!course.is_enrolled" class="flex-1 overflow-y-auto bg-gradient-to-b from-surface-container-low to-surface-container-lowest">
     <div class="relative h-[450px] flex items-center justify-center overflow-hidden">
       <img *ngIf="!isImageBroken('detail-thumb')" [src]="course.thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1280&auto=format&fit=crop'" (error)="onImageError('detail-thumb')" alt="" class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm scale-110">
-      <div *ngIf="isImageBroken('detail-thumb')" class="absolute inset-0 w-full h-full bg-gradient-to-br from-sky-900/40 to-purple-900/40 flex items-center justify-center">
+      <div *ngIf="isImageBroken('detail-thumb')" class="absolute inset-0 w-full h-full bg-gradient-to-br from-sky-900/40 to-amber-900/40 flex items-center justify-center">
         <span class="material-symbols-outlined text-8xl text-white/10">auto_stories</span>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-t from-[#050810] via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
       
       <div class="relative z-10 max-w-4xl px-8 text-center animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-bold mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-sky-400 text-xs font-bold mb-6">
           <span class="material-symbols-outlined text-[14px]">school</span>
           CURSO {{ course.is_premium ? 'PREMIUM' : 'GRATUITO' }}
         </div>
@@ -68,7 +68,7 @@
         </p>
         
         <div class="flex flex-wrap justify-center gap-4">
-          <button (click)="enroll()" class="px-10 py-4 bg-sky-500 hover:bg-sky-400 text-white rounded-2xl font-bold text-lg shadow-xl shadow-sky-500/20 transition-all hover:-translate-y-1 flex items-center gap-3">
+          <button (click)="enroll()" class="px-10 py-4 bg-emerald-500 hover:bg-sky-400 text-white rounded-2xl font-bold text-lg shadow-xl shadow-emerald-500/20 transition-all hover:-translate-y-1 flex items-center gap-3">
             <span class="material-symbols-outlined">bolt</span>
             Inscribirse ahora
           </button>
@@ -103,14 +103,14 @@
         <div class="w-full max-w-6xl mx-auto">
           
           <!-- Estado de Procesamiento AI -->
-          <div *ngIf="processingStatus && processingStatus.status !== 'completed'" class="mb-6 bg-[#0f172a] border border-sky-500/30 rounded-2xl p-6 relative overflow-hidden">
+          <div *ngIf="processingStatus && processingStatus.status !== 'completed'" class="mb-6 bg-surface-container-low border border-emerald-500/30 rounded-2xl p-6 relative overflow-hidden">
              <!-- Background glow -->
-             <div class="absolute inset-0 bg-sky-500/5 animate-pulse"></div>
+             <div class="absolute inset-0 bg-emerald-500/5 animate-pulse"></div>
              
              <div class="relative z-10">
                <div class="flex items-center justify-between mb-4">
                  <div class="flex items-center gap-3">
-                   <div class="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400">
+                   <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-sky-400">
                      <span class="material-symbols-outlined animate-spin">autorenew</span>
                    </div>
                    <div>
@@ -126,7 +126,7 @@
                
                <!-- Progress Bar -->
                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                 <div class="h-full bg-gradient-to-r from-sky-500 to-purple-500 transition-all duration-500" [style.width.%]="processingStatus.progress_percent"></div>
+                 <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 transition-all duration-500" [style.width.%]="processingStatus.progress_percent"></div>
                </div>
 
                <div *ngIf="processingStatus.status === 'error'" class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
@@ -140,7 +140,7 @@
              
              <!-- Si NO hay video subido aún -->
              <ng-container *ngIf="!activeLessonVideoData || !activeLessonVideoData.video_file">
-               <div class="absolute inset-0 bg-[#0a0f1e] flex flex-col items-center justify-center">
+               <div class="absolute inset-0 bg-surface-container-lowest flex flex-col items-center justify-center">
                   <div class="text-center mb-8">
                     <h2 class="text-4xl font-black font-space tracking-widest text-slate-500 opacity-50 uppercase">{{ getActiveLesson()?.title || 'LECCIÓN' }}</h2>
                     <h3 class="text-2xl font-bold text-slate-600 opacity-40">PENDIENTE DE VIDEO</h3>
@@ -149,7 +149,7 @@
                   <!-- Controles de Admin para Subir Video -->
                   <div *ngIf="isAdmin" class="mt-4 z-20">
                     <input type="file" #videoUploadInput accept="video/*" class="hidden" (change)="uploadVideo($event)">
-                    <button (click)="videoUploadInput.click()" [disabled]="isUploadingVideo" class="px-6 py-3 bg-gradient-to-r from-sky-500 to-purple-500 hover:from-sky-400 hover:to-purple-400 text-white rounded-xl font-bold text-sm shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all disabled:opacity-50">
+                    <button (click)="videoUploadInput.click()" [disabled]="isUploadingVideo" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-sky-400 hover:to-purple-400 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all disabled:opacity-50">
                       <span class="material-symbols-outlined">{{ isUploadingVideo ? 'sync' : 'upload' }}</span>
                       {{ isUploadingVideo ? 'Subiendo...' : 'Subir Video (Admin)' }}
                     </button>
@@ -178,7 +178,7 @@
             [class.text-sky-400]="activeTab === 'chat'"
             [class.border-b-2]="activeTab === 'chat'"
             class="pb-4 text-sm font-bold transition-all border-sky-400 hover:text-white uppercase tracking-wider flex items-center gap-2">
-            IA Chat Bot <span class="px-1.5 py-0.5 rounded bg-sky-500/20 text-[9px] text-sky-400">BETA</span>
+            IA Chat Bot <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[9px] text-sky-400">BETA</span>
           </button>
           
           <button (click)="selectTab('transcription')" 
@@ -236,7 +236,7 @@
           <div *ngIf="activeTab === 'chat'" class="animate-in fade-in duration-500 max-w-3xl">
              <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-4">
                 <div class="flex items-center gap-3 mb-6">
-                  <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-sky-400 flex items-center justify-center">
                     <span class="material-symbols-outlined">smart_toy</span>
                   </div>
                   <div>
@@ -251,7 +251,7 @@
                   <ng-container *ngFor="let msg of chatMessages">
                     <!-- Mensaje del usuario -->
                     <div *ngIf="msg.role === 'user'" class="flex justify-end">
-                      <div class="bg-sky-500/20 border border-sky-500/20 rounded-2xl rounded-tr-none p-4 text-sm text-white max-w-[80%]">
+                      <div class="bg-emerald-500/20 border border-emerald-500/20 rounded-2xl rounded-tr-none p-4 text-sm text-white max-w-[80%]">
                         {{ msg.text }}
                       </div>
                     </div>
@@ -267,8 +267,8 @@
                   </div>
                 </div>
                 <div class="relative">
-                  <input [(ngModel)]="aiQuery" (keyup.enter)="askAi()" [disabled]="isAiTyping" placeholder="Pregunta algo sobre esta lección..." class="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-12 text-sm focus:border-sky-500 focus:outline-none transition-all disabled:opacity-50">
-                  <button (click)="askAi()" [disabled]="isAiTyping" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-sky-500 hover:bg-sky-400 disabled:bg-slate-600 text-white flex items-center justify-center transition-all">
+                  <input [(ngModel)]="aiQuery" (keyup.enter)="askAi()" [disabled]="isAiTyping" placeholder="Pregunta algo sobre esta lección..." class="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-12 text-sm focus:border-emerald-500 focus:outline-none transition-all disabled:opacity-50">
+                  <button (click)="askAi()" [disabled]="isAiTyping" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-emerald-500 hover:bg-sky-400 disabled:bg-slate-600 text-white flex items-center justify-center transition-all">
                     <span class="material-symbols-outlined text-[18px]">send</span>
                   </button>
                 </div>
@@ -277,7 +277,7 @@
 
           <!-- Tab: Editor de Código (Captura Referencia) -->
           <div *ngIf="activeTab === 'editor'" class="animate-in fade-in duration-500">
-            <div class="bg-[#0b0f19] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[500px]">
+            <div class="bg-surface-dim border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[500px]">
               <!-- Editor Header -->
               <div class="h-14 bg-white/5 border-b border-white/5 flex items-center justify-between px-6">
                 <div class="flex items-center gap-4">
@@ -291,7 +291,7 @@
                     <span class="text-xs font-mono font-bold">main.py</span>
                   </div>
                 </div>
-                <button (click)="runCode()" [disabled]="isExecutingCode" class="px-4 py-2 bg-sky-500 hover:bg-sky-400 disabled:bg-slate-700 text-white rounded-lg text-xs font-bold flex items-center gap-2 transition-all">
+                <button (click)="runCode()" [disabled]="isExecutingCode" class="px-4 py-2 bg-emerald-500 hover:bg-sky-400 disabled:bg-slate-700 text-white rounded-lg text-xs font-bold flex items-center gap-2 transition-all">
                   <span class="material-symbols-outlined text-[16px]">{{ isExecutingCode ? 'sync' : 'play_arrow' }}</span>
                   {{ isExecutingCode ? 'Ejecutando...' : 'Ejecutar código' }}
                 </button>
@@ -317,7 +317,7 @@
 
           <!-- Tab: Transcripción (REAL) -->
           <div *ngIf="activeTab === 'transcription'" class="animate-in fade-in duration-500">
-            <div *ngIf="transcriptionData" class="bg-[#0b0f19] border border-white/10 rounded-2xl p-8 shadow-xl max-h-[600px] overflow-y-auto custom-scrollbar">
+            <div *ngIf="transcriptionData" class="bg-surface-dim border border-white/10 rounded-2xl p-8 shadow-xl max-h-[600px] overflow-y-auto custom-scrollbar">
               <div class="flex items-center gap-3 mb-8 pb-4 border-b border-white/5">
                 <span class="material-symbols-outlined text-sky-400">closed_caption</span>
                 <h3 class="text-xl font-bold font-space">Transcripción Oficial</h3>
@@ -346,7 +346,7 @@
           <div *ngIf="activeTab === 'summary'" class="animate-in fade-in duration-500">
             <div *ngIf="summaryData" class="space-y-8">
               
-              <div class="bg-gradient-to-br from-purple-900/20 to-[#0b0f19] border border-purple-500/20 rounded-3xl p-8 shadow-xl relative overflow-hidden">
+              <div class="bg-gradient-to-br from-amber-900/20 to-surface-dim border border-amber-500/20 rounded-3xl p-8 shadow-xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-8 opacity-10">
                   <span class="material-symbols-outlined text-9xl">auto_awesome</span>
                 </div>
@@ -356,7 +356,7 @@
                       <span class="material-symbols-outlined">menu_book</span>
                       Resumen Ejecutivo
                     </h3>
-                    <button *ngIf="isAdmin" (click)="regenerateSummary()" class="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 border border-purple-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                    <button *ngIf="isAdmin" (click)="regenerateSummary()" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/40 text-purple-300 border border-amber-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
                       <span class="material-symbols-outlined text-[14px]">autorenew</span> Regenerar
                     </button>
                   </div>
@@ -364,14 +364,14 @@
                 </div>
               </div>
 
-              <div class="bg-[#0b0f19] border border-white/10 rounded-3xl p-8 shadow-xl">
+              <div class="bg-surface-dim border border-white/10 rounded-3xl p-8 shadow-xl">
                 <h3 class="text-xl font-bold font-space text-sky-400 mb-6 flex items-center gap-3">
                   <span class="material-symbols-outlined">lightbulb</span>
                   Puntos Clave
                 </h3>
                 <ul class="space-y-4">
                   <li *ngFor="let point of summaryData.key_points" class="flex gap-4 items-start bg-white/5 p-4 rounded-2xl">
-                    <div class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
                       <span class="material-symbols-outlined text-[16px]">check</span>
                     </div>
                     <span class="text-slate-300 leading-relaxed">{{ point }}</span>
@@ -414,7 +414,7 @@
               </div>
 
               <div class="space-y-8">
-                <div *ngFor="let q of quizData; let i = index" class="bg-[#0b0f19] border border-white/10 rounded-3xl p-8 shadow-xl relative overflow-hidden transition-all duration-300"
+                <div *ngFor="let q of quizData; let i = index" class="bg-surface-dim border border-white/10 rounded-3xl p-8 shadow-xl relative overflow-hidden transition-all duration-300"
                      [ngClass]="{'border-emerald-500/50 shadow-emerald-500/10': quizSubmitted[q.id] && isQuizAnswerCorrect(q.id),
                                  'border-red-500/50 shadow-red-500/10': quizSubmitted[q.id] && !isQuizAnswerCorrect(q.id)}">
                   
@@ -432,7 +432,7 @@
                          class="p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-4"
                          [ngClass]="{
                            'border-white/10 bg-white/5 hover:bg-white/10': !quizSubmitted[q.id] && quizAnswers[q.id] !== optIdx,
-                           'border-sky-500 bg-sky-500/10 text-white': !quizSubmitted[q.id] && quizAnswers[q.id] === optIdx,
+                           'border-emerald-500 bg-emerald-500/10 text-white': !quizSubmitted[q.id] && quizAnswers[q.id] === optIdx,
                            'border-emerald-500 bg-emerald-500/10 text-emerald-100': quizSubmitted[q.id] && optIdx === q.correct_option,
                            'border-red-500 bg-red-500/10 text-red-100': quizSubmitted[q.id] && quizAnswers[q.id] === optIdx && optIdx !== q.correct_option,
                            'border-white/5 bg-black/40 opacity-50': quizSubmitted[q.id] && quizAnswers[q.id] !== optIdx && optIdx !== q.correct_option
@@ -442,11 +442,11 @@
                       <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors"
                            [ngClass]="{
                              'border-slate-600': quizAnswers[q.id] !== optIdx && !quizSubmitted[q.id],
-                             'border-sky-500': quizAnswers[q.id] === optIdx && !quizSubmitted[q.id],
+                             'border-emerald-500': quizAnswers[q.id] === optIdx && !quizSubmitted[q.id],
                              'border-emerald-500 bg-emerald-500': quizSubmitted[q.id] && optIdx === q.correct_option,
                              'border-red-500 bg-red-500': quizSubmitted[q.id] && quizAnswers[q.id] === optIdx && optIdx !== q.correct_option
                            }">
-                        <div *ngIf="quizAnswers[q.id] === optIdx && !quizSubmitted[q.id]" class="w-2.5 h-2.5 rounded-full bg-sky-500"></div>
+                        <div *ngIf="quizAnswers[q.id] === optIdx && !quizSubmitted[q.id]" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
                         <span *ngIf="quizSubmitted[q.id] && optIdx === q.correct_option" class="material-symbols-outlined text-[14px] text-white font-bold">check</span>
                         <span *ngIf="quizSubmitted[q.id] && quizAnswers[q.id] === optIdx && optIdx !== q.correct_option" class="material-symbols-outlined text-[14px] text-white font-bold">close</span>
                       </div>
@@ -502,7 +502,7 @@
     </div>
 
     <!-- SIDEBAR DE CONTENIDO (Derecha) -->
-    <aside class="w-96 border-l border-white/5 bg-[#0b0f19]/50 backdrop-blur-3xl overflow-y-auto hidden xl:block">
+    <aside class="w-96 border-l border-white/5 bg-surface-dim/50 backdrop-blur-3xl overflow-y-auto hidden xl:block">
       <div class="p-8">
         <div class="mb-10">
           <div class="flex items-center justify-between mb-4">
@@ -510,7 +510,7 @@
             <span class="text-xs text-sky-400 font-bold">{{ course.progress_percent || 0 }}% completado</span>
           </div>
           <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-sky-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.3)] transition-all duration-1000" [style.width.%]="course.progress_percent || 0"></div>
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.3)] transition-all duration-1000" [style.width.%]="course.progress_percent || 0"></div>
           </div>
         </div>
 
@@ -525,11 +525,11 @@
               <div *ngFor="let lesson of section.lessons; let L = index" 
                 (click)="selectLesson(lesson)"
                 class="group p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden"
-                [ngClass]="lesson.active ? 'bg-sky-500/10 border-sky-500/40 shadow-[0_4px_20px_rgba(14,165,233,0.1)]' : 'bg-white/5 border-transparent hover:bg-white/10'">
+                [ngClass]="lesson.active ? 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_4px_20px_rgba(14,165,233,0.1)]' : 'bg-white/5 border-transparent hover:bg-white/10'">
                 
                 <div class="flex items-center gap-4 relative z-10">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
-                    [ngClass]="lesson.active ? 'bg-sky-500 text-white' : (lesson.is_completed ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/5 text-slate-500 group-hover:bg-sky-500/20 group-hover:text-sky-400')">
+                    [ngClass]="lesson.active ? 'bg-emerald-500 text-white' : (lesson.is_completed ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/5 text-slate-500 group-hover:bg-emerald-500/20 group-hover:text-sky-400')">
                     <span class="material-symbols-outlined text-[20px]">{{ lesson.active ? 'play_arrow' : (lesson.is_completed ? 'check' : 'play_circle') }}</span>
                   </div>
                   <div>
@@ -538,7 +538,7 @@
                   </div>
                 </div>
                 
-                <div *ngIf="lesson.active" class="absolute right-0 top-0 bottom-0 w-1 bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+                <div *ngIf="lesson.active" class="absolute right-0 top-0 bottom-0 w-1 bg-emerald-500 shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
               </div>
             </div>
           </div>
@@ -551,8 +551,8 @@
   <!-- FLOATING AI WIDGET (Bottom Right) -->
   <div *ngIf="course.is_enrolled" class="fixed bottom-8 right-8 z-[100] group">
     <div class="absolute bottom-full right-0 mb-6 w-80 scale-0 group-hover:scale-100 origin-bottom-right transition-all duration-300 opacity-0 group-hover:opacity-100">
-        <div class="bg-[#0b0f19] border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl">
-           <div class="p-4 bg-gradient-to-r from-sky-500/20 to-purple-500/20 border-b border-white/10 flex items-center justify-between">
+        <div class="bg-surface-dim border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl">
+           <div class="p-4 bg-gradient-to-r from-emerald-500/20 to-amber-500/20 border-b border-white/10 flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span class="text-xs font-bold">Flemy AI Tutor</span>
@@ -566,11 +566,11 @@
            </div>
            <div class="p-3 bg-black/40 border-t border-white/5 flex items-center gap-2">
               <input type="text" placeholder="Escribe tu duda..." class="flex-1 bg-transparent text-[11px] border-none focus:ring-0 focus:outline-none">
-              <span class="material-symbols-outlined text-sky-500 cursor-pointer text-[18px]">send</span>
+              <span class="material-symbols-outlined text-emerald-500 cursor-pointer text-[18px]">send</span>
            </div>
         </div>
     </div>
-    <button class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-purple-500 text-white flex items-center justify-center shadow-[0_0_20px_rgba(14,165,233,0.4)] hover:scale-110 transition-transform">
+    <button class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-amber-500 text-white flex items-center justify-center shadow-[0_0_20px_rgba(14,165,233,0.4)] hover:scale-110 transition-transform">
       <span class="material-symbols-outlined text-2xl">smart_toy</span>
     </button>
   </div>

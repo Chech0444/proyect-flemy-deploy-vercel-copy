@@ -70,7 +70,7 @@ textarea {
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(14, 165, 233, 0.3); /* sky-500/30 */
+  background: rgba(14, 165, 233, 0.3); /* emerald-500/30 */
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
