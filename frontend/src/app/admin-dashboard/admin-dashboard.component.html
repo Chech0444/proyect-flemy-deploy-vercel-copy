@@ -203,7 +203,7 @@
               <div class="donut-container">
                 <svg class="donut-svg" viewBox="0 0 36 36">
                   <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3.8"/>
-                  <path *ngIf="courseStats" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0ea5e9" stroke-width="3.8" [attr.stroke-dasharray]="(courseStats.published / (courseStats.total || 1)) * 100 + ', 100'"/>
+                  <path *ngIf="courseStats" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" stroke-width="3.8" [attr.stroke-dasharray]="(courseStats.published / (courseStats.total || 1)) * 100 + ', 100'"/>
                   <path *ngIf="courseStats" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#10b981" stroke-width="3.8" [attr.stroke-dasharray]="(courseStats.draft / (courseStats.total || 1)) * 100 + ', 100'" [attr.stroke-dashoffset]="'-' + ((courseStats.published / (courseStats.total || 1)) * 100)"/>
                 </svg>
                 <div class="donut-center">
@@ -213,7 +213,7 @@
               </div>
               <div class="donut-legend">
                 <div class="legend-item">
-                  <span class="legend-dot" style="background:#0ea5e9"></span>
+                  <span class="legend-dot" style="background:#10b981"></span>
                   <span class="legend-label">Publicados</span>
                   <span class="legend-value">{{ courseStats ? ((courseStats.published / (courseStats.total || 1)) * 100 | number:'1.0-0') + '%' : '0%' }}</span>
                 </div>
@@ -239,7 +239,7 @@
               <div class="activity-grid" *ngIf="activityData.length > 0">
                 <div class="activity-bar-group" *ngFor="let val of activityData; let i = index">
                   <div class="activity-bar" [style.height.%]="(val / 27) * 100" 
-                       [style.background]="val > 20 ? '#0ea5e9' : val > 10 ? '#0ea5e980' : '#0ea5e930'">
+                       [style.background]="val > 20 ? '#10b981' : val > 10 ? '#10b98180' : '#10b98130'">
                     <div class="activity-tooltip">{{ val }} usuarios</div>
                   </div>
                   <span class="activity-label" *ngIf="i % 5 === 0 || i === 29">{{ i + 1 }}</span>

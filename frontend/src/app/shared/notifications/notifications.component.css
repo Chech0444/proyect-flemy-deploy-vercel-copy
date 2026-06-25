@@ -102,7 +102,7 @@
 .mark-all-btn {
   background: transparent;
   border: none;
-  color: #38bdf8;
+  color: #34d399;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -164,9 +164,9 @@
   flex-shrink: 0;
 }
 
-.notif-icon-wrap.suggestion { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.notif-icon-wrap.suggestion { background: rgba(168, 85, 247, 0.15); color: #fbbf24; }
 .notif-icon-wrap.streak { background: rgba(234, 179, 8, 0.15); color: #facc15; }
-.notif-icon-wrap.reminder { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+.notif-icon-wrap.reminder { background: rgba(14, 165, 233, 0.15); color: #34d399; }
 .notif-icon-wrap.system { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
 
 .notif-content {
@@ -202,7 +202,7 @@
 .dot {
   width: 8px;
   height: 8px;
-  background-color: #38bdf8;
+  background-color: #34d399;
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
 }
