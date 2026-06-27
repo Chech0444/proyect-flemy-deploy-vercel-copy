@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { NotificationService } from '../shared/notification.service';
@@ -9,7 +10,7 @@ import { NotificationService } from '../shared/notification.service';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, TopbarComponent, FormsModule],
+  imports: [CommonModule, RouterModule, TopbarComponent, FormsModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
