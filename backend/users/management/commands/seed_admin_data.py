@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -28,7 +30,7 @@ class Command(BaseCommand):
         if admin_password:
             admin.set_password(admin_password)
         else:
-            admin.set_password(user_model.objects.make_random_password())
+            admin.set_password(secrets.token_urlsafe(24))
         admin.save()
 
         premium_user, _ = user_model.objects.get_or_create(
@@ -42,7 +44,7 @@ class Command(BaseCommand):
                 "study_streak": 5,
             },
         )
-        premium_user.set_password(user_model.objects.make_random_password())
+        premium_user.set_password(secrets.token_urlsafe(24))
         premium_user.save()
 
         free_user, _ = user_model.objects.get_or_create(
@@ -56,7 +58,7 @@ class Command(BaseCommand):
                 "study_streak": 2,
             },
         )
-        free_user.set_password(user_model.objects.make_random_password())
+        free_user.set_password(secrets.token_urlsafe(24))
         free_user.save()
 
         python_course, _ = Course.objects.get_or_create(
