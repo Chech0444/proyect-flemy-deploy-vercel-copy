@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 // Importaciones directas (como las que ya tienes)
+import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -18,7 +19,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { CallbackComponent } from './auth/callback/callback.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: LandingComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: Register },
