@@ -28,7 +28,7 @@
         </p>
         <div class="hero-actions">
           <a routerLink="/register" class="btn-primary">Comenzar gratis</a>
-          <a (click)="scrollTo('features')" class="btn-secondary">Saber más</a>
+          <a (click)="scrollTo('problem')" class="btn-secondary">Saber más</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -42,48 +42,70 @@
       </div>
     </section>
 
-    <!-- FEATURES -->
-    <section id="features" class="features">
-      <div class="features-body">
-        <div class="features-intro">
-          <h2 class="features-title">
-            Construido para aprender de verdad.
-          </h2>
-          <p class="features-desc">
-            No es una plataforma más. Cada pieza está pensada para que entiendas,
-            practiques y avances sin fricción.
+    <!-- PROBLEM -->
+    <section id="problem" class="problem">
+      <div class="problem-body">
+        <div class="problem-text">
+          <span class="label">El problema</span>
+          <h2 class="problem-title">Ver no es aprender.</h2>
+          <p class="problem-desc">
+            La mayoría de plataformas se limitan a reproducir video. Ves, escuchas,
+            y cuando terminas no sabes si realmente entendiste. No hay quien te
+            pregunte, no hay quien te responda, no hay quien te guíe.
+          </p>
+          <p class="problem-desc">
+            Los estudios de la OCDE lo confirman: el aprendizaje digital funciona
+            cuando hay evaluación continua y retroalimentación inmediata. Sin eso,
+            el video es solo entretenimiento.
           </p>
         </div>
-        <div class="features-list">
-          <div class="feat">
-            <div class="feat-num">01</div>
-            <div class="feat-content">
-              <h3 class="feat-title">Un tutor que responde</h3>
-              <p class="feat-desc">
-                No esperes a que termine un video. Pregunta lo que necesites
-                y recibe una respuesta clara al instante.
-              </p>
-            </div>
+        <div class="problem-stats">
+          <div class="stat">
+            <span class="stat-value">70%</span>
+            <span class="stat-label">de los estudiantes abandonan cursos solo con video</span>
           </div>
-          <div class="feat">
-            <div class="feat-num">02</div>
-            <div class="feat-content">
-              <h3 class="feat-title">Rutas que sí funcionan</h3>
-              <p class="feat-desc">
-                Desde tu primer script hasta tu primer proyecto profesional.
-                El orden importa, y nosotros lo cuidamos.
-              </p>
-            </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">más retención con evaluación y práctica activa</span>
           </div>
-          <div class="feat">
-            <div class="feat-num">03</div>
-            <div class="feat-content">
-              <h3 class="feat-title">Progreso que se ve</h3>
-              <p class="feat-desc">
-                Cada lección completada suma. Cada racha cuenta.
-                Sabes exactamente dónde estás y hacia dónde vas.
-              </p>
-            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- SOLUTION -->
+    <section id="solution" class="solution">
+      <div class="solution-body">
+        <div class="solution-intro">
+          <span class="label">La solución</span>
+          <h2 class="solution-title">IA que transforma cada video en una clase interactiva.</h2>
+          <p class="solution-desc">
+            No reemplazamos al creador. Le damos herramientas automáticas para
+            que sus cursos cobren vida sin trabajo extra.
+          </p>
+        </div>
+        <div class="solution-grid">
+          <div class="s-card">
+            <div class="s-card-num">01</div>
+            <h3 class="s-card-title">Transcripción automática</h3>
+            <p class="s-card-desc">Cada video se transcribe al instante. El estudiante puede leer, buscar y repasar sin tener que escuchar todo de nuevo.</p>
+          </div>
+          <div class="s-card">
+            <div class="s-card-num">02</div>
+            <h3 class="s-card-title">Resúmenes estructurados</h3>
+            <p class="s-card-desc">La IA sintetiza los conceptos clave de cada lección en un resumen claro. Ideal para repasar antes de un examen o proyecto.</p>
+          </div>
+          <div class="s-card">
+            <div class="s-card-num">03</div>
+            <h3 class="s-card-title">Evaluaciones progresivas</h3>
+            <p class="s-card-desc">Después de cada video, un cuestionario generado por IA mide qué tanto entendiste. Sin esfuerzo para el creador del curso.</p>
+          </div>
+          <div class="s-card">
+            <div class="s-card-num">04</div>
+            <h3 class="s-card-title">Tutor disponible 24/7</h3>
+            <p class="s-card-desc">Un asistente inteligente responde dudas al instante, explica conceptos y da feedback en tiempo real durante todo el curso.</p>
           </div>
         </div>
       </div>
@@ -104,24 +126,55 @@
             <div class="how-line"></div>
             <div class="how-step">
               <span class="how-dot"></span>
-              <span class="how-label">Eliges tu ruta</span>
+              <span class="how-label">Eliges un curso</span>
             </div>
             <div class="how-line"></div>
             <div class="how-step">
               <span class="how-dot"></span>
-              <span class="how-label">Aprendes con IA</span>
+              <span class="how-label">Cada video incluye</span>
+              <div class="how-step-sub">
+                <span>Transcripción</span>
+                <span>Resumen IA</span>
+                <span>Quiz</span>
+                <span>Tutor</span>
+              </div>
             </div>
           </div>
         </div>
         <div class="how-text">
           <h2 class="how-title">
-            Empieza en tres pasos.
+            Así funciona.
           </h2>
           <p class="how-desc">
             Sin configuración complicada. Sin procesos eternos.
-            Crea tu cuenta, elige lo que quieres aprender y deja que la IA te guíe.
+            Crea tu cuenta, elige lo que quieres aprender, y cada video
+            viene con transcripción, resumen, cuestionario y un tutor
+            que resuelve tus dudas al instante.
           </p>
           <a routerLink="/register" class="btn-primary">Crear cuenta gratis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- FOR WHOM -->
+    <section class="for">
+      <div class="for-body">
+        <div class="for-intro">
+          <span class="label">Para quién es</span>
+          <h2 class="for-title">Dos perfiles, un solo objetivo.</h2>
+        </div>
+        <div class="for-grid">
+          <div class="for-card">
+            <h3 class="for-card-title">Estudiantes</h3>
+            <p class="for-card-desc">Que quieren aprender programación con un método que no los deje solos. Con alguien que les pregunte si entendieron, que les resuma lo importante y que esté ahí cuando tengan dudas.</p>
+          </div>
+          <div class="for-card">
+            <h3 class="for-card-title">Creadores de contenido</h3>
+            <p class="for-card-desc">Que quieren ofrecer cursos completos sin tener que invertir horas extras en transcripciones, resúmenes y cuestionarios. La IA se encarga de eso.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -133,10 +186,10 @@
     <section class="cta">
       <div class="cta-body">
         <h2 class="cta-title">
-          ¿Listo para aprender distinto?
+          Aprender no debería ser pasivo.
         </h2>
         <p class="cta-desc">
-          Únete y descubre cómo la inteligencia artificial puede acelerar tu camino en tecnología.
+          Únete y descubre cómo la inteligencia artificial puede transformar tu forma de aprender.
         </p>
         <a routerLink="/register" class="btn-primary">Comenzar ahora</a>
       </div>
