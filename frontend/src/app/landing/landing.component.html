@@ -1,212 +1,413 @@
-<div class="page">
+<div class="landing">
 
-  <nav class="nav">
-    <div class="nav-body">
-      <div class="nav-start">
-        <img src="logo.jpg" alt="" class="nav-mark">
-        <span class="nav-name">Flemy</span>
-      </div>
-      <div class="nav-end">
-        <a routerLink="/login" class="nav-link">Iniciar sesión</a>
-        <a routerLink="/register" class="nav-cta">Empezar</a>
+  <!-- ═══════════════ NAVIGATION ═══════════════ -->
+  <nav class="nav" role="navigation" aria-label="Navegación principal">
+    <div class="nav__inner">
+      <a routerLink="/" class="nav__brand" aria-label="Flemy — Inicio">
+        <svg class="nav__logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+          <path d="M10 10h12v3H13.5v3H20v3h-6.5v5H10V10z" fill="#fff"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="nav__wordmark">Flemy</span>
+      </a>
+
+      <div class="nav__actions">
+        <a routerLink="/login" class="nav__link">Ingresar</a>
+        <a routerLink="/register" class="nav__cta">
+          Empezar gratis
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
   </nav>
 
+
   <main>
 
-    <!-- HERO -->
+    <!-- ═══════════════ HERO ═══════════════ -->
     <section class="hero">
-      <div class="hero-body">
-        <h1 class="hero-title">
-          Aprende a programar<br>
-          <span class="hero-em">con un tutor que te entiende.</span>
+      <div class="hero__content" data-reveal>
+        <div class="hero__badge" data-reveal data-reveal-delay="100">
+          <span class="hero__badge-dot"></span>
+          Plataforma con IA integrada
+        </div>
+
+        <h1 class="hero__title" #heroHeading data-reveal data-reveal-delay="200">
+          Cada video se convierte en<br>
+          <span class="hero__title-accent">una clase que te entiende.</span>
         </h1>
-        <p class="hero-sub">
-          Cursos interactivos con inteligencia artificial que se adapta a tu ritmo.
-          Sin videos genéricos. Sin ritmo impuesto.
+
+        <p class="hero__subtitle" data-reveal data-reveal-delay="350">
+          Flemy usa inteligencia artificial para generar transcripciones,
+          resúmenes y evaluaciones automáticas a partir de cada video.
+          Tus estudiantes aprenden más. Tú no trabajas más.
         </p>
-        <div class="hero-actions">
-          <a routerLink="/register" class="btn-primary">Comenzar gratis</a>
-          <a (click)="scrollTo('problem')" class="btn-secondary">Saber más</a>
+
+        <div class="hero__actions" data-reveal data-reveal-delay="500">
+          <a routerLink="/register" class="btn btn--primary" id="hero-cta-register">
+            Crear cuenta gratis
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <button class="btn btn--ghost" (click)="scrollTo('how-it-works')" id="hero-cta-learn-more">
+            Cómo funciona
+          </button>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="hero-block">
-          <div class="block-dot"></div>
-          <div class="block-line block-line--1"></div>
-          <div class="block-line block-line--2"></div>
-          <div class="block-line block-line--3"></div>
-          <div class="block-cursor"></div>
-        </div>
-      </div>
-    </section>
 
-    <!-- PROBLEM -->
-    <section id="problem" class="problem">
-      <div class="problem-body">
-        <div class="problem-text">
-          <span class="label">El problema</span>
-          <h2 class="problem-title">Ver no es aprender.</h2>
-          <p class="problem-desc">
-            La mayoría de plataformas se limitan a reproducir video. Ves, escuchas,
-            y cuando terminas no sabes si realmente entendiste. No hay quien te
-            pregunte, no hay quien te responda, no hay quien te guíe.
-          </p>
-          <p class="problem-desc">
-            Los estudios de la OCDE lo confirman: el aprendizaje digital funciona
-            cuando hay evaluación continua y retroalimentación inmediata. Sin eso,
-            el video es solo entretenimiento.
-          </p>
-        </div>
-        <div class="problem-stats">
-          <div class="stat">
-            <span class="stat-value">70%</span>
-            <span class="stat-label">de los estudiantes abandonan cursos solo con video</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">3x</span>
-            <span class="stat-label">más retención con evaluación y práctica activa</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="divider"></div>
-
-    <!-- SOLUTION -->
-    <section id="solution" class="solution">
-      <div class="solution-body">
-        <div class="solution-intro">
-          <span class="label">La solución</span>
-          <h2 class="solution-title">IA que transforma cada video en una clase interactiva.</h2>
-          <p class="solution-desc">
-            No reemplazamos al creador. Le damos herramientas automáticas para
-            que sus cursos cobren vida sin trabajo extra.
-          </p>
-        </div>
-        <div class="solution-grid">
-          <div class="s-card">
-            <div class="s-card-num">01</div>
-            <h3 class="s-card-title">Transcripción automática</h3>
-            <p class="s-card-desc">Cada video se transcribe al instante. El estudiante puede leer, buscar y repasar sin tener que escuchar todo de nuevo.</p>
-          </div>
-          <div class="s-card">
-            <div class="s-card-num">02</div>
-            <h3 class="s-card-title">Resúmenes estructurados</h3>
-            <p class="s-card-desc">La IA sintetiza los conceptos clave de cada lección en un resumen claro. Ideal para repasar antes de un examen o proyecto.</p>
-          </div>
-          <div class="s-card">
-            <div class="s-card-num">03</div>
-            <h3 class="s-card-title">Evaluaciones progresivas</h3>
-            <p class="s-card-desc">Después de cada video, un cuestionario generado por IA mide qué tanto entendiste. Sin esfuerzo para el creador del curso.</p>
-          </div>
-          <div class="s-card">
-            <div class="s-card-num">04</div>
-            <h3 class="s-card-title">Tutor disponible 24/7</h3>
-            <p class="s-card-desc">Un asistente inteligente responde dudas al instante, explica conceptos y da feedback en tiempo real durante todo el curso.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="divider"></div>
-
-    <!-- HOW -->
-    <section class="how">
-      <div class="how-body">
-        <div class="how-visual">
-          <div class="how-steps">
-            <div class="how-step">
-              <span class="how-dot"></span>
-              <span class="how-label">Creas tu cuenta</span>
+      <!-- Hero Visual: Abstract AI Processing Animation -->
+      <div class="hero__visual" data-reveal data-reveal-delay="400">
+        <div class="hero__canvas">
+          <!-- Simulated code/content processing -->
+          <div class="hero__processor">
+            <div class="processor__header">
+              <div class="processor__dots">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="processor__label">video_leccion_03.mp4</span>
             </div>
-            <div class="how-line"></div>
-            <div class="how-step">
-              <span class="how-dot"></span>
-              <span class="how-label">Eliges un curso</span>
-            </div>
-            <div class="how-line"></div>
-            <div class="how-step">
-              <span class="how-dot"></span>
-              <span class="how-label">Cada video incluye</span>
-              <div class="how-step-sub">
-                <span>Transcripción</span>
-                <span>Resumen IA</span>
-                <span>Quiz</span>
-                <span>Tutor</span>
+            <div class="processor__body">
+              <div class="processor__input">
+                <div class="processor__wave">
+                  <span style="--i:0"></span>
+                  <span style="--i:1"></span>
+                  <span style="--i:2"></span>
+                  <span style="--i:3"></span>
+                  <span style="--i:4"></span>
+                  <span style="--i:5"></span>
+                  <span style="--i:6"></span>
+                  <span style="--i:7"></span>
+                  <span style="--i:8"></span>
+                  <span style="--i:9"></span>
+                  <span style="--i:10"></span>
+                  <span style="--i:11"></span>
+                  <span style="--i:12"></span>
+                  <span style="--i:13"></span>
+                  <span style="--i:14"></span>
+                  <span style="--i:15"></span>
+                  <span style="--i:16"></span>
+                  <span style="--i:17"></span>
+                  <span style="--i:18"></span>
+                  <span style="--i:19"></span>
+                </div>
+              </div>
+              <div class="processor__arrow">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 4v12m0 0l4-4m-4 4l-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="processor__outputs">
+                <div class="processor__output processor__output--1">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  Transcripción
+                </div>
+                <div class="processor__output processor__output--2">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Resumen
+                </div>
+                <div class="processor__output processor__output--3">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8l1.5 1.5 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Quiz
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="how-text">
-          <h2 class="how-title">
-            Así funciona.
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ SOCIAL PROOF BAR ═══════════════ -->
+    <section class="proof" aria-label="Indicadores de confianza">
+      <div class="proof__inner" data-reveal>
+        <div class="proof__item">
+          <span class="proof__value">IA</span>
+          <span class="proof__label">Procesamiento automático</span>
+        </div>
+        <div class="proof__separator"></div>
+        <div class="proof__item">
+          <span class="proof__value">24/7</span>
+          <span class="proof__label">Tutor disponible siempre</span>
+        </div>
+        <div class="proof__separator"></div>
+        <div class="proof__item">
+          <span class="proof__value">0 config</span>
+          <span class="proof__label">Sube el video y listo</span>
+        </div>
+        <div class="proof__separator"></div>
+        <div class="proof__item">
+          <span class="proof__value">3x</span>
+          <span class="proof__label">Más retención que solo video</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ PROBLEM ═══════════════ -->
+    <section class="problem" id="problem">
+      <div class="problem__inner">
+        <div class="problem__text" data-reveal>
+          <span class="overline">El problema real</span>
+          <h2 class="section-heading">
+            Ver un video no es aprender.
           </h2>
-          <p class="how-desc">
-            Sin configuración complicada. Sin procesos eternos.
-            Crea tu cuenta, elige lo que quieres aprender, y cada video
-            viene con transcripción, resumen, cuestionario y un tutor
-            que resuelve tus dudas al instante.
+          <p class="section-body">
+            Las plataformas actuales reprodujeron el modelo del aula pasiva en formato digital.
+            Un video de 40 minutos sin pausas, sin preguntas, sin retroalimentación.
           </p>
-          <a routerLink="/register" class="btn-primary">Crear cuenta gratis</a>
+          <p class="section-body">
+            El resultado: el 70% de los estudiantes abandona antes de completar un curso online.
+            No porque el contenido sea malo, sino porque nadie verifica si realmente entendieron.
+          </p>
         </div>
-      </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="divider"></div>
-
-    <!-- FOR WHOM -->
-    <section class="for">
-      <div class="for-body">
-        <div class="for-intro">
-          <span class="label">Para quién es</span>
-          <h2 class="for-title">Dos perfiles, un solo objetivo.</h2>
-        </div>
-        <div class="for-grid">
-          <div class="for-card">
-            <h3 class="for-card-title">Estudiantes</h3>
-            <p class="for-card-desc">Que quieren aprender programación con un método que no los deje solos. Con alguien que les pregunte si entendieron, que les resuma lo importante y que esté ahí cuando tengan dudas.</p>
+        <div class="problem__evidence" data-reveal data-reveal-delay="200">
+          <div class="evidence-card">
+            <div class="evidence-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <span class="evidence-card__stat">70%</span>
+            <span class="evidence-card__desc">abandona cursos basados únicamente en video</span>
           </div>
-          <div class="for-card">
-            <h3 class="for-card-title">Creadores de contenido</h3>
-            <p class="for-card-desc">Que quieren ofrecer cursos completos sin tener que invertir horas extras en transcripciones, resúmenes y cuestionarios. La IA se encarga de eso.</p>
+          <div class="evidence-card" data-reveal data-reveal-delay="350">
+            <div class="evidence-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20l4-4h3l5-5 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <span class="evidence-card__stat">3x</span>
+            <span class="evidence-card__desc">más retención con evaluación continua y práctica activa</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- DIVIDER -->
-    <div class="divider"></div>
 
-    <!-- CTA -->
+    <!-- ═══════════════ SOLUTION ═══════════════ -->
+    <section class="solution" id="how-it-works">
+      <div class="solution__inner">
+        <div class="solution__header" data-reveal>
+          <span class="overline">Cómo lo resuelve Flemy</span>
+          <h2 class="section-heading">
+            Cada video genera, automáticamente, todo lo que un estudiante necesita.
+          </h2>
+        </div>
+
+        <div class="solution__grid">
+          <article class="feature-card" data-reveal data-reveal-delay="0">
+            <div class="feature-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16M4 10h12M4 14h16M4 18h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Transcripción automática</h3>
+            <p class="feature-card__desc">
+              Whisper procesa el audio y genera un texto buscable en segundos.
+              El estudiante lee, repasa y encuentra lo que necesita sin rebobinar.
+            </p>
+          </article>
+
+          <article class="feature-card" data-reveal data-reveal-delay="100">
+            <div class="feature-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 9h8M8 12h5M8 15h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Resúmenes con Gemini</h3>
+            <p class="feature-card__desc">
+              La IA extrae los conceptos clave y los estructura de forma clara.
+              El resumen perfecto para repasar antes de un examen o un proyecto.
+            </p>
+          </article>
+
+          <article class="feature-card" data-reveal data-reveal-delay="200">
+            <div class="feature-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Quizzes por lección</h3>
+            <p class="feature-card__desc">
+              Después de cada video, un cuestionario generado por IA verifica la comprensión.
+              Sin trabajo manual para el creador del curso.
+            </p>
+          </article>
+
+          <article class="feature-card" data-reveal data-reveal-delay="300">
+            <div class="feature-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 12a9 9 0 11-4.22-7.63" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 8v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Tutor IA 24/7</h3>
+            <p class="feature-card__desc">
+              Un asistente que conoce el contenido del curso, responde dudas
+              al instante y da retroalimentación personalizada.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ HOW IT WORKS (FLOW) ═══════════════ -->
+    <section class="flow">
+      <div class="flow__inner">
+        <div class="flow__header" data-reveal>
+          <span class="overline">El proceso</span>
+          <h2 class="section-heading">
+            Tres pasos. Cero fricción.
+          </h2>
+        </div>
+
+        <div class="flow__steps">
+          <div class="flow__step" data-reveal data-reveal-delay="0">
+            <div class="flow__step-number">01</div>
+            <h3 class="flow__step-title">Crea tu cuenta</h3>
+            <p class="flow__step-desc">
+              Regístrate en menos de un minuto. Sin tarjeta, sin compromiso.
+            </p>
+          </div>
+          <div class="flow__connector" data-reveal data-reveal-delay="100">
+            <svg width="40" height="2" viewBox="0 0 40 2" fill="none">
+              <line x1="0" y1="1" x2="40" y2="1" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <div class="flow__step" data-reveal data-reveal-delay="150">
+            <div class="flow__step-number">02</div>
+            <h3 class="flow__step-title">Elige un curso</h3>
+            <p class="flow__step-desc">
+              Explora el catálogo y empieza el que te interese. Cada lección
+              ya viene equipada con herramientas de IA.
+            </p>
+          </div>
+          <div class="flow__connector" data-reveal data-reveal-delay="250">
+            <svg width="40" height="2" viewBox="0 0 40 2" fill="none">
+              <line x1="0" y1="1" x2="40" y2="1" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <div class="flow__step" data-reveal data-reveal-delay="300">
+            <div class="flow__step-number">03</div>
+            <h3 class="flow__step-title">Aprende de verdad</h3>
+            <p class="flow__step-desc">
+              Video + transcripción + resumen + quiz + tutor.
+              Todo automático, todo en un solo lugar.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ AUDIENCE ═══════════════ -->
+    <section class="audience">
+      <div class="audience__inner">
+        <div class="audience__header" data-reveal>
+          <span class="overline">¿Para quién es Flemy?</span>
+          <h2 class="section-heading">
+            Dos perfiles. Un mismo objetivo: que el aprendizaje funcione.
+          </h2>
+        </div>
+
+        <div class="audience__grid">
+          <article class="persona-card" data-reveal data-reveal-delay="0">
+            <div class="persona-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M4 20c0-3.5 3.5-6 8-6s8 2.5 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="persona-card__title">Estudiantes</h3>
+            <p class="persona-card__desc">
+              Personas que quieren aprender programación de forma activa.
+              Con alguien que les pregunte si entendieron, que resuma
+              lo importante y que esté ahí cuando tengan dudas.
+            </p>
+            <ul class="persona-card__list">
+              <li>Retroalimentación inmediata</li>
+              <li>Resúmenes para repasar</li>
+              <li>Tutor disponible siempre</li>
+            </ul>
+          </article>
+
+          <article class="persona-card" data-reveal data-reveal-delay="150">
+            <div class="persona-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="persona-card__title">Creadores de contenido</h3>
+            <p class="persona-card__desc">
+              Educadores que quieren ofrecer una experiencia completa
+              sin invertir horas extra en material complementario.
+              La IA se encarga de transcripciones, resúmenes y cuestionarios.
+            </p>
+            <ul class="persona-card__list">
+              <li>Sube el video, nosotros hacemos el resto</li>
+              <li>Material generado automáticamente</li>
+              <li>Más valor sin más trabajo</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ FINAL CTA ═══════════════ -->
     <section class="cta">
-      <div class="cta-body">
-        <h2 class="cta-title">
+      <div class="cta__inner" data-reveal>
+        <div class="cta__glow"></div>
+        <h2 class="cta__heading">
           Aprender no debería ser pasivo.
         </h2>
-        <p class="cta-desc">
-          Únete y descubre cómo la inteligencia artificial puede transformar tu forma de aprender.
+        <p class="cta__body">
+          Crea tu cuenta y descubre cómo la inteligencia artificial
+          convierte cada video en una experiencia de aprendizaje real.
         </p>
-        <a routerLink="/register" class="btn-primary">Comenzar ahora</a>
+        <a routerLink="/register" class="btn btn--primary btn--lg" id="final-cta-register">
+          Empezar gratis
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </section>
 
   </main>
 
-  <footer class="footer">
-    <div class="footer-body">
-      <div class="footer-start">
-        <span class="footer-name">Flemy</span>
-        <span class="footer-year">&copy; 2026</span>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <svg class="footer__logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="url(#logo-grad-footer)"/>
+          <path d="M10 10h12v3H13.5v3H20v3h-6.5v5H10V10z" fill="#fff"/>
+          <defs>
+            <linearGradient id="logo-grad-footer" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="footer__wordmark">Flemy</span>
       </div>
-      <div class="footer-end">
-        <a routerLink="/login" class="footer-link">Iniciar sesión</a>
-        <a routerLink="/register" class="footer-link">Registrarse</a>
+      <div class="footer__links">
+        <a routerLink="/login" class="footer__link">Ingresar</a>
+        <a routerLink="/register" class="footer__link">Registrarse</a>
+        <a routerLink="/catalog" class="footer__link">Catálogo</a>
       </div>
+      <span class="footer__copy">&copy; 2026 Flemy. Todos los derechos reservados.</span>
     </div>
   </footer>
 
