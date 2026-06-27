@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════
    FLEMY LANDING — DESIGN SYSTEM
-   Identity: Indigo-Violet · Dark · Precise
+   Identity: Emerald-Navy · Dark · Precise
    ══════════════════════════════════════════ */
 
 /* ─── TOKENS ─── */
@@ -13,10 +13,10 @@
   --c-text-primary: #fafafa;
   --c-text-secondary: #a1a1aa;
   --c-text-tertiary: #52525b;
-  --c-accent: #818cf8;
-  --c-accent-dim: #6366f1;
-  --c-accent-glow: rgba(99,102,241,0.15);
-  --c-accent-glow-strong: rgba(99,102,241,0.25);
+  --c-accent: #10b981;
+  --c-accent-dim: #047857;
+  --c-accent-glow: rgba(4,120,87,0.15);
+  --c-accent-glow-strong: rgba(4,120,87,0.25);
 
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
@@ -161,6 +161,8 @@
 .nav__logo {
   width: 28px;
   height: 28px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 .nav__wordmark {
   font-family: var(--font-display);
@@ -225,7 +227,7 @@
   background: var(--c-accent-glow);
   padding: 6px 14px;
   border-radius: 100px;
-  border: 1px solid rgba(99,102,241,0.12);
+  border: 1px solid rgba(4,120,87,0.12);
   margin-bottom: 24px;
   letter-spacing: 0.01em;
 }
@@ -250,7 +252,7 @@
   margin-bottom: 20px;
 }
 .hero__title-accent {
-  background: linear-gradient(135deg, var(--c-accent) 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, var(--c-accent-dim) 0%, #d4a853 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -318,8 +320,8 @@
 }
 .processor__input {
   width: 100%;
-  background: rgba(99,102,241,0.04);
-  border: 1px solid rgba(99,102,241,0.08);
+  background: rgba(4,120,87,0.04);
+  border: 1px solid rgba(4,120,87,0.08);
   border-radius: var(--radius-sm);
   padding: 16px;
   display: flex;
@@ -490,7 +492,7 @@
   transition: border-color 0.3s ease, transform 0.3s var(--ease-out);
 }
 .feature-card:hover {
-  border-color: rgba(99,102,241,0.2);
+  border-color: rgba(4,120,87,0.2);
   transform: translateY(-2px);
 }
 .feature-card__icon {
@@ -711,7 +713,7 @@
   align-items: center;
   gap: 8px;
 }
-.footer__logo { width: 22px; height: 22px; }
+.footer__logo { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; }
 .footer__wordmark {
   font-family: var(--font-display);
   font-size: 0.9rem;
