@@ -29,12 +29,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   brokenImages: Set<string> = new Set();
   
   // Estado de la UI
-  activeTab: 'description' | 'chat' | 'transcription' | 'editor' | 'summary' | 'quiz' = 'description';
-  
-  // Editor de Código
-  codeContent = `# Ejercicio: Implementación de Red Neuronal Básica\nimport numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\n# Inicialización de pesos\ninputs = np.array([0.5, -0.2, 0.1])\nweights = np.array([0.4, 0.7, -0.3])\nbias = 0.1\n\n# Calculando la salida\noutput = sigmoid(np.dot(inputs, weights) + bias)\nprint("Resultado de la activación:", output)`;
-  outputContent = '';
-  isExecutingCode = false;
+  activeTab: 'description' | 'chat' | 'transcription' | 'summary' | 'quiz' = 'description';
 
   // IA Chat
   aiQuery = '';
@@ -468,7 +463,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectTab(tab: 'description' | 'chat' | 'transcription' | 'editor' | 'summary' | 'quiz') {
+  selectTab(tab: 'description' | 'chat' | 'transcription' | 'summary' | 'quiz') {
     this.activeTab = tab;
   }
 
@@ -486,29 +481,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         console.error('No se pudo cargar el historial del chat');
       }
     });
-  }
-
-  runCode() {
-    this.isExecutingCode = true;
-    this.outputContent = 'Ejecutando...';
-    
-    setTimeout(() => {
-      this.http.post<any>(`${environment.apiUrl}/ai/code-feedback/`, {
-        language: 'python',
-        code: this.codeContent
-      }).subscribe({
-        next: (res) => {
-          this.outputContent = `> Resultado de la activación: 0.5841905243301777\n\n[IA FEEDBACK]: ${res.feedback}`;
-          this.isExecutingCode = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.outputContent = '> Resultado de la activación: 0.5841905243301777\n\n[Error al obtener feedback de IA]';
-          this.isExecutingCode = false;
-          this.cdr.detectChanges();
-        }
-      });
-    }, 1500);
   }
 
   goBack() {
