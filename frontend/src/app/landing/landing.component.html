@@ -1,172 +1,159 @@
-<div class="landing">
+<div class="page">
 
-  <!-- ====== NAVBAR ====== -->
-  <nav class="navbar">
-    <div class="nav-inner">
-      <div class="nav-brand">
-        <img src="logo.jpg" alt="Flemy" class="nav-logo">
-        <span>Flemy</span>
+  <nav class="nav">
+    <div class="nav-body">
+      <div class="nav-start">
+        <img src="logo.jpg" alt="" class="nav-mark">
+        <span class="nav-name">Flemy</span>
       </div>
-      <div class="nav-links">
-        <a (click)="scrollTo('features')">Características</a>
-        <a (click)="scrollTo('how')">Cómo funciona</a>
-        <a routerLink="/login" class="nav-btn-outline">Iniciar sesión</a>
-        <a routerLink="/register" class="nav-btn-primary">Comenzar gratis</a>
+      <div class="nav-end">
+        <a routerLink="/login" class="nav-link">Iniciar sesión</a>
+        <a routerLink="/register" class="nav-cta">Empezar</a>
       </div>
     </div>
   </nav>
 
-  <!-- ====== HERO ====== -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-badge">🚀 Educación potenciada por IA</div>
-      <h1 class="hero-title">Aprende programación <span class="hero-highlight">con un tutor IA</span> a tu lado</h1>
-      <p class="hero-subtitle">Cursos interactivos, rutas de aprendizaje personalizadas y un asistente de inteligencia artificial que te guía paso a paso. Todo en una plataforma diseñada para que domines la tecnología.</p>
-      <div class="hero-actions">
-        <a routerLink="/register" class="hero-btn-primary">Empieza a aprender gratis</a>
-        <a (click)="scrollTo('features')" class="hero-btn-secondary">Conoce más</a>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-value">100%</span>
-          <span class="hero-stat-label">Gratuito para empezar</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">IA</span>
-          <span class="hero-stat-label">Tutor inteligente 24/7</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">Cert</span>
-          <span class="hero-stat-label">Certificados al completar</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main>
 
-  <!-- ====== FEATURES ====== -->
-  <section id="features" class="features">
-    <div class="section-header">
-      <span class="section-badge">Características</span>
-      <h2 class="section-title">Todo lo que necesitas para aprender</h2>
-      <p class="section-desc">Una plataforma completa con herramientas impulsadas por inteligencia artificial.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon tutor-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-body">
+        <h1 class="hero-title">
+          Aprende a programar<br>
+          <span class="hero-em">con un tutor que te entiende.</span>
+        </h1>
+        <p class="hero-sub">
+          Cursos interactivos con inteligencia artificial que se adapta a tu ritmo.
+          Sin videos genéricos. Sin ritmo impuesto.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/register" class="btn-primary">Comenzar gratis</a>
+          <a (click)="scrollTo('features')" class="btn-secondary">Saber más</a>
         </div>
-        <h3 class="feature-title">Tutor IA 24/7</h3>
-        <p class="feature-desc">Un asistente inteligente que resuelve tus dudas al instante, explica conceptos y te da feedback en tiempo real.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon courses-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <div class="hero-visual">
+        <div class="hero-block">
+          <div class="block-dot"></div>
+          <div class="block-line block-line--1"></div>
+          <div class="block-line block-line--2"></div>
+          <div class="block-line block-line--3"></div>
+          <div class="block-cursor"></div>
         </div>
-        <h3 class="feature-title">Cursos interactivos</h3>
-        <p class="feature-desc">Lecciones en video, ejercicios prácticos y transcripciones automáticas generadas con IA para cada clase.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon roadmap-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <h3 class="feature-title">Rutas de aprendizaje</h3>
-        <p class="feature-desc">Roadmaps personalizados que te guían desde principiante hasta profesional con una progresión clara.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon cert-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </div>
-        <h3 class="feature-title">Certificaciones</h3>
-        <p class="feature-desc">Obtén certificados al completar cursos y construye tu portafolio profesional con respaldo de IA.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon progress-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <h3 class="feature-title">Progreso visible</h3>
-        <p class="feature-desc">Dashboard con estadísticas, rachas de estudio, XP y seguimiento detallado de tu avance en cada curso.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon quiz-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <h3 class="feature-title">Quizzes con IA</h3>
-        <p class="feature-desc">Evaluaciones inteligentes generadas automáticamente para reforzar lo aprendido en cada lección.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ====== HOW IT WORKS ====== -->
-  <section id="how" class="how">
-    <div class="section-header">
-      <span class="section-badge">Cómo funciona</span>
-      <h2 class="section-title">Tres pasos para empezar</h2>
-      <p class="section-desc">En minutos estarás aprendiendo con inteligencia artificial.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">1</div>
-        <h3 class="step-title">Crea tu cuenta</h3>
-        <p class="step-desc">Regístrate gratis con tu correo, Google o GitHub. Sin tarjeta de crédito.</p>
+    <!-- FEATURES -->
+    <section id="features" class="features">
+      <div class="features-body">
+        <div class="features-intro">
+          <h2 class="features-title">
+            Construido para aprender de verdad.
+          </h2>
+          <p class="features-desc">
+            No es una plataforma más. Cada pieza está pensada para que entiendas,
+            practiques y avances sin fricción.
+          </p>
+        </div>
+        <div class="features-list">
+          <div class="feat">
+            <div class="feat-num">01</div>
+            <div class="feat-content">
+              <h3 class="feat-title">Un tutor que responde</h3>
+              <p class="feat-desc">
+                No esperes a que termine un video. Pregunta lo que necesites
+                y recibe una respuesta clara al instante.
+              </p>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-num">02</div>
+            <div class="feat-content">
+              <h3 class="feat-title">Rutas que sí funcionan</h3>
+              <p class="feat-desc">
+                Desde tu primer script hasta tu primer proyecto profesional.
+                El orden importa, y nosotros lo cuidamos.
+              </p>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-num">03</div>
+            <div class="feat-content">
+              <h3 class="feat-title">Progreso que se ve</h3>
+              <p class="feat-desc">
+                Cada lección completada suma. Cada racha cuenta.
+                Sabes exactamente dónde estás y hacia dónde vas.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="step-connector">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#d4a853" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="step">
-        <div class="step-number">2</div>
-        <h3 class="step-title">Elige tu ruta</h3>
-        <p class="step-desc">Selecciona entre cursos diseñados por expertos o sigue un roadmap completo.</p>
-      </div>
-      <div class="step-connector">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#d4a853" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="step">
-        <div class="step-number">3</div>
-        <h3 class="step-title">Aprende con IA</h3>
-        <p class="step-desc">Estudia a tu ritmo con un tutor virtual que te acompaña 24/7.</p>
-      </div>
-    </div>
-    <div class="how-cta">
-      <a routerLink="/register" class="hero-btn-primary">Crear cuenta gratis</a>
-    </div>
-  </section>
+    </section>
 
-  <!-- ====== CTA FINAL ====== -->
-  <section class="cta">
-    <div class="cta-content">
-      <h2 class="cta-title">¿Listo para transformar tu aprendizaje?</h2>
-      <p class="cta-desc">Únete a Flemy y descubre cómo la inteligencia artificial puede acelerar tu camino en tecnología.</p>
-      <a routerLink="/register" class="cta-btn">Comenzar ahora</a>
-    </div>
-  </section>
+    <!-- DIVIDER -->
+    <div class="divider"></div>
 
-  <!-- ====== FOOTER ====== -->
+    <!-- HOW -->
+    <section class="how">
+      <div class="how-body">
+        <div class="how-visual">
+          <div class="how-steps">
+            <div class="how-step">
+              <span class="how-dot"></span>
+              <span class="how-label">Creas tu cuenta</span>
+            </div>
+            <div class="how-line"></div>
+            <div class="how-step">
+              <span class="how-dot"></span>
+              <span class="how-label">Eliges tu ruta</span>
+            </div>
+            <div class="how-line"></div>
+            <div class="how-step">
+              <span class="how-dot"></span>
+              <span class="how-label">Aprendes con IA</span>
+            </div>
+          </div>
+        </div>
+        <div class="how-text">
+          <h2 class="how-title">
+            Empieza en tres pasos.
+          </h2>
+          <p class="how-desc">
+            Sin configuración complicada. Sin procesos eternos.
+            Crea tu cuenta, elige lo que quieres aprender y deja que la IA te guíe.
+          </p>
+          <a routerLink="/register" class="btn-primary">Crear cuenta gratis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="cta-body">
+        <h2 class="cta-title">
+          ¿Listo para aprender distinto?
+        </h2>
+        <p class="cta-desc">
+          Únete y descubre cómo la inteligencia artificial puede acelerar tu camino en tecnología.
+        </p>
+        <a routerLink="/register" class="btn-primary">Comenzar ahora</a>
+      </div>
+    </section>
+
+  </main>
+
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <img src="logo.jpg" alt="Flemy" class="footer-logo">
-        <span>Flemy</span>
-        <p class="footer-tagline">Educación potenciada por inteligencia artificial.</p>
+    <div class="footer-body">
+      <div class="footer-start">
+        <span class="footer-name">Flemy</span>
+        <span class="footer-year">&copy; 2026</span>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Plataforma</h4>
-          <a routerLink="/catalog">Cursos</a>
-          <a (click)="scrollTo('features')">Características</a>
-          <a routerLink="/roadmap-timeline">Roadmap</a>
-        </div>
-        <div class="footer-col">
-          <h4>Soporte</h4>
-          <a routerLink="/login">Iniciar sesión</a>
-          <a routerLink="/register">Registrarse</a>
-        </div>
+      <div class="footer-end">
+        <a routerLink="/login" class="footer-link">Iniciar sesión</a>
+        <a routerLink="/register" class="footer-link">Registrarse</a>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Flemy. Todos los derechos reservados.</p>
     </div>
   </footer>
 

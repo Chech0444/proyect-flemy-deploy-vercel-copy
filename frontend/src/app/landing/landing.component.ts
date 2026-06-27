@@ -10,7 +10,6 @@ import { RouterLink } from '@angular/router';
 })
 export class LandingComponent {
   scrollTo(id: string) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 }
