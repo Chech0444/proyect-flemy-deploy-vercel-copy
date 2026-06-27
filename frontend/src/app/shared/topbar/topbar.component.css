@@ -56,7 +56,7 @@
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 50%;
-  color: #cbd5e1;
+  color: #b3b3b3;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
@@ -88,7 +88,7 @@
 .username {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #94a3b8;
+  color: #9e9e9e;
 }
 
 .avatar-link {
@@ -99,7 +99,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: block;
-  background: #1e293b;
+  background: #1a1a1a;
 }
 
 .avatar-link:hover {

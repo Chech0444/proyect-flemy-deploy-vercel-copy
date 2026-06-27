@@ -5,7 +5,7 @@
 
 .login-wrapper {
   min-height: 100vh;
-  background-color: #0f1117;
+  background-color: #0d0d0d;
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(20, 30, 80, 0.5) 0%, transparent 50%),
     radial-gradient(circle at 85% 30%, rgba(40, 20, 80, 0.5) 0%, transparent 50%);
@@ -81,7 +81,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #10b981, #6366f1);
+  background: linear-gradient(135deg, #047857, #d4a853);
   box-shadow: 0 0 18px rgba(100, 150, 255, 0.55);
   font-size: 17px;
 }
@@ -94,7 +94,7 @@
 }
 
 .no-account-text {
-  color: #94a3b8;
+  color: #9e9e9e;
 }
 
 .register-btn {
@@ -136,7 +136,7 @@
 }
 
 .login-header p {
-  color: #94a3b8;
+  color: #9e9e9e;
   font-size: 16px;
   margin: 0;
 }
@@ -171,7 +171,7 @@
 .form-group label {
   display: block;
   font-size: 14px;
-  color: #e2e8f0;
+  color: #e0e0e0;
   margin-bottom: 8px;
 }
 
@@ -206,13 +206,13 @@
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #d4a853;
   background: rgba(15, 20, 35, 0.8);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 0 2px rgba(212, 168, 83, 0.2);
 }
 
 .input-wrapper input::placeholder {
-  color: #475569;
+  color: #333333;
 }
 
 .error-msg {
@@ -224,7 +224,7 @@
 }
 
 .success-msg {
-  color: #10b981;
+  color: #047857;
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
@@ -236,14 +236,14 @@
   padding: 14px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #10b981 0%, #6366f1 100%);
+  background: linear-gradient(90deg, #047857 0%, #d4a853 100%);
   color: white;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   margin-top: 10px;
   transition: opacity 0.2s, transform 0.1s;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 14px rgba(212, 168, 83, 0.4);
 }
 
 .submit-btn:hover {
@@ -264,18 +264,18 @@
   margin-top: 60px;
   text-align: center;
   font-size: 12px;
-  color: #64748b;
+  color: #808080;
 }
 
 .login-footer a {
-  color: #64748b;
+  color: #808080;
   text-decoration: none;
   margin: 0 8px;
   transition: color 0.2s;
 }
 
 .login-footer a:hover {
-  color: #cbd5e1;
+  color: #b3b3b3;
 }
 
 @media (max-width: 640px) {

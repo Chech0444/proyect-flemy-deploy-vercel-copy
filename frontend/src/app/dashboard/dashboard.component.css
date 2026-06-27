@@ -16,7 +16,7 @@
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
 }
 .progress-bar-fill {
-    background: linear-gradient(90deg, #10b981, #bf7dff);
+    background: linear-gradient(90deg, #047857, #d4a853);
     box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
 }
 .blob-bg {

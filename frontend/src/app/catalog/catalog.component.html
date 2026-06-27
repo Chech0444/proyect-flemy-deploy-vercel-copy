@@ -16,7 +16,7 @@
     <div class="p-8 max-w-[1280px] mx-auto w-full">
       <div class="mb-8">
         <h1
-          class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-amber-500 bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">
+          class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-secondary bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">
           Descubre Nuevas Habilidades</h1>
         <p class="text-slate-400 mt-2 text-lg">Explora la colección completa de cursos diseñados por nuestros expertos e
           Inteligencia Artificial.</p>
@@ -26,13 +26,13 @@
         <div class="relative flex-1 max-w-md">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
           <input type="text" placeholder="Buscar cursos..." [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()"
-            class="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all text-sm">
+            class="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all text-sm">
         </div>
         <div class="flex items-center gap-2">
           <button *ngFor="let lvl of levels" (click)="toggleLevel(lvl)"
             class="px-4 py-2 rounded-xl text-xs font-bold transition-all border"
             [ngClass]="selectedLevel === lvl
-              ? 'bg-emerald-500/20 text-sky-400 border-emerald-500/40 shadow-sm shadow-emerald-500/10'
+              ? 'bg-primary/20 text-sky-400 border-primary/40 shadow-sm shadow-primary/10'
               : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white'">
             {{ lvl }}
           </button>
@@ -59,7 +59,7 @@
       <div *ngIf="!isLoading && filteredCourses.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
         <div *ngFor="let course of filteredCourses"
-          class="bg-[#ffffff08] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors flex flex-col group backdrop-blur-sm shadow-xl hover:shadow-emerald-500/10">
+          class="bg-[#ffffff08] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors flex flex-col group backdrop-blur-sm shadow-xl hover:shadow-primary/10">
           <div class="relative h-48 overflow-hidden">
             <img *ngIf="!isImageBroken(course)"
               [src]="course.thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop'"
@@ -67,12 +67,12 @@
               alt=""
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <div *ngIf="isImageBroken(course)"
-              class="w-full h-full bg-gradient-to-br from-sky-900/40 to-amber-900/40 flex items-center justify-center">
+              class="w-full h-full bg-gradient-to-br from-sky-900/40 to-secondary-container/40 flex items-center justify-center">
               <span class="material-symbols-outlined text-5xl text-white/20">auto_stories</span>
             </div>
             <div
               class="absolute top-3 right-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-xs font-bold flex items-center gap-1"
-              [ngClass]="{'text-yellow-400': course.is_premium, 'text-emerald-400': !course.is_premium}">
+              [ngClass]="{'text-yellow-400': course.is_premium, 'text-primary-fixed-dim': !course.is_premium}">
               <span class="material-symbols-outlined text-[14px]">
                 {{ course.is_premium ? 'workspace_premium' : 'verified' }}
               </span>
@@ -104,7 +104,7 @@
                 <span class="text-[10px] text-slate-400 font-bold">{{ course.progress_percent }}%</span>
               </div>
               <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
+                <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
                   [style.width.%]="course.progress_percent"></div>
               </div>
             </div>
@@ -117,8 +117,8 @@
             <a [routerLink]="['/catalog', course.slug]"
               class="w-full py-3 rounded-xl font-bold text-center transition-all block cursor-pointer transform group-hover:translate-y-[-2px]"
               [ngClass]="course.is_enrolled && course.progress_percent > 0
-                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-lg shadow-emerald-500/20'
-                : 'bg-emerald-500 hover:bg-sky-400 text-white shadow-lg shadow-emerald-500/20'">
+                ? 'bg-gradient-to-r from-primary to-teal-500 hover:from-primary-fixed-dim hover:to-teal-400 text-white shadow-lg shadow-primary/20'
+                : 'bg-primary hover:bg-sky-400 text-white shadow-lg shadow-primary/20'">
               {{ course.is_enrolled && course.progress_percent > 0 ? 'Continuar Curso' : 'Ver Detalles del Curso' }}
             </a>
           </div>

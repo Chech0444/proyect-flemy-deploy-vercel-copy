@@ -14,8 +14,8 @@
     }
     
     .centered-form-panel {
-        background: #161b22;
-        border: 1px solid #30363d;
+        background: #1a1a1a;
+        border: 1px solid #333333;
         border-radius: 24px;
         padding: 40px;
         width: 100%;
@@ -40,7 +40,7 @@
     }
 
     .form-subtitle {
-        color: #94a3b8;
+        color: #9e9e9e;
         font-size: 14px;
         margin-top: 5px;
     }
@@ -68,7 +68,7 @@
 
     .form-group label {
         display: block;
-        color: #94a3b8;
+        color: #9e9e9e;
         font-size: 13px;
         font-weight: 600;
         margin-bottom: 8px;
@@ -78,7 +78,7 @@
     .form-group select {
         width: 100%;
         background: #0d1117 !important;
-        border: 1px solid #30363d !important;
+        border: 1px solid #333333 !important;
         border-radius: 8px !important;
         padding: 10px 15px !important;
         color: #ffffff !important;
@@ -86,9 +86,9 @@
     }
 
     .form-group input:focus {
-        border-color: #14b8a6 !important;
+        border-color: #047857 !important;
         outline: none;
-        box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+        box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.2);
     }
 
     /* Avatar Upload */
@@ -103,7 +103,7 @@
     .avatar-preview {
         width: 80px;
         height: 80px;
-        background: #30363d;
+        background: #333333;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -112,8 +112,8 @@
 
     .btn-upload {
         background: transparent;
-        border: 1px solid #14b8a6;
-        color: #14b8a6;
+        border: 1px solid #047857;
+        color: #047857;
         padding: 6px 15px;
         border-radius: 8px;
         font-size: 12px;
@@ -133,7 +133,7 @@
         appearance: none;
         width: 44px;
         height: 22px;
-        background: #30363d !important;
+        background: #333333 !important;
         border-radius: 20px !important;
         position: relative;
         cursor: pointer;
@@ -143,7 +143,7 @@
     }
 
     .toggle-container input[type="checkbox"]:checked {
-        background: #14b8a6 !important;
+        background: #047857 !important;
     }
 
     .toggle-container input[type="checkbox"]::before {
@@ -176,26 +176,26 @@
         gap: 15px;
         margin-top: 40px;
         padding-top: 30px;
-        border-top: 1px solid #30363d;
+        border-top: 1px solid #333333;
     }
 
     .btn-cancel {
         background: transparent !important;
-        border: 1px solid #30363d !important;
-        color: #94a3b8 !important;
+        border: 1px solid #333333 !important;
+        color: #9e9e9e !important;
         padding: 12px 30px !important;
         border-radius: 10px !important;
         font-weight: 600 !important;
     }
 
     .btn-create {
-        background: #14b8a6 !important;
+        background: #047857 !important;
         border: none !important;
         color: #ffffff !important;
         padding: 12px 40px !important;
         border-radius: 10px !important;
         font-weight: 700 !important;
-        box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4);
+        box-shadow: 0 4px 14px rgba(4, 120, 87, 0.4);
     }
 
     /* Hide default Django bits */
@@ -261,7 +261,7 @@
 
                 <div class="avatar-upload-area">
                     <div class="avatar-preview">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
                     {{ adminform.form.photo }}
                 </div>
@@ -280,15 +280,15 @@
                     <label>Estado Activo</label>
                     <div class="toggle-container">
                         {{ adminform.form.is_active }}
-                        <span style="color: #94a3b8; font-size: 13px;">Sí / No</span>
+                        <span style="color: #9e9e9e; font-size: 13px;">Sí / No</span>
                     </div>
                 </div>
 
                 <div style="margin-top: 60px; text-align: center;">
                     <div class="avatar-preview" style="width: 100px; height: 100px; margin: 0 auto 15px;">
-                         <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                         <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
-                    <span style="color: #14b8a6; font-size: 13px; font-weight: 600; cursor: pointer;">Subir Avatar</span>
+                    <span style="color: #047857; font-size: 13px; font-weight: 600; cursor: pointer;">Subir Avatar</span>
                 </div>
             </div>
 
@@ -301,7 +301,7 @@
                     <div class="input-with-icon">
                         {{ adminform.form.xp }}
                         <span class="input-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                         </span>
                     </div>
                 </div>

@@ -12,8 +12,8 @@
         margin-bottom: 30px;
     }
     .metric-card {
-        background: #161b22;
-        border: 1px solid #30363d;
+        background: #1a1a1a;
+        border: 1px solid #333333;
         border-radius: 12px;
         padding: 20px;
         display: flex;
@@ -29,11 +29,11 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: var(--accent, #10b981);
+        background: var(--accent, #047857);
         opacity: 0.5;
     }
     .metric-title {
-        color: #94a3b8;
+        color: #9e9e9e;
         font-size: 14px;
         font-weight: 600;
         text-transform: uppercase;
@@ -47,7 +47,7 @@
     .sparkline {
         height: 40px;
         width: 100%;
-        background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%);
+        background: linear-gradient(90deg, rgba(4, 120, 87, 0.1) 0%, rgba(4, 120, 87, 0) 100%);
         margin-top: 10px;
         border-radius: 4px;
     }
@@ -59,20 +59,20 @@
         gap: 20px;
     }
     .app-card {
-        background: #161b22;
-        border: 1px solid #30363d;
+        background: #1a1a1a;
+        border: 1px solid #333333;
         border-radius: 12px;
         overflow: hidden;
         transition: transform 0.2s, border-color 0.2s;
     }
     .app-card:hover {
-        border-color: #3b82f6;
+        border-color: #d4a853;
         transform: translateY(-2px);
     }
     .app-card-header {
         background: rgba(255, 255, 255, 0.03);
         padding: 15px 20px;
-        border-bottom: 1px solid #30363d;
+        border-bottom: 1px solid #333333;
     }
     .app-card-header a {
         color: #ffffff !important;
@@ -90,7 +90,7 @@
         border-bottom: 1px solid rgba(48, 54, 61, 0.5);
     }
     .model-row:last-child { border-bottom: 0; }
-    .model-name { color: #cbd5e1; font-weight: 500; }
+    .model-name { color: #b3b3b3; font-weight: 500; }
     .model-actions { display: flex; gap: 10px; }
     .model-actions a {
         font-size: 11px;
@@ -100,8 +100,8 @@
         border-radius: 5px;
         text-decoration: none;
     }
-    .action-add { background: rgba(59, 130, 246, 0.1); color: #3b82f6 !important; }
-    .action-change { background: rgba(255, 255, 255, 0.05); color: #94a3b8 !important; }
+    .action-add { background: rgba(212, 168, 83, 0.1); color: #d4a853 !important; }
+    .action-change { background: rgba(255, 255, 255, 0.05); color: #9e9e9e !important; }
 
     /* Timeline */
     .timeline {
@@ -111,7 +111,7 @@
         position: relative;
         padding-left: 25px;
         padding-bottom: 20px;
-        border-left: 2px solid #30363d;
+        border-left: 2px solid #333333;
     }
     .timeline-item:last-child { border-left: 0; padding-bottom: 0; }
     .timeline-item::before {
@@ -122,16 +122,16 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background: #30363d;
-        border: 2px solid #161b22;
+        background: #333333;
+        border: 2px solid #1a1a1a;
     }
-    .timeline-item.addition::before { background: #10b981; }
-    .timeline-item.change::before { background: #3b82f6; }
+    .timeline-item.addition::before { background: #047857; }
+    .timeline-item.change::before { background: #d4a853; }
     .timeline-item.deletion::before { background: #ef4444; }
     
     .timeline-content {
         font-size: 13px;
-        color: #94a3b8;
+        color: #9e9e9e;
     }
     .timeline-title { color: #ffffff; font-weight: 600; margin-bottom: 2px; }
     .timeline-meta { font-size: 11px; opacity: 0.6; }
@@ -145,34 +145,34 @@
         <div class="metric-card">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="metric-title">Total Cursos Activos</div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
             </div>
             <div class="metric-value">{{ course_count|default:0 }}</div>
             <div class="sparkline"></div>
         </div>
-        <div class="metric-card" style="--accent: #3b82f6;">
+        <div class="metric-card" style="--accent: #d4a853;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="metric-title">Estudiantes Registrados</div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
             <div class="metric-value">{{ student_count|default:0 }}</div>
-            <div class="sparkline" style="background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 100%);"></div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(212, 168, 83, 0.1) 0%, rgba(212, 168, 83, 0) 100%);"></div>
         </div>
-        <div class="metric-card" style="--accent: #f59e0b;">
+        <div class="metric-card" style="--accent: #1e3a5f;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="metric-title">Certificados Emitidos</div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-2 5 2 2 2-2-2-5z"></path><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-2 5 2 2 2-2-2-5z"></path><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
             <div class="metric-value">{{ certificate_count|default:0 }}</div>
-            <div class="sparkline" style="background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0) 100%);"></div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(30, 58, 95, 0.1) 0%, rgba(30, 58, 95, 0) 100%);"></div>
         </div>
-        <div class="metric-card" style="--accent: #8b5cf6;">
+        <div class="metric-card" style="--accent: #d4a853;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="metric-title">Inscripciones Totales</div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
             <div class="metric-value">{{ enrollment_count|default:0 }}</div>
-            <div class="sparkline" style="background: linear-gradient(90deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0) 100%);"></div>
+            <div class="sparkline" style="background: linear-gradient(90deg, rgba(212, 168, 83, 0.1) 0%, rgba(212, 168, 83, 0) 100%);"></div>
         </div>
     </div>
 
@@ -182,24 +182,24 @@
         <div class="app-card">
             <div class="app-card-header" style="display: flex; align-items: center; gap: 10px;">
                 {% if app.app_label == 'admin' or app.app_label == 'auth' or app.app_label == 'users' %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.25-2.25"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.25-2.25"></path></svg>
                 {% elif app.app_label == 'courses' %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                 {% elif app.app_label == 'learning' %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 {% elif app.app_label == 'certificates' %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path></svg>
                 {% elif app.app_label == 'gamification' %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg>
                 {% else %}
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                 {% endif %}
                 <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
             </div>
                 <div class="model-list">
                     {% for model in app.models %}
                     <div class="model-row" style="border-bottom: 1px dashed rgba(255,255,255,0.1); padding: 15px 20px;">
-                        <div class="model-name" style="font-size: 14px; color: #cbd5e1;">{{ model.name }}</div>
+                        <div class="model-name" style="font-size: 14px; color: #b3b3b3;">{{ model.name }}</div>
                         <div class="model-actions" style="display: flex; gap: 8px;">
                             {% if model.add_url %}
                             <a href="{{ model.add_url }}" class="action-add" style="display: flex; align-items: center; gap: 5px;">

@@ -1,7 +1,7 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #0f1117;
+  background: #0d0d0d;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -33,7 +33,7 @@
   border-radius: 0.65rem;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(148,163,184,0.12);
-  color: #94a3b8;
+  color: #9e9e9e;
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -43,8 +43,8 @@
 }
 
 .rt-back-btn:hover {
-  background: rgba(99,102,241,0.08);
-  border-color: rgba(99,102,241,0.2);
+  background: rgba(212,168,83,0.08);
+  border-color: rgba(212,168,83,0.2);
   color: #a5b4fc;
 }
 
@@ -56,14 +56,14 @@
   transform: translateX(-50%);
   width: 700px;
   height: 400px;
-  background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(212,168,83,0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .rt-hero h1 {
   font-size: 2.6rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+  background: linear-gradient(135deg, #f1f5f9 0%, #9e9e9e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -73,7 +73,7 @@
 
 .rt-hero p {
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #9e9e9e;
   max-width: 600px;
   margin: 0 auto;
   position: relative;
@@ -102,7 +102,7 @@
   gap: 10px;
   font-size: 0.92rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: #e0e0e0;
   white-space: nowrap;
 }
 
@@ -122,7 +122,7 @@
   border-radius: 9999px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(148,163,184,0.12);
-  color: #94a3b8;
+  color: #9e9e9e;
   font-size: 0.83rem;
   font-weight: 600;
   cursor: pointer;
@@ -132,14 +132,14 @@
 
 .rt-pill:hover {
   border-color: rgba(148,163,184,0.25);
-  color: #e2e8f0;
+  color: #e0e0e0;
 }
 
 .rt-pill.active {
-  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(245,158,11,0.15));
-  border-color: rgba(99,102,241,0.4);
+  background: linear-gradient(135deg, rgba(212,168,83,0.2), rgba(30,58,95,0.15));
+  border-color: rgba(212,168,83,0.4);
   color: #a5b4fc;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.15);
+  box-shadow: 0 4px 20px rgba(212,168,83,0.15);
 }
 
 /* ── Description ── */
@@ -151,7 +151,7 @@
 }
 
 .rt-desc p {
-  color: #94a3b8;
+  color: #9e9e9e;
   font-size: 0.9rem;
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(148,163,184,0.08);
@@ -179,8 +179,8 @@
   width: 3px;
   background: linear-gradient(to bottom,
     transparent 0%,
-    rgba(99,102,241,0.6) 10%,
-    rgba(245,158,11,0.6) 90%,
+    rgba(212,168,83,0.6) 10%,
+    rgba(30,58,95,0.6) 90%,
     transparent 100%
   );
   transform: translateX(-50%);
@@ -215,8 +215,8 @@
 }
 
 .rt-card:hover {
-  border-color: rgba(99,102,241,0.25);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 30px rgba(99,102,241,0.06);
+  border-color: rgba(212,168,83,0.25);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 30px rgba(212,168,83,0.06);
   transform: translateY(-4px);
 }
 
@@ -245,13 +245,13 @@
 
 .level-intermediate {
   background: rgba(251,191,36,0.12);
-  color: #fcd34d;
+  color: #e0c36a;
   border: 1px solid rgba(251,191,36,0.25);
 }
 
 .level-advanced {
   background: rgba(244,63,94,0.12);
-  color: #fb7185;
+  color: #b89235;
   border: 1px solid rgba(244,63,94,0.25);
 }
 
@@ -260,9 +260,9 @@
   border-radius: 9999px;
   font-size: 0.66rem;
   font-weight: 600;
-  background: rgba(99,102,241,0.12);
+  background: rgba(212,168,83,0.12);
   color: #a5b4fc;
-  border: 1px solid rgba(99,102,241,0.25);
+  border: 1px solid rgba(212,168,83,0.25);
 }
 
 .rt-card-title {
@@ -274,7 +274,7 @@
 
 .rt-card-desc {
   font-size: 0.86rem;
-  color: #94a3b8;
+  color: #9e9e9e;
   line-height: 1.7;
   margin-bottom: 18px;
 }
@@ -319,7 +319,7 @@
 .rt-meta-label {
   display: block;
   font-size: 0.65rem;
-  color: #64748b;
+  color: #808080;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -328,7 +328,7 @@
   display: block;
   font-size: 0.86rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: #e0e0e0;
 }
 
 .rt-card-action {
@@ -341,8 +341,8 @@
   gap: 6px;
   padding: 9px 22px;
   border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(245,158,11,0.1));
-  border: 1px solid rgba(99,102,241,0.25);
+  background: linear-gradient(135deg, rgba(212,168,83,0.15), rgba(30,58,95,0.1));
+  border: 1px solid rgba(212,168,83,0.25);
   color: #a5b4fc;
   font-size: 0.84rem;
   font-weight: 600;
@@ -351,10 +351,10 @@
 }
 
 .rt-btn-course:hover {
-  background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(245,158,11,0.2));
-  border-color: rgba(99,102,241,0.4);
+  background: linear-gradient(135deg, rgba(212,168,83,0.25), rgba(30,58,95,0.2));
+  border-color: rgba(212,168,83,0.4);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(99,102,241,0.2);
+  box-shadow: 0 4px 16px rgba(212,168,83,0.2);
 }
 
 /* ── Node ── */
@@ -365,21 +365,21 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(245,158,11,0.15));
-  border: 2px solid rgba(99,102,241,0.4);
+  background: linear-gradient(135deg, rgba(212,168,83,0.2), rgba(30,58,95,0.15));
+  border: 2px solid rgba(212,168,83,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
   z-index: 2;
-  box-shadow: 0 0 20px rgba(99,102,241,0.2);
+  box-shadow: 0 0 20px rgba(212,168,83,0.2);
   transition: all 0.3s ease;
 }
 
 .rt-node:hover {
   transform: translateX(-50%) scale(1.1);
-  box-shadow: 0 0 30px rgba(99,102,241,0.35);
-  border-color: rgba(99,102,241,0.6);
+  box-shadow: 0 0 30px rgba(212,168,83,0.35);
+  border-color: rgba(212,168,83,0.6);
 }
 
 /* ── Step Label ── */
@@ -414,7 +414,7 @@
   height: 0;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
-  border-top: 9px solid rgba(99,102,241,0.35);
+  border-top: 9px solid rgba(212,168,83,0.35);
 }
 
 .rt-item:last-child::after {
@@ -431,13 +431,13 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(245,158,11,0.08));
-  border: 1px solid rgba(99,102,241,0.25);
+  background: linear-gradient(135deg, rgba(212,168,83,0.1), rgba(30,58,95,0.08));
+  border: 1px solid rgba(212,168,83,0.25);
   border-radius: 20px;
   padding: 18px 32px;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #e2e8f0;
+  color: #e0e0e0;
 }
 
 .rt-cert-goal-icon {

@@ -53,9 +53,9 @@ import { NotificationService } from '../notification.service';
       to { transform: translateX(0); opacity: 1; }
     }
 
-    .toast.success { border-left: 4px solid #10b981; }
+    .toast.success { border-left: 4px solid #047857; }
     .toast.error { border-left: 4px solid #ef4444; }
-    .toast.info { border-left: 4px solid #3b82f6; }
+    .toast.info { border-left: 4px solid #d4a853; }
 
     .toast-icon {
       margin-right: 1rem;
@@ -63,9 +63,9 @@ import { NotificationService } from '../notification.service';
       align-items: center;
     }
 
-    .toast.success .toast-icon { color: #10b981; }
+    .toast.success .toast-icon { color: #047857; }
     .toast.error .toast-icon { color: #ef4444; }
-    .toast.info .toast-icon { color: #3b82f6; }
+    .toast.info .toast-icon { color: #d4a853; }
 
     .toast-content {
       flex: 1;

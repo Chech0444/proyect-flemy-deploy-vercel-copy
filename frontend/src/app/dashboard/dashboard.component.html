@@ -72,7 +72,7 @@
 
   <div class="glass-card rounded-xl p-5 flex flex-col justify-center items-start">
     <div class="flex items-center gap-2 mb-2">
-      <span class="material-symbols-outlined text-emerald-400 text-xl">schedule</span>
+      <span class="material-symbols-outlined text-primary-fixed-dim text-xl">schedule</span>
       <span class="font-label-caps text-label-caps text-on-surface-variant uppercase text-[11px]">Horas de Estudio</span>
     </div>
     <div class="font-h3 text-h3 text-white">{{ userProfile?.learning_hours || 0 }}<span class="text-lg text-slate-400"> hrs</span></div>
@@ -81,7 +81,7 @@
 
   <div class="glass-card rounded-xl p-5 flex flex-col justify-center items-start">
     <div class="flex items-center gap-2 mb-2">
-      <span class="material-symbols-outlined text-amber-400 text-xl">local_fire_department</span>
+      <span class="material-symbols-outlined text-secondary-fixed-dim text-xl">local_fire_department</span>
       <span class="font-label-caps text-label-caps text-on-surface-variant uppercase text-[11px]">Racha Actual</span>
     </div>
     <div class="font-h3 text-h3 text-white">{{ userProfile?.study_streak || 0 }}<span class="text-lg text-slate-400"> días</span></div>
@@ -98,12 +98,12 @@
   </div>
 
   <div class="glass-card rounded-xl p-5 flex flex-col justify-center items-start relative overflow-hidden group">
-    <div class="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/20 to-secondary/20 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#d4a853]/20 to-secondary/20 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
     <div class="flex items-center gap-2 mb-2 relative z-10">
-      <span class="material-symbols-outlined text-amber-400 text-xl">workspace_premium</span>
+      <span class="material-symbols-outlined text-secondary-fixed-dim text-xl">workspace_premium</span>
       <span class="font-label-caps text-label-caps text-on-surface-variant uppercase text-[11px]">Membresía</span>
     </div>
-    <div class="font-h3 text-h3 bg-gradient-to-r from-[#fbbf24] to-secondary bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'PREMIUM' : 'FREE' }}</div>
+    <div class="font-h3 text-h3 bg-gradient-to-r from-[#d4a853] to-secondary bg-clip-text text-transparent relative z-10 font-bold">{{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'PREMIUM' : 'FREE' }}</div>
     <p class="text-[10px] text-slate-500 mt-1 relative z-10">{{ userProfile?.role === 'ROLE_PREMIUM' || userProfile?.role === 'ROLE_ADMIN' ? 'Acceso ilimitado' : 'Actualiza a Premium' }}</p>
   </div>
 </section>
@@ -119,15 +119,15 @@
     <div *ngFor="let enrollment of userProfile?.active_enrollments" class="glass-card rounded-xl overflow-hidden flex flex-col group/card">
       <div class="h-40 relative overflow-hidden">
         <img *ngIf="!isImageBroken('active-' + enrollment.course.slug) && getThumbnailUrl(enrollment.course.thumbnail)" (error)="onImageError('active-' + enrollment.course.slug)" alt="" class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" [src]="getThumbnailUrl(enrollment.course.thumbnail)" />
-        <div *ngIf="isImageBroken('active-' + enrollment.course.slug) || !getThumbnailUrl(enrollment.course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-amber-900/40 flex items-center justify-center">
+        <div *ngIf="isImageBroken('active-' + enrollment.course.slug) || !getThumbnailUrl(enrollment.course.thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-secondary-container/40 flex items-center justify-center">
           <span class="material-symbols-outlined text-5xl text-white/20">auto_stories</span>
         </div>
         <div class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-primary/15 border border-primary/30 backdrop-blur-md font-label-caps text-label-caps text-[10px] flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
           <span class="text-sky-200">En Progreso</span>
         </div>
-        <div *ngIf="enrollment.course.is_premium" class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30 backdrop-blur-md font-label-caps text-label-caps text-[10px]">
-          <span class="text-amber-300">PREMIUM</span>
+        <div *ngIf="enrollment.course.is_premium" class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-secondary-fixed-dim/15 border border-secondary-fixed-dim/30 backdrop-blur-md font-label-caps text-label-caps text-[10px]">
+          <span class="text-secondary-fixed">PREMIUM</span>
         </div>
       </div>
       <div class="p-5 flex-1 flex flex-col">
@@ -152,7 +152,7 @@
       <span class="material-symbols-outlined text-6xl text-sky-400 mb-4 opacity-70">school</span>
       <h3 class="font-h2 text-h2 text-white mb-2">Comienza tu Aventura</h3>
       <p class="text-on-surface-variant max-w-md mx-auto mb-6">Aún no estás inscrito en ningún curso. Visita nuestro catálogo para descubrir nuevas habilidades.</p>
-      <button routerLink="/catalog" class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 text-white rounded-lg font-bold shadow-lg transition-transform hover:-translate-y-1">
+      <button routerLink="/catalog" class="px-8 py-3 bg-gradient-to-r from-primary to-tertiary hover:from-sky-400 hover:to-tertiary-fixed-dim text-white rounded-lg font-bold shadow-lg transition-transform hover:-translate-y-1">
         Explorar Catálogo
       </button>
     </div>
@@ -168,14 +168,14 @@
   </div>
   <div class="glass-card rounded-xl overflow-hidden divide-y divide-white/5">
     <div *ngFor="let activity of userProfile.recent_activity" class="flex items-center gap-4 p-4 hover:bg-white/[0.02] transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center shrink-0">
-        <span class="material-symbols-outlined text-emerald-400 text-lg">check_circle</span>
+      <div class="w-9 h-9 rounded-lg bg-primary-fixed-dim/10 border border-primary-fixed-dim/20 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-primary-fixed-dim text-lg">check_circle</span>
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm text-white font-medium truncate">{{ activity.title }}</p>
         <p class="text-xs text-slate-500">{{ activity.type }} · {{ timeAgo(activity.time) }}</p>
       </div>
-      <div class="text-xs text-emerald-400 font-medium shrink-0">Completada</div>
+      <div class="text-xs text-primary-fixed-dim font-medium shrink-0">Completada</div>
     </div>
   </div>
 </section>
@@ -186,19 +186,19 @@
 
 <div *ngIf="userProfile?.recent_transactions?.length" class="glass-card rounded-xl p-5">
   <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
-    <span class="material-symbols-outlined text-emerald-400 text-xl">emoji_events</span>
+    <span class="material-symbols-outlined text-primary-fixed-dim text-xl">emoji_events</span>
     <h3 class="font-h3 text-h3 text-white text-base">Ganancias de XP</h3>
   </div>
   <div class="space-y-3">
     <div *ngFor="let tx of userProfile.recent_transactions" class="flex items-start gap-3">
-      <div class="w-8 h-8 rounded-full bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center shrink-0 mt-0.5">
-        <span class="material-symbols-outlined text-emerald-400 text-sm">add</span>
+      <div class="w-8 h-8 rounded-full bg-primary-fixed-dim/10 border border-primary-fixed-dim/20 flex items-center justify-center shrink-0 mt-0.5">
+        <span class="material-symbols-outlined text-primary-fixed-dim text-sm">add</span>
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm text-white truncate">{{ tx.reason }}</p>
         <p class="text-xs text-slate-500">{{ timeAgo(tx.created_at) }}</p>
       </div>
-      <div class="text-sm font-bold text-emerald-400 shrink-0">+{{ tx.amount }} XP</div>
+      <div class="text-sm font-bold text-primary-fixed-dim shrink-0">+{{ tx.amount }} XP</div>
     </div>
   </div>
 </div>
@@ -209,9 +209,9 @@
     <h3 class="font-h3 text-h3 text-white text-base">Continúa tu Aprendizaje</h3>
   </div>
   <div class="flex gap-3">
-    <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-emerald-500/10">
+    <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-primary/10">
       <img *ngIf="!isImageBroken('next-lesson') && getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" [src]="getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" (error)="onImageError('next-lesson')" alt="" class="w-full h-full object-cover">
-      <div *ngIf="isImageBroken('next-lesson') || !getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-amber-900/40 flex items-center justify-center">
+      <div *ngIf="isImageBroken('next-lesson') || !getThumbnailUrl(userProfile.next_lesson.course_thumbnail)" class="w-full h-full bg-gradient-to-br from-sky-900/40 to-secondary-container/40 flex items-center justify-center">
         <span class="material-symbols-outlined text-lg text-white/20">auto_stories</span>
       </div>
     </div>
@@ -221,7 +221,7 @@
       <p class="text-sm text-white font-semibold truncate">{{ userProfile.next_lesson.lesson_title }}</p>
     </div>
   </div>
-  <button [routerLink]="['/catalog', userProfile.next_lesson.course_slug]" class="w-full mt-4 py-2.5 rounded-lg bg-gradient-to-r from-emerald-500 to-indigo-500 text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+  <button [routerLink]="['/catalog', userProfile.next_lesson.course_slug]" class="w-full mt-4 py-2.5 rounded-lg bg-gradient-to-r from-primary to-tertiary text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
     <span class="material-symbols-outlined text-lg">play_arrow</span>
     Seguir Aprendiendo
   </button>
@@ -232,7 +232,7 @@
     <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">school</span>
     <p class="text-sm text-slate-400 font-medium">No tienes cursos activos</p>
     <p class="text-xs text-slate-500 mt-1">Inscríbete en un curso para empezar.</p>
-    <button routerLink="/catalog" class="mt-4 px-4 py-2 text-xs rounded-lg bg-gradient-to-r from-emerald-500 to-indigo-500 text-white font-medium">Explorar Catálogo</button>
+    <button routerLink="/catalog" class="mt-4 px-4 py-2 text-xs rounded-lg bg-gradient-to-r from-primary to-tertiary text-white font-medium">Explorar Catálogo</button>
   </div>
 </div>
 

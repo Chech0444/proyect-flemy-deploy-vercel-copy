@@ -31,7 +31,7 @@
 
       <!-- Verificando Pago -->
       <div class="max-w-md mx-auto text-center py-16 animate-in fade-in duration-500" *ngIf="isVerifyingPayment">
-        <div class="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-6"></div>
+        <div class="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-6"></div>
         <h2 class="text-2xl font-bold text-white mb-2">Verificando tu Pago</h2>
         <p class="text-slate-400">Por favor no cierres ni recargues esta pestana. Estamos confirmando tu transaccion con Wompi y tu banco...</p>
       </div>
@@ -40,14 +40,14 @@
 
         <!-- Usuario ya es Premium -->
         <div *ngIf="isPremium && !showPaymentForm" class="text-center py-12">
-          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 mb-6">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-6">
             <span class="material-symbols-outlined text-4xl text-sky-400" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
           </div>
           <h1 class="text-4xl font-bold text-white mb-4">Ya eres Premium</h1>
           <p class="text-slate-400 text-lg max-w-lg mx-auto mb-8">Disfruta de acceso ilimitado a todos los cursos, herramientas de IA y certificados oficiales.</p>
           <div class="flex items-center justify-center gap-4">
             <a routerLink="/catalog"
-              class="px-8 py-4 rounded-2xl bg-emerald-500 hover:bg-sky-400 text-white font-black transition-all shadow-xl shadow-emerald-500/20">
+              class="px-8 py-4 rounded-2xl bg-primary hover:bg-sky-400 text-white font-black transition-all shadow-xl shadow-primary/20">
               Explorar Cursos
             </a>
             <a routerLink="/dashboard"
@@ -62,7 +62,7 @@
 
           <div class="text-center mb-12" *ngIf="!showPaymentForm">
             <h1
-              class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-amber-500 bg-clip-text text-transparent font-space tracking-tight mb-4">
+              class="text-4xl font-bold bg-gradient-to-r from-sky-400 to-secondary bg-clip-text text-transparent font-space tracking-tight mb-4">
               Eleva tu Potencial al Maximo</h1>
             <p class="text-slate-400 text-lg max-w-2xl mx-auto">Elige el plan que mejor se adapte a tus metas. Desbloquea
               herramientas de IA exclusivas y cursos premium.</p>
@@ -76,17 +76,17 @@
               <button (click)="setPlanToggle('MONTHLY')"
                 class="px-6 py-3 rounded-xl text-sm font-bold transition-all border"
                 [ngClass]="selectedPlan === 'MONTHLY'
-                  ? 'bg-emerald-500/20 text-sky-400 border-emerald-500/40 shadow-sm shadow-emerald-500/10'
+                  ? 'bg-primary/20 text-sky-400 border-primary/40 shadow-sm shadow-primary/10'
                   : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white'">
                 Mensual
               </button>
               <button (click)="setPlanToggle('YEARLY')"
                 class="px-6 py-3 rounded-xl text-sm font-bold transition-all border"
                 [ngClass]="selectedPlan === 'YEARLY'
-                  ? 'bg-emerald-500/20 text-sky-400 border-emerald-500/40 shadow-sm shadow-emerald-500/10'
+                  ? 'bg-primary/20 text-sky-400 border-primary/40 shadow-sm shadow-primary/10'
                   : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white'">
                 Anual
-                <span class="ml-2 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] rounded-full font-black">AHORRA 17%</span>
+                <span class="ml-2 px-2 py-0.5 bg-primary/20 text-primary-fixed-dim text-[10px] rounded-full font-black">AHORRA 17%</span>
               </button>
             </div>
 
@@ -106,9 +106,9 @@
                     mes</span></div>
                 <ul class="space-y-4 flex-1 mb-8">
                   <li class="flex items-center gap-3 text-slate-300 text-sm"><span
-                      class="material-symbols-outlined text-emerald-500">check_circle</span> Acceso a cursos gratuitos</li>
+                      class="material-symbols-outlined text-primary">check_circle</span> Acceso a cursos gratuitos</li>
                   <li class="flex items-center gap-3 text-slate-300 text-sm"><span
-                      class="material-symbols-outlined text-emerald-500">check_circle</span> Perfil de usuario</li>
+                      class="material-symbols-outlined text-primary">check_circle</span> Perfil de usuario</li>
                   <li class="flex items-center gap-3 text-slate-500 text-sm"><span
                       class="material-symbols-outlined opacity-50">cancel</span> Herramientas de IA Premium</li>
                   <li class="flex items-center gap-3 text-slate-500 text-sm"><span
@@ -120,13 +120,13 @@
 
               <!-- Plan Premium -->
               <div
-                class="relative bg-gradient-to-b from-emerald-500/10 to-amber-500/10 border-2 border-emerald-500/50 rounded-3xl p-8 backdrop-blur-md flex flex-col group hover:shadow-[0_0_50px_rgba(16,185,129,0.2)] transition-all transform hover:scale-[1.02]">
+                class="relative bg-gradient-to-b from-primary/10 to-secondary/10 border-2 border-primary/50 rounded-3xl p-8 backdrop-blur-md flex flex-col group hover:shadow-[0_0_50px_rgba(4,120,87,0.2)] transition-all transform hover:scale-[1.02]">
                 <div
-                  class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-emerald-500 text-white text-[10px] font-black rounded-full shadow-lg shadow-emerald-500/40">
+                  class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-[10px] font-black rounded-full shadow-lg shadow-primary/40">
                   RECOMENDADO</div>
                 <div class="mb-6">
                   <span
-                    class="px-3 py-1 bg-emerald-500/20 rounded-full text-[10px] font-bold text-sky-400 uppercase tracking-widest">PRO
+                    class="px-3 py-1 bg-primary/20 rounded-full text-[10px] font-bold text-sky-400 uppercase tracking-widest">PRO
                     ACCESO</span>
                   <h2 class="text-3xl font-bold text-white mt-4">Premium</h2>
                   <p class="text-slate-300 text-sm mt-2">Acceso ilimitado y potenciado por IA.</p>
@@ -137,7 +137,7 @@
                     / {{ selectedPlan === 'MONTHLY' ? 'mes' : 'ano' }}
                   </span>
                 </div>
-                <p *ngIf="selectedPlan === 'YEARLY'" class="text-emerald-400 text-sm font-bold mb-8">
+                <p *ngIf="selectedPlan === 'YEARLY'" class="text-primary-fixed-dim text-sm font-bold mb-8">
                   $16.67/mes - Ahorras $40 al ano
                 </p>
                 <p *ngIf="selectedPlan !== 'YEARLY'" class="mb-8"></p>
@@ -152,7 +152,7 @@
                       class="material-symbols-outlined text-sky-400">verified</span> Soporte prioritario</li>
                 </ul>
                 <button (click)="selectPlan(selectedPlan)"
-                  class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-sky-400 text-white font-black transition-all shadow-xl shadow-emerald-500/20">
+                  class="w-full py-4 rounded-2xl bg-primary hover:bg-sky-400 text-white font-black transition-all shadow-xl shadow-primary/20">
                   Suscribirse Ahora
                 </button>
               </div>
@@ -169,7 +169,7 @@
             </div>
 
             <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-              <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 filter blur-3xl rounded-full"></div>
+              <div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 filter blur-3xl rounded-full"></div>
 
               <p class="text-slate-300 text-sm text-center mb-8">
                 Plan <span class="text-sky-400 font-bold">{{ selectedPlan === 'MONTHLY' ? 'Mensual' : 'Anual' }}</span>
@@ -177,7 +177,7 @@
               </p>
 
               <button (click)="payWithWompi(selectedPlan)" [disabled]="isWompiLoading"
-                class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black transition-all shadow-xl shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3">
+                class="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-teal-600 text-white font-black transition-all shadow-xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3">
                 <span class="material-symbols-outlined text-white" *ngIf="!isWompiLoading">payments</span>
                 <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" *ngIf="isWompiLoading"></span>
                 {{ isWompiLoading ? 'Cargando Wompi...' : 'Pagar con Wompi (PSE / Nequi / Tarjeta)' }}
