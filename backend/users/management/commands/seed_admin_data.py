@@ -1,8 +1,8 @@
+import os
 import secrets
 
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-from django.conf import settings
 
 from certificates.models import Certificate
 from courses.models import Course, Lesson, Section
@@ -26,11 +26,9 @@ class Command(BaseCommand):
                 "is_superuser": True,
             },
         )
-        admin_password = settings.ADMIN_PASSWORD if hasattr(settings, 'ADMIN_PASSWORD') and settings.ADMIN_PASSWORD else None
+        admin_password = os.getenv("ADMIN_PASSWORD", "Admin12345!")
         if admin_password:
             admin.set_password(admin_password)
-        else:
-            admin.set_password(secrets.token_urlsafe(24))
         admin.save()
 
         premium_user, _ = user_model.objects.get_or_create(
