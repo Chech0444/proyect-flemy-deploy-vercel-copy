@@ -115,12 +115,12 @@
   justify-content: center;
 }
 
-.kpi-icon-blue { background: rgba(4,120,87,0.12); color: #059669; }
+.kpi-icon-blue { background: rgba(4,120,87,0.12); color: #10b981; }
 .kpi-icon-amber { background: rgba(30,58,95,0.12); color: #d4a853; }
-.kpi-icon-emerald { background: rgba(4,120,87,0.12); color: #059669; }
+.kpi-icon-emerald { background: rgba(4,120,87,0.12); color: #10b981; }
 .kpi-icon-purple { background: rgba(30,58,95,0.12); color: #d4a853; }
 .kpi-icon-rose { background: rgba(244,63,94,0.12); color: #b89235; }
-.kpi-icon-sky { background: rgba(6,182,212,0.12); color: #059669; }
+.kpi-icon-sky { background: rgba(6,182,212,0.12); color: #10b981; }
 
 .kpi-icon .material-symbols-outlined { font-size: 18px; }
 
@@ -440,7 +440,7 @@
 }
 
 .activity-summary {
-  color: #047857;
+  color: #10b981;
   font-weight: 700;
   font-size: 0.65rem;
 }
@@ -505,7 +505,7 @@
 
 .sale-amount {
   font-weight: 700;
-  color: #059669 !important;
+  color: #10b981 !important;
 }
 
 .sale-date {
@@ -631,9 +631,9 @@
   margin: 0;
 }
 
-.col-title-sky { color: #059669; }
+.col-title-sky { color: #10b981; }
 .col-title-purple { color: #d4a853; }
-.col-title-emerald { color: #059669; }
+.col-title-emerald { color: #10b981; }
 
 .col-add-btn {
   width: 30px;
@@ -715,7 +715,7 @@
   align-items: center;
 }
 
-.meta-published { color: #059669; }
+.meta-published { color: #10b981; }
 .meta-draft { color: #d4a853; }
 
 .col-item-actions {
@@ -744,7 +744,7 @@
 .action-btn .material-symbols-outlined { font-size: 15px; }
 
 .action-edit { color: #808080; }
-.action-edit:hover { background: rgba(4,120,87,0.1); color: #059669; }
+.action-edit:hover { background: rgba(4,120,87,0.1); color: #10b981; }
 .action-delete { color: #808080; }
 .action-delete:hover { background: rgba(239,68,68,0.1); color: #f87171; }
 
@@ -841,7 +841,7 @@
   box-sizing: border-box;
 }
 
-.input:focus { border-color: #047857; }
+.input:focus { border-color: #10b981; }
 
 textarea.input { resize: vertical; min-height: 60px; }
 
@@ -861,7 +861,7 @@ textarea.input { resize: vertical; min-height: 60px; }
   border-radius: 0.5rem;
   border: none;
   background: rgba(4,120,87,0.15);
-  color: #059669;
+  color: #10b981;
   font-weight: 700;
   font-size: 0.7rem;
   cursor: pointer;
@@ -886,7 +886,7 @@ textarea.input { resize: vertical; min-height: 60px; }
 .checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #047857;
+  accent-color: #10b981;
 }
 
 .modal-actions {

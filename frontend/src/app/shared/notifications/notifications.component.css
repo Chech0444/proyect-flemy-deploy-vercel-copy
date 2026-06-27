@@ -102,7 +102,7 @@
 .mark-all-btn {
   background: transparent;
   border: none;
-  color: #059669;
+  color: #10b981;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -166,7 +166,7 @@
 
 .notif-icon-wrap.suggestion { background: rgba(168, 85, 247, 0.15); color: #d4a853; }
 .notif-icon-wrap.streak { background: rgba(234, 179, 8, 0.15); color: #e0c36a; }
-.notif-icon-wrap.reminder { background: rgba(14, 165, 233, 0.15); color: #059669; }
+.notif-icon-wrap.reminder { background: rgba(14, 165, 233, 0.15); color: #10b981; }
 .notif-icon-wrap.system { background: rgba(255, 255, 255, 0.1); color: #b3b3b3; }
 
 .notif-content {
@@ -202,7 +202,7 @@
 .dot {
   width: 8px;
   height: 8px;
-  background-color: #059669;
+  background-color: #10b981;
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
 }

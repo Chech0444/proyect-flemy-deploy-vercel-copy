@@ -63,7 +63,7 @@ import { NotificationService } from '../notification.service';
       align-items: center;
     }
 
-    .toast.success .toast-icon { color: #047857; }
+    .toast.success .toast-icon { color: #10b981; }
     .toast.error .toast-icon { color: #ef4444; }
     .toast.info .toast-icon { color: #d4a853; }
 
