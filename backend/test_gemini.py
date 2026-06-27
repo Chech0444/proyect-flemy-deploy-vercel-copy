@@ -22,7 +22,7 @@ def test_gemini():
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash-preview')
         print("Enviando petición de prueba a Google Gemini...")
         response = model.generate_content("Responde únicamente con la palabra: VERDE")
         

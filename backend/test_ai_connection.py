@@ -22,7 +22,7 @@ except Exception as e:
 
 print("\n--- Probando Google Gemini ---")
 genai.configure(api_key=google_key)
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-2.5-flash-preview')
 try:
     response = model.generate_content("Dime 'OK'")
     print(f"Respuesta Gemini: {response.text}")

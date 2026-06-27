@@ -1,7 +1,7 @@
 """
 Servicio de IA para herramientas interactivas (Chatbot, Code Feedback, etc).
 
-Usa Google Gemini (gemini-2.0-flash) para:
+Usa Google Gemini (gemini-2.5-flash-preview) para:
 - Chatbot contextual basado en la transcripción del video de cada lección
 - Feedback de código en tiempo real
 - Generación de ejercicios
@@ -35,7 +35,7 @@ def _get_model():
 
     try:
         genai.configure(api_key=api_key)
-        _model = genai.GenerativeModel('gemini-2.0-flash')
+        _model = genai.GenerativeModel('gemini-2.5-flash-preview')
         logger.info('Gemini API (ai_tools) inicializada correctamente.')
         return _model
     except Exception as e:
