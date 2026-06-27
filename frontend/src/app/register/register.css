@@ -76,14 +76,11 @@
 }
 
 .logo-mark {
-  display: grid;
-  place-items: center;
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #047857, #d4a853);
+  object-fit: cover;
   box-shadow: 0 0 18px rgba(100, 150, 255, 0.55);
-  font-size: 17px;
 }
 
 .nav-right {
