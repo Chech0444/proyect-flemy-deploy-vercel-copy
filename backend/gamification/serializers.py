@@ -163,7 +163,7 @@ class ProgressDashboardSerializer(serializers.Serializer):
     learning_streak = serializers.IntegerField()
     learning_hours = serializers.FloatField()
     weekly_hours = serializers.FloatField()
-    avg_quiz_score = serializers.FloatField()
+
     heatmap_data = serializers.DictField()
     global_progress = serializers.FloatField()
     course_breakdown = serializers.ListField()

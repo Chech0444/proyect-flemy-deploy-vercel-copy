@@ -127,7 +127,7 @@ class ProgressDashboardView(APIView):
             "learning_streak": user.study_streak,
             "learning_hours": learning_hours,
             "weekly_hours": weekly_hours,
-            "avg_quiz_score": 92.5,
+
             "heatmap_data": heatmap,
             "global_progress": global_progress,
             "course_breakdown": course_breakdown,
