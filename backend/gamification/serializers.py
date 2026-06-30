@@ -149,7 +149,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "xp", "study_streak", "level")
+        fields = ("id", "username", "first_name", "last_name", "xp", "study_streak", "level")
 
     def get_level(self, obj):
         return (obj.xp // 100) + 1
