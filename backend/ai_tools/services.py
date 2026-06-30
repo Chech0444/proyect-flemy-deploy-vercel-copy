@@ -35,7 +35,7 @@ def _get_model():
 
     try:
         genai.configure(api_key=api_key)
-        _model = genai.GenerativeModel('gemini-2.5-flash')
+        _model = genai.GenerativeModel('gemini-flash-latest')
         logger.info('Gemini API (ai_tools) inicializada correctamente.')
         return _model
     except Exception as e:
