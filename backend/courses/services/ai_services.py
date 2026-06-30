@@ -8,6 +8,7 @@ Usa la API de Google Gemini (GRATIS) para:
 
 import json
 import logging
+import random
 import re
 
 from django.conf import settings
@@ -93,6 +94,70 @@ class AIService:
             pass
         return ''
 
+    def _shuffle_and_track_correct(self, options: list[str], correct_idx: int) -> tuple[list[str], int]:
+        tagged = []
+        for i, opt in enumerate(options):
+            tagged.append((opt, i == correct_idx))
+        random.shuffle(tagged)
+        new_options = []
+        new_correct = None
+        for i, (text, is_correct) in enumerate(tagged):
+            new_options.append(text)
+            if is_correct:
+                new_correct = i
+        return new_options, new_correct if new_correct is not None else 0
+
+    def _resolve_correct_option(self, options: list[str], explanation: str, ai_correct: int) -> int:
+        # Priority 1: marker tag in option text
+        for i, opt in enumerate(options):
+            if '<<<CORRECTO>>>' in opt:
+                return i
+
+        # Priority 2: match explanation quotes against options
+        if explanation:
+            import re as _re
+            quotes = _re.findall(r"'([^']+)'|\"([^\"]+)\"", explanation)
+            for quote_tuple in quotes:
+                quote = quote_tuple[0] or quote_tuple[1]
+                if quote:
+                    for i, opt in enumerate(options):
+                        clean = opt.replace('<<<CORRECTO>>>', '').strip()
+                        if quote.lower() in clean.lower() or clean.lower() in quote.lower():
+                            return i
+                        if len(quote) > 20 and (quote[:40].lower() in clean.lower() or clean[:40].lower() in quote.lower()):
+                            return i
+
+        # Priority 3: AI's correct_option (as fallback)
+        if 0 <= ai_correct <= 3:
+            return ai_correct
+        return 0
+
+    def _extract_quiz_questions(self, quiz_raw: list) -> list:
+        questions = []
+        for q in quiz_raw:
+            if not all(k in q for k in ['question', 'options']):
+                continue
+            options = q['options'][:4]
+            ai_correct = q.get('correct_option', 0)
+            explanation = q.get('explanation', '')
+
+            correct_option = self._resolve_correct_option(options, explanation, ai_correct)
+
+            cleaned = []
+            for opt in options:
+                cleaned.append(opt.replace('<<<CORRECTO>>>', '').strip())
+            options = cleaned
+
+            options, correct_option = self._shuffle_and_track_correct(options, correct_option)
+
+            questions.append({
+                'question': q['question'],
+                'options': options,
+                'correct_option': correct_option,
+                'explanation': explanation
+            })
+        return questions
+
     def generate_educational_content(self, lesson_or_text, num_questions: int = 5) -> dict:
         self._initialize()
         num_questions = max(num_questions, 5)
@@ -125,14 +190,13 @@ Responde ÚNICAMENTE con un objeto JSON válido (sin bloques de código markdown
     }},
     "quiz": [
         {{
-            "question": "Pregunta compleja que evalúe pensamiento crítico. Debe estar formulada refiriéndose al video (ej. 'Según el video, ¿qué...?', 'En el video se menciona que...').",
+            "question": "Pregunta compleja que evalúe pensamiento crítico.",
             "options": [
-                "Opción A estructurada e inteligente (distractor)",
-                "Opción B argumentada (distractor)",
-                "Opción C (respuesta verdadera, clara e indiscutible)",
-                "Opción D (distractor tramposo)"
+                "Opción A (distractor)",
+                "Opción B (distractor)",
+                "Opción C <<<CORRECTO>>>",
+                "Opción D (distractor)"
             ],
-            "correct_option": 2,
             "explanation": "Explicación didáctica basada en lo mostrado en el video."
         }}
     ]
@@ -140,9 +204,11 @@ Responde ÚNICAMENTE con un objeto JSON válido (sin bloques de código markdown
 
 Reglas del Quiz:
 - Crea EXACTAMENTE {num_questions} preguntas.
-- Cada pregunta debe tener exactamente 4 opciones.
-- "correct_option" debe ser un entero (0, 1, 2, o 3).
-- Altera aleatoriamente la ubicación de las respuestas correctas.
+- Cada pregunta debe tener exactamente 4 opciones de respuesta.
+- MARCA la opción correcta agregando "<<<CORRECTO>>>" al final de su texto.
+- Solo UNA opción debe tener "<<<CORRECTO>>>".
+- NO incluyas el campo "correct_option" en el JSON.
+- Las opciones incorrectas deben ser distractores creíbles pero claramente erróneos.
 - RECUERDA: Tanto el resumen como las preguntas y explicaciones deben hablar explícitamente del "video".
 Todo el contenido generado debe estar en el mismo idioma predominante de la transcripción original."""
 
@@ -154,16 +220,7 @@ Todo el contenido generado debe estar en el mismo idioma predominante de la tran
                 summary_data = {}
 
             quiz_raw = result.get('quiz', [])
-            quiz_questions = []
-            if isinstance(quiz_raw, list):
-                for q in quiz_raw:
-                    if all(k in q for k in ['question', 'options', 'correct_option']):
-                        quiz_questions.append({
-                            'question': q['question'],
-                            'options': q['options'][:4],
-                            'correct_option': min(q['correct_option'], 3),
-                            'explanation': q.get('explanation', '')
-                        })
+            quiz_questions = self._extract_quiz_questions(quiz_raw) if isinstance(quiz_raw, list) else []
 
             logger.info('Resumen y Quiz generados exitosamente en una sola petición con Gemini')
             return {
@@ -237,25 +294,22 @@ Responde ÚNICAMENTE con una lista JSON válida con {num_questions} preguntas, c
 [
     {{
         "question": "Pregunta referida al video.",
-        "options": ["Opcion A", "Opcion B", "Opcion C", "Opcion D"],
-        "correct_option": 2,
+        "options": [
+            "Opción A (distractor)",
+            "Opción B (distractor)",
+            "Opción C <<<CORRECTO>>>",
+            "Opción D (distractor)"
+        ],
         "explanation": "Explicación basada en el video."
     }}
-]"""
+]
+
+IMPORTANTE: Marca la opción correcta agregando "<<<CORRECTO>>>" al final de su texto. NO incluyas el campo "correct_option".""" 
+
             response = self._model.generate_content(prompt)
             result = self._parse_json_response(response.text)
             
-            quiz_questions = []
-            if isinstance(result, list):
-                for q in result:
-                    if all(k in q for k in ['question', 'options', 'correct_option']):
-                        quiz_questions.append({
-                            'question': q['question'],
-                            'options': q['options'][:4],
-                            'correct_option': min(q['correct_option'], 3),
-                            'explanation': q.get('explanation', '')
-                        })
-            return quiz_questions
+            return self._extract_quiz_questions(result) if isinstance(result, list) else []
         except Exception as e:
             logger.error(f'Error al generar solo quiz: {e}')
             return self._fallback_quiz(transcription_text, num_questions)
