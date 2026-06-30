@@ -258,8 +258,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   regenerateSummary() {
     if (!this.authService.isLoggedIn() || !this.activeLessonVideoData) return;
-    
-    if (!confirm('¿Estás seguro de que quieres regenerar solo el resumen con la IA? Esto sobreescribirá el resumen actual.')) return;
 
     this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-summary/`, {}).subscribe({
       next: (res) => {
@@ -274,8 +272,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   regenerateQuiz() {
     if (!this.authService.isLoggedIn() || !this.activeLessonVideoData) return;
-    
-    if (!confirm('¿Estás seguro de que quieres regenerar solo las preguntas del quiz con la IA? Esto sobreescribirá las preguntas actuales y borrará el progreso del quiz.')) return;
 
     this.http.post<any>(`${environment.apiUrl}/courses/admin/videos/${this.activeLessonVideoData.id}/regenerate-quiz/`, {}).subscribe({
       next: (res) => {
