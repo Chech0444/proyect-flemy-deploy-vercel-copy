@@ -76,7 +76,7 @@ from datetime import timedelta
 
 class PasswordResetCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reset_codes")
-    code = models.CharField(max_length=6)
+    code = models.CharField(max_length=8)
     created_at = models.DateTimeField(auto_now_add=True)
     
     @property

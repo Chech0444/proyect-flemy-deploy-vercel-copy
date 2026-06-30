@@ -181,7 +181,7 @@ class PasswordResetRequestView(APIView):
             user = User.objects.filter(email__iexact=email).first()
             if user:
                 # Generate a 6 digit code
-                code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+                code = ''.join(random.choices(string.digits, k=6))
                 
                 # Delete any existing valid codes for this user to avoid confusion
                 PasswordResetCode.objects.filter(user=user).delete()
