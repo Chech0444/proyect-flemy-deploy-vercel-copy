@@ -80,13 +80,23 @@ class AIService:
 
         raise ValueError(f'No se pudo extraer JSON de la respuesta: {text[:200]}')
 
-    def generate_educational_content(self, transcription_text: str, num_questions: int = 5) -> dict:
-        """
-        Genera simultáneamente el resumen y las preguntas del quiz
-        usando UNA SOLA llamada a la API de Gemini para ahorrar tokens y peticiones.
-        """
+    def _get_transcription_text(self, lesson_or_text) -> str:
+        if isinstance(lesson_or_text, str):
+            return lesson_or_text
+        try:
+            if hasattr(lesson_or_text, 'video') and lesson_or_text.video:
+                if hasattr(lesson_or_text.video, 'transcription') and lesson_or_text.video.transcription:
+                    return lesson_or_text.video.transcription.full_text or ''
+            if lesson_or_text.content:
+                return lesson_or_text.content
+        except Exception:
+            pass
+        return ''
+
+    def generate_educational_content(self, lesson_or_text, num_questions: int = 5) -> dict:
         self._initialize()
         num_questions = max(num_questions, 5)
+        transcription_text = self._get_transcription_text(lesson_or_text)
 
         if not self._is_configured:
             return {
@@ -139,12 +149,10 @@ Todo el contenido generado debe estar en el mismo idioma predominante de la tran
             response = self._model.generate_content(prompt)
             result = self._parse_json_response(response.text)
 
-            # Validar y extraer Summary
             summary_data = result.get('summary', {})
             if not isinstance(summary_data, dict):
                 summary_data = {}
 
-            # Validar y extraer Quiz
             quiz_raw = result.get('quiz', [])
             quiz_questions = []
             if isinstance(quiz_raw, list):
@@ -174,8 +182,9 @@ Todo el contenido generado debe estar en el mismo idioma predominante de la tran
                 'quiz': self._fallback_quiz(transcription_text, num_questions)
             }
 
-    def generate_summary_only(self, transcription_text: str) -> dict:
+    def generate_summary_only(self, lesson_or_text) -> dict:
         self._initialize()
+        transcription_text = self._get_transcription_text(lesson_or_text)
         if not self._is_configured:
             return self._fallback_summary(transcription_text)
 
@@ -208,8 +217,9 @@ Responde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta:
             logger.error(f'Error al generar solo resumen: {e}')
             return self._fallback_summary(transcription_text)
 
-    def generate_quiz_only(self, transcription_text: str, num_questions: int = 8) -> list:
+    def generate_quiz_only(self, lesson_or_text, num_questions: int = 8) -> list:
         self._initialize()
+        transcription_text = self._get_transcription_text(lesson_or_text)
         if not self._is_configured:
             return self._fallback_quiz(transcription_text, num_questions)
 
